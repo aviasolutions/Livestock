@@ -1,0 +1,68 @@
+<!-- /templates/collection.liquid -->
+{% include 'collection_banner' %}
+{% if section.settings.enable_sorting %}
+	{% include 'collection-sortby-menu' %}
+{% endif %}
+<div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template" data-grid-type="{{ section.settings.collection_products_grid }}">
+  {% include 'collection-template' %}
+</div>
+
+{% schema %}
+  {
+    "name": "Upcoming Release ",
+    "settings": [
+	  {
+		"type": "image_picker",
+        "id": "collection_banner_image_desc",
+        "label": "Collection Banner image for desktop"
+	  },
+      {
+        "type": "image_picker",
+        "id": "collection_banner_image_mobile",
+        "label": "Collection Banner image for Mobile"
+      },
+	  {
+		"type": "url",
+        "id": "link_to_image",
+        "label": "Link to image"
+	  },
+	  {
+		"type": "textarea",
+        "id": "handles_of_collection",
+        "label": "Add Handle of Collection saperate with Comma",
+        "label": "Image will not display for these Collections"
+	  },
+      {
+        "type": "select",
+        "id": "collection_products_grid",
+        "label": "Grid style",
+        "options": [
+          {
+            "value": "collage",
+            "label": "Collage"
+          },
+          {
+            "value": "grid",
+            "label": "Grid"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sorting",
+        "label": "Enable Collection Sorting",
+		"default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_tags_enable",
+        "label": "Show collection tags"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_vendor_enable",
+        "label": "Show product vendor"
+      }
+    ]
+  }
+{% endschema %}

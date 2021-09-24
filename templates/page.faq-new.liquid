@@ -1,0 +1,64 @@
+<!-- /templates/page.liquid -->
+<div class="grid custom-page">
+  <div class="grid__item large--three-quarters push--large--one-eighth">
+    <div class="grid__item large--one-quarter ">&nbsp;</div><div class="grid__item large--three-quarters">
+    <div class="rte rte--nomargin rte--indented-images"> <h1>{{ page.title }}</h1></div></div>
+    <div class="grid__item large--one-quarter ">
+      <div>
+        <ul class="faq-ul">
+          {% for link in linklists.sidebar-pages.links %}
+          <li><a href="{{link.url}}" class="{% if link.active %}active {% endif %}"> {{link.title}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="grid__item large--three-quarters">
+      <div class="rte rte--nomargin rte--indented-images">
+
+        {{ page.content }}
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+//==========  faq section ===========
+      $('.faq-section div h2').click(function(){        
+        
+        $(this).parent().find('section').addClass('find-p');
+         $(this).addClass('find-p');
+       
+        var cls = $(this).hasClass('open-heading');
+        console.log('===='+cls);
+        $('.faq-section section').each(function(){
+          console.log('test new');
+          if( !$(this).hasClass('find-p'))            
+        	$(this).slideUp();
+        });
+        $('.faq-section h2').each(function(){
+          //console.log('test new');
+          if( !$(this).hasClass('find-p'))            
+        	$(this).removeClass('open-heading');
+          	$(this).addClass('close-heading');
+        });
+        
+        	
+        	//$(this).toggleClass('open-heading');
+        	//$(this).toggleClass('close-heading');
+        console.log('cls ' +cls);
+        if(cls == true)
+        {	console.log('if'+cls);
+          	$(this).addClass('close-heading');
+        	$(this).removeClass('open-heading');
+        }else{
+          console.log('else');        	
+          	$(this).addClass('open-heading');
+          $(this).removeClass('close-heading');
+        }
+            $(this).removeClass('find-p');
+            
+     		$(this).parent().find('section').slideToggle();
+        	$(this).parent().find('section').removeClass('find-p');
+        	
+         });
+</script>

@@ -1,0 +1,344 @@
+{%- comment -%}Sort Article Base On Date{%- endcomment -%}
+
+{% assign current_date = "now" | date: "%Y-%m-%dT%H:%M" | append:':00' %}
+{% assign current_sec = 'now' | date: "%s" | times:1 %}
+
+<script>
+(function(){
+  window.released_article = window.released_article || {};
+  {%- assign articleStr = '' -%}
+  {%- assign current_sec = 'now' | date: "%s" | times:1 -%}
+  {% for article in blog.articles %}
+      {%- assign released_date = article.metafields.article.released_date | default:'now' | date: '%F' -%}
+  	  {%- assign raffle_link = article.metafields.article.raffle_link -%}
+  
+      {%- assign time = article.metafields.time.time | default:'00:00am' -%}
+  		{% if time contains 'am' %}
+  			{% assign new_time_arr = time | remove:'am' | strip | split:':' %}
+  			{% assign hours = new_time_arr | first | times: 1 %}
+  		{% else %}
+  			{% assign new_time_arr = time | remove:'pm' | strip | split:':' %}
+  			{% assign hours = new_time_arr | first | times: 1 %}
+  
+  			{% comment %} Convert into 24 hours format {% endcomment %}
+  			{% assign hours = hours | plus: 12 %}
+  		{% endif %}
+  
+  		{% assign minutes = new_time_arr | last %}
+  		{% if hours < 10 %}		
+  			{% assign hours = hours | prepend:'0' %}
+        {% endif %}  
+        {% assign new_time = hours | append: ':' | append: minutes | append: ':00' | strip %}
+            
+      {%- assign fullTime = released_date | append:'T' | append: new_time -%}
+      {%- assign sec_in_30min = 1800 -%}
+      {%- assign fullTime_end = fullTime | date: "%s" | times:1 | plus: sec_in_30min | date: "%Y-%m-%dT%H:%M:00" -%}
+            
+      {%- assign article_date_sec = released_date | date: "%s" | times:1 -%}
+  	  {%- assign art_date_sec = fullTime | date: "%s" | times:1 -%}
+            {% assign default_url = shop.url | append: blog.url %}
+
+      {% if art_date_sec <= current_sec and raffle_link == blank %}
+            
+          {%- assign articleStr = articleStr | strip | append:article_date_sec | strip -%}
+          {%- unless forloop.last -%}
+              {%- assign articleStr = articleStr | append: ';' | strip -%}
+          {%- endunless -%}
+
+          window.released_article['{{- article.id -}}'] = {
+             id:{{- article.id| json -}},
+             articleTitle:{{ article.title | json }},
+             articlePrice: {{ article.metafields.article.articleprice | json }},
+             productURL: {{- articleProductURL | default:default_url | json -}},
+             productCode: {{- article.metafields.article.product_code | json -}},
+             released_date: {{- released_date | json -}},
+             released_end: {{- fullTime_end | json -}},
+             time: {{- time | json -}},
+             fullTime: {{- fullTime | json -}},
+			 dateObj: new Date({{ fullTime | json }}),
+             today: {{- current_date | json -}}
+          };
+
+      {%- endif -%}
+  {% endfor %}
+})();
+</script>
+
+
+<div class="release-calendar-template released-template">
+  <div class="header-padding">
+    <div class="grid--rev">
+      <div class="grid__item large--one-whole">
+     <div class="article_paginate">
+          {% if section.settings.upcomming_heading != blank %}
+          <h2 class="article_type_title">{{ section.settings.upcomming_heading }}</h2>
+          {% endif %}
+
+          <div class="article-itemss grid_new_design-cover article-items-none swiper-container ">
+                <div class="swiper-wrapper">
+            {% assign first_limit = section.settings.upsell_limit | times: 1 %}
+            {% assign count = 1 %}
+                  
+                  
+             	{% for article in blog.articles %}
+                  {%- assign released_date = article.metafields.article.released_date | default:'now' | date: '%F' -%}
+                  {%- assign raffle_link = article.metafields.article.raffle_link -%}
+                  
+                  {% assign article_date_sec = article.metafields.article.released_date | date: "%s" %}
+                  {%- assign time = article.metafields.time.time | default:'00:00am' | downcase -%}
+                  {% if time contains 'am' %}
+                    {% assign new_time_arr = time | remove:'am' | strip | split:':' %}
+                    {% assign hours = new_time_arr | first | times: 1 %}
+                  {% else %}
+                    {% assign new_time_arr = time | remove:'pm' | strip | split:':' %}
+                    {% assign hours = new_time_arr | first | times: 1 %}
+
+                    {% comment %} Convert into 24 hours format {% endcomment %}
+                    {% assign hours = hours | plus: 12 %}
+                  {% endif %}
+
+                  {% assign minutes = new_time_arr | last %}
+                  {% if hours < 10 %}		
+                      {% assign hours = hours | prepend:'0' %}
+                  {% endif %}  
+                  {% assign new_time = hours | append: ':' | append: minutes | append: ':00' | strip %}
+                  
+                  {%- assign fullTime = released_date | strip | append:'T' | append: new_time -%}
+                  {%- assign art_date_sec = fullTime | date: "%s" | times:1 -%}
+
+                   {% if art_date_sec <= current_sec and raffle_link == blank %}
+                      <div data-id="{{- article.id -}}" data-enddate="{{- article.metafields.article.released_date | date: '%F' -}}" class="article article-item grid__item grid-product medium--one-half large--one-quarter small--one-whole article article-itemm swiper-slide ">
+
+                        <div class="article__img">
+                          {% if article.image %}
+                          <div class="article__featured-image">
+                           <a href="{{article.metafields.article.product_button_link }}" >  
+                            {{ article | img_url: '1024x1024' | img_tag: article.title }}
+                            </a>
+                          </div>
+                          {% endif %}
+
+                         
+                          
+                          {%- comment -%}
+                            {% if article.metafields.date.date != blank  %}
+                              <span class="drop_date">
+                                {{article.metafields.date.date}}
+                              </span>
+                            {% endif %}
+                          {%- endcomment -%}
+
+                          {% if article.metafields.article.released_date != blank  %}
+                            <span class="drop_date">
+                              {{article.metafields.article.released_date | date: '%m.%d'}}
+                              
+                            </span>
+                            {% endif %}
+
+
+
+                        </div>
+                        <div class="article article-item-inner">
+                        <div class="article__meta_info">
+                          {% if article.metafields.article.articleprice != blank %}
+                          <span class="pro_price">
+                            {{ article.metafields.article.articleprice }}
+                          </span>
+                          {% endif %}
+                          <h2 class="h3">{{ article.title }}</h2>
+
+                        </div>
+                            </div>  
+                        <div class="cd-modal-action">
+                          
+                          	<a href="{% unless article.metafields.article.product_button_link != blank %}#{% endunless %} {{article.metafields.article.product_button_link }}" class="released-true view_btn-fixed">SHOP NOW</a>
+                        
+                        {% comment %}  <a href="#modal-openedd-{{- article.id -}}" class="view_btn-fixed">SHOP NOW</a>   {% endcomment %}
+                        </div>                
+                      </div>
+                  
+                  	{%- assign count = count | plus: 1 -%}
+                  
+                   {% endif %}
+            
+            {% endfor %}
+            </div>
+             <!-- Add Arrows -->
+    <div class="swiper-button-next swiper-button-defult"><span class="circle-arrow"> {% include'arrow-cus' %}</span></div>
+    <div class="swiper-button-prev swiper-button-defult"> <span class="circle-arrow">{% include'arrow-cus-prev' %}</span></div>
+    <!-- Add Pagination -->
+   {% comment %} <div class="swiper-scrollbar"></div> {% endcomment %}
+          </div>
+       </div>
+       </div>
+        
+ </div>      
+
+    </div>
+  </div>
+
+{% assign count = 1 %}
+
+  {% for article in blog.articles %}
+      {% assign article_date_sec = article.metafields.article.released_date | date: "%s" %}
+      {% assign current_sec = 'now' | date: "%s" %}
+
+      {% if article_date_sec <= current_sec %}
+        <!--start popup-->
+        <div class="modal-container" id="modal-openedd-{{- article.id -}}" data-enddate="{{- article.metafields.article.released_date | date: '%F' -}}">
+
+          <div class="modal">
+            <a href="#modal-closedd-{{ forloop.index }}" class="modal-close">
+
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.3325 0.0169678L10.9992 9.3503L1.66587 0.0169678L0.015625 1.66663L9.34954 11L0.015625 20.3333L1.66587 21.983L10.9992 12.6496L20.3325 21.983L21.9822 20.3333L12.6489 11L21.9822 1.66663L20.3325 0.0169678Z" fill="white"/>
+              </svg>
+
+            </a>
+            <div class="modal-inner">
+              <div class="popup_rows">
+                <div class="popup_column image_column" style="background:{{ section.settings.popup_bg }};">
+                  <div class="image_wrap">
+                    {{ article | img_url: '1024x1024' | img_tag: article.title }}
+                  </div>
+
+                </div>
+                <div class="popup_column text_column">
+                  <div class="text_column__iner">
+                    <h2 class="h3">{{ article.title }}</h2>
+                    {% if article.metafields.article.product_code != blank %}
+                    <span class="pro_code">
+                      Product Code: {{article.metafields.article.product_code}}
+                    </span>  
+                    {% endif %}
+
+
+
+                    <div class="rte">
+                      {% if article.metafields.article.articleprice != blank %}
+                      <span class="pro_price">
+                        {{ article.metafields.article.articleprice }}
+                      </span>
+                      {% endif %}
+                      {% if article.metafields.article.size_run_text != blank  %}
+                      <p> {{ article.metafields.article.size_run_text }}</p>
+                      {% endif %}
+                      {% if article.metafields.article.no_size != blank  %}
+                      <span>{{article.metafields.article.no_size}}</span>
+                      {% endif %}
+                    </div>
+                    <div class="pop_footer">
+
+
+                      {% if article.metafields.article.sign_button_text != blank and article.metafields.article.notification_link != blank %}
+                      <a class="signup_btn" href="{{ article.metafields.article.notification_link }}">
+                        {{ article.metafields.article.sign_button_text }}   
+                      </a>
+                      {% endif %}
+
+                      {% if article.metafields.article.shop_button_text and article.metafields.article.product_button_link != blank %}
+                      <a class="signup_btn text-center shop_btn" href="{{ article.metafields.article.product_button_link }}">
+                        {{ article.metafields.article.shop_button_text }}
+                      </a>
+                      {% endif %}
+
+                      {% if article.metafields.article.raffle_button_text != blank and article.metafields.article.raffle_link != blank %}
+                      <a class="signup_btn text-center raffle_btn" href="{{ article.metafields.article.raffle_link }}">
+                        {{ article.metafields.article.raffle_button_text }}
+                      </a>
+                      {% endif %}
+
+                      <ul class="Add-google flex" data-id="{{- article.id -}}">
+                        <li class="addevent-google"><a href="#">Add to Google Cal</a></li>
+                        <li><a href="#">|</a></li>
+                        <li class="addevent-apple"><a href="#">Add to iCal</a></li>
+                      </ul>
+
+                      <p class="social_title">{{ section.settings.social_title }}</p>
+                      {% comment %}
+                      	{% include 'social-links', share_url: true %} 
+                      {% endcomment %}
+                      {% include 'social-sharing', article:article %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end popup-->
+			{%- assign count = count | plus: 1 -%}
+      {% endif %}
+
+{% endfor %}
+
+{% schema %}
+  {
+    "name": "Release Slider",
+    "settings": [
+		
+		{
+          "type": "text",
+          "id": "upcomming_heading",
+          "label": "Heading"
+        },
+		{
+          "type": "range",
+          "id": "upsell_limit",
+          "min": 2,
+          "max": 24,
+          "step": 2,
+          "label": "Upsell Product Limit",
+          "default": 4
+        },
+		{
+          "type": "color",
+          "id": "popup_bg",
+          "label": "Popup image background color"
+        },
+		{
+          "type": "text",
+          "id": "shopnow_btn",
+          "label": "Shop Now Button Text"
+        },
+		{
+          "type": "text",
+          "id": "notify_btn",
+          "label": "Notify Button Text"
+        },
+		{
+          "type": "text",
+          "id": "raffle_btn",
+          "label": "Raffle Button Text"
+        },
+		{
+          "type": "text",
+          "id": "social_title",
+          "label": "Social Title Text"
+        }
+	],
+     "blocks": [
+      {
+        "type": "grid",
+        "name": "article select",
+        "settings": [
+         {
+          "type": "article",
+          "id": "article",
+          "label": "Select Article"
+        }
+        
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+
+

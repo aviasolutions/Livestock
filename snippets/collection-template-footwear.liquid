@@ -1,0 +1,113 @@
+{% comment %}
+  Collection template, used on collection.liquid and collection.image.liquid
+{% endcomment %}
+
+{% paginate collection.products by 48 %}
+
+{% if collection.image != blank or collection.description != blank %}
+<header class="section-header text-center "> 
+  <div class="collection_description collection-desc">
+  <div class="grid">		{% if collection.image %}
+        <div class="grid__item large--one-quarter ll-head-img">
+          <img src="{{collection.image | img_url: 'medium' }}" />
+        </div>
+        {% endif %}  
+  
+    <div class="grid__item large--one-half"><!--- blockquote-div--->
+      <div>{% if collection.description != blank %}   {{ collection.description }} {% endif %}</div>
+      
+      <div>{% if section.settings.collection_tags_enable %}
+    {% if collection.all_tags.size > 0 %}
+      {% comment %}
+        To provide a 'catch-all' link at the top of the list,
+        check against the collection.handle, product type, and vendor.
+      {% endcomment %}
+        
+  <div class=" filter-sorting ">
+ <div class="grid">
+   {% comment %}
+   {% include 'collection-filters' %}
+  
+{% if paginate.pages > 1 %}
+ {% include 'pagination' %}
+{% endif %}
+    </div>
+     {% endcomment %} 
+  </div>
+    {% endif %}
+  {% endif %}</div>
+    </div>
+    
+    
+   
+    </div>
+  </div>
+  
+</header>
+{% endif %}
+{% if section.settings.collection_products_grid == 'collage' %}
+  <div class="grid grid-collage">
+    {% comment %}
+      Loop through our products in the current collection.
+      See the snippet 'snippets/product-grid-collage.liquid'.
+
+      `is_reverse_row__product`, `three_row_index__product`, `collection_product_count`, and `divisible_by_three__product` are
+      all used by 'snippets/product-grid-collage.liquid'
+    {% endcomment %}
+    {% assign is_reverse_row__product = false %}
+    {% assign three_row_index__product = 0 %}
+    {% assign collection_product_count__product = collection.products.size %}
+    {% assign divisible_by_three__product = collection_product_count__product | modulo:3 %}
+    {% for product in collection.products %}
+      {% include 'product-grid-collage' %}
+    {% else %}
+
+      {% if shop.products_count == 0 %}
+        {% comment %}
+          Add default products to help with onboarding for collections/all only
+        {% endcomment %}
+        {% include 'onboarding-featured-products' %}
+      {% else %}
+        {% comment %}
+          If collection exists but is empty, display message
+        {% endcomment %}
+        <div class="grid__item text-center">
+       <br/><br/><br/>   <p>{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
+{% elsif section.settings.collection_products_grid == 'grid' %}
+  <div class="grid-uniform">
+    {% if section.settings.mobile_view_grid == 'half' %}
+    {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-half' %}
+    {% else %}
+    {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-whole' %}
+    {% endif %}
+    
+    {% for product in collection.products %}
+      {% include 'product-grid-item' %}
+    {% else %}
+      {% if collection.handle == 'all' %}
+        {% comment %}
+          Add default products to help with onboarding for collections/all only
+        {% endcomment %}
+        {% include 'onboarding-featured-products' %}
+      {% else %}
+        {% comment %}
+          If collection exists but is empty, display message
+        {% endcomment %}
+        <div class="grid__item text-center">
+        <br/><br/><br/>  <p>{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="footer-page">
+{% if paginate.pages > 1 %}
+  {% include 'pagination' %}
+{% endif %}
+</div>
+{% endpaginate %}

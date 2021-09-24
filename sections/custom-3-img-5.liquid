@@ -1,0 +1,55 @@
+{% if section.settings.enable_linkableimg == true %}
+<div class="grid-uniform grid--full custom-three-coll">
+  {% for block in section.blocks %}
+  <div class="grid__item grid-custom grid-three-custom medium--one-third large--one-third small--one-third">
+    {% if block.settings.slide_link != blank %}
+    <a href="{{block.settings.slide_link}}">{% endif %}
+      
+    <img src="{{ block.settings.image | img_url:'original' }}" />
+      {% if block.settings.slide_link != blank %}
+    </a>{% endif %}
+    
+  </div>
+  {% endfor %}
+  
+
+</div>
+  {% endif %}
+
+{% comment %}
+<script>
+{% endcomment %}
+{% schema %}
+  {
+    "name": "3 Linkable img sec",
+    "class": "custom-section-10",
+    "max_blocks": 4,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_linkableimg",
+        "label": "Enable this section",
+        "default": true
+      }   
+    ],
+    "blocks" : [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },               
+              
+          {
+            "type": "url",
+            "id": "slide_link",
+            "label": "link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

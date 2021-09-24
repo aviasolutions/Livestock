@@ -1,0 +1,296 @@
+{% assign current_date = "now" | date: "%Y-%m-%dT%H:%M" | append:':00' %}
+{% assign current_sec = 'now' | date: "%s" | times:1 %}
+
+<div class="release-hero-wrap">
+  <div class="feature_rows">
+    <div class="feature_row_half feature_text-column">
+      {% assign article = articles[section.settings.article] %}
+      <h1>{{ article.title }}</h1>      
+    </div>
+    <div class="feature_row_half feature_image-column ">
+      <div class="img_wrap">
+         {% if section.settings.pop-enable != blank %}
+          <a href="#modal-opened" class="view_btn btn-border" id="modal-closed">
+        {% if section.settings.image != blank %}
+        <img class="desktop_img" src="{{ section.settings.image | img_url:'master' }}">
+        {% endif %}
+        {% if section.settings.mobile_image != blank %}
+        <img class="mobile_img" src="{{ section.settings.mobile_image | img_url:'master' }}">
+        {% endif %}
+        </a>
+        
+         {% else %}
+        
+        <a href="{{ section.settings.btn_link }}">
+        {% if section.settings.image != blank %}
+        <img class="desktop_img" src="{{ section.settings.image | img_url:'master' }}">
+        {% endif %}
+        {% if section.settings.mobile_image != blank %}
+        <img class="mobile_img" src="{{ section.settings.mobile_image | img_url:'master' }}">
+        {% endif %}
+        </a>
+         {% endif %}
+        
+      </div>
+    
+      <div class="timer-postion">
+         <div class="timer-postion-inner flex flex-justify-center flex-break">
+       {% if section.settings.show_timer %}
+     {% if section.settings.timer_title != blank %}   <p><label>{{ section.settings.timer_title }}</label></p> {% endif %}
+        <div id="countDown_timer"></div>
+      {% endif %}
+      
+           {% if section.settings.pop-enable != blank %}
+           <a href="#modal-opened" class="view_btn btn-border ctm_pop_open" id="modal-closed">
+             {{ section.settings.btn_text }}  
+           </a>
+           {% else %}
+           <a href="{{ section.settings.btn_link }}" class=" hero_btn btn-border">
+             {{ section.settings.btn_text1 }}
+           </a>
+           {% endif %}
+      </div>
+          </div>
+      
+      
+      
+            <!--start popup-->
+      <div class="modal-container" id="modal-opened">
+        <div class="modal">
+            <a href="#modal-closed" class="modal-close"><svg id="Capa_1" enable-background="new 0 0 413.348 413.348" height="512" viewBox="0 0 413.348 413.348" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m413.348 24.354-24.354-24.354-182.32 182.32-182.32-182.32-24.354 24.354 182.32 182.32-182.32 182.32 24.354 24.354 182.32-182.32 182.32 182.32 24.354-24.354-182.32-182.32z"/></svg></a>
+         <div class="modal-inner">
+          <div class="popup_rows">
+              <div class="popup_column image_column">
+                <div class="image_wrap">
+                  {{ article | img_url: '1024x1024' | img_tag: article.title }}                  
+                </div>
+                
+                
+              </div>
+              <div class="popup_column text_column">
+                <div class="text_column__iner">
+                   
+                  <h2 class="h3">{{ article.title }}</h2>
+                  {% if article.metafields.article.product_code != blank %}
+                  <span class="pro_code">
+                    Product Code: {{article.metafields.article.product_code}}
+                  </span>  
+                  {% endif %} 
+               
+                  
+                  <div class="rte">
+                    {% if article.metafields.article.articleprice != blank %}
+                      <span class="pro_price">
+                     {{ article.metafields.article.articleprice }}
+                      </span>
+                    {% endif %}
+                    {% if article.metafields.article.size_run_text != blank  %}
+                    <p>{{ article.metafields.article.size_run_text }}</p>
+                    {% endif %}
+                    {% if article.metafields.article.no_size != blank  %}
+                    <span>{{article.metafields.article.no_size}}</span>
+                     {% endif %}
+                  </div>
+                  <div class="pop_footer">
+                    {% if section.settings.notifications_link != blank %}
+                    <a class="signup_btn" href="{{ section.settings.notifications_link }}">
+                      {{ section.settings.shopnow_btn}}                                    
+                    </a>
+                    {% endif %}
+                    
+                    
+                    {% if article.metafields.article.raffle_link != blank %}
+                    <a class="signup_btn text-center" href="{{ article.metafields.article.raffle_link }}">
+                      {{ article.metafields.article.raffle_button_text }}
+                    </a>
+                    {% endif %}
+                    {% if article.metafields.article.product_button_link != blank %}
+                    <a class="signup_btn text-center" href="/products/{{article.metafields.article.product_button_link}}" >
+                      {{ section.settings.shopnow_btn }}
+                    </a>
+                    {% endif %}
+                    
+                    <ul class="Add-google flex" data-id="{{- article.id -}}">
+                      <li class="addevent-google"><a href="#">Add to Google Cal</a></li>
+                      <li><a href="#">|</a></li>
+                      <li class="addevent-apple"><a href="#">Add to iCal</a></li>
+                    </ul>
+                    
+                    <p class="social_title">{{ section.settings.social_title }}</p>
+                    
+                    	{% include 'social-links' , article:article %} 
+                    
+                  {% comment %}
+                    {% include 'social-sharing', article:article %}
+                      {% endcomment %}
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div> 
+         
+        </div>
+      </div>
+      <!--end popup-->
+      
+      
+    </div>
+  </div>
+</div>
+
+ 
+
+
+<input type="hidden" class="ctm_date" value="{{ section.settings.date }}">
+<input type="hidden" class="ctm_time" value="{{ section.settings.time }}">
+<style type="text/css">
+  #shopify-section-{{ section.id }}{
+    background:{{ section.settings.bg_color }};
+  }
+</style>
+
+<script>
+  	(function(){
+      window.upcoming_article = window.upcoming_article || {};
+      
+      {%- assign released_date = article.metafields.article.released_date | default:'now' | date: '%F' -%}
+      {%- assign time = article.metafields.time.time | default:'00:00am' -%}
+      {%- assign articleProductURL = article.metafields.c_f.buynow_btn_link -%}
+      
+      {% if time contains 'am' %}
+        {% assign new_time_arr = time | remove:'am' | strip | split:':' %}
+        {% assign hours = new_time_arr | first | times: 1 %}
+      {% else %}
+        {% assign new_time_arr = time | remove:'pm' | strip | split:':' %}
+        {% assign hours = new_time_arr | first | times: 1 %}
+
+      	{% comment %} Convert into 24 hours format {% endcomment %}
+      	{% assign hours = hours | plus: 12 %}
+      {% endif %}
+        
+      {% assign minutes = new_time_arr | last %}
+      {% if hours < 10 %}		
+       {% assign hours = hours | prepend:'0' %}
+      {% endif %}  
+      {% assign new_time = hours | append: ':' | append: minutes | append: ':00' | strip %}
+        
+      {%- assign fullTime = released_date | strip | append:'T' | append: new_time -%}
+      {%- assign sec_in_30min = 1800 -%}
+      {%- assign fullTime_end = fullTime | date: "%s" | times:1 | plus: sec_in_30min | date: "%Y-%m-%dT%H:%M:00" -%}
+        
+      {%- assign article_date_sec = released_date | date: "%s" | times:1 -%}
+      {%- assign articleProductURL = article.metafields.c_f.buynow_btn_link -%}
+  	  {%- assign art_date_sec = fullTime | date: "%s" | times:1 -%}
+      {%- assign default_url = shop.url | append: blog.url -%}
+        
+      window.upcoming_article['{{- article.id -}}'] = {
+       id:{{- article.id | json -}},
+       articleTitle:{{ article.title | json }},
+       articlePrice: {{ article.metafields.article.articleprice | json }},
+       productURL: {{- articleProductURL | default: default_url | json -}},
+       productCode: {{- article.metafields.article.product_code | json -}},
+       time: {{- time | json -}},
+       fullTime: {{- fullTime | json -}},
+       released_date: {{- released_date | json -}},
+       released_end: {{- fullTime_end | json -}},
+       dateObj: new Date({{ fullTime | json }}),
+       today: {{- current_date | json -}}
+     };
+      
+	})();
+</script>
+
+{% schema %}
+  {
+    "name": "Release Hero",
+    "settings": [
+		{
+          "type": "article",
+          "id": "article",
+          "label": "Select Article"
+        },
+		{
+          "type": "image_picker",
+          "id": "image",
+          "label": "Article Custom Image"
+        },
+		{
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Article Custom Mobile Image"
+        },
+        {
+         "type": "checkbox",
+         "id": "pop-enable",
+         "default": false,
+         "label": "Popup Enable"
+        }, 
+		{
+          "type": "text",
+          "id": "btn_text",
+          "label": "View Details Text"
+        },
+        {
+          "type": "text",
+          "id": "btn_text1",
+          "label": "Hero Button Text"
+        },
+		{
+          "type": "url",
+          "id": "btn_link",
+          "label": "Hero Button Link"
+        },
+	    {
+		  "type": "header",
+		  "content": "Timer Setting"
+		},
+		{
+          "type": "checkbox",
+          "id": "show_timer",
+          "label": "Show Countdown Timer"
+        },
+		{
+          "type": "text",
+          "id": "timer_title",
+          "label": "Timer Title"
+        },
+		{
+		  "type": "text",
+		  "id": "date",
+		  "label": "Date",
+		  "info": "date formate : Apr 22, 2021"
+		},
+		{
+		  "type": "text",
+		  "id": "time",
+		  "label": "Time",
+		  "info": "Time formate : 15:30:25"
+		},
+	    {
+		  "type": "header",
+		  "content": "Popup Setting"
+		},
+		{
+          "type": "text",
+          "id": "shopnow_btn",
+          "label": "Button - Sign Up For Notifications"
+        },
+        {
+          "type": "url",
+          "id": "notifications_link",
+          "label": "Button Link"
+        },
+		{
+          "type": "text",
+          "id": "social_title",
+          "label": "Social Title Text"
+        }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

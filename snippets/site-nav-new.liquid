@@ -1,0 +1,152 @@
+
+
+<!-- begin site-nav -->
+<ul class="flex" >
+  {% for link in linklists[section.settings.main-menu].links %}
+  
+  {%- assign is_megamenu = false -%}
+  {% for block in section.blocks %}
+      {% if block.type == 'mega_menu' %}
+          {% if block.settings.menu_item contains link.title %}  			
+              {%- assign is_megamenu = true -%}
+          {% endif %}
+      {% endif %}
+  {% endfor %}
+  
+  {% comment %}
+  Create a dropdown menu by naming a linklist the same as a link in the parent nav
+
+  More info on dropdowns:
+  - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu
+  {% endcomment %}
+  {% assign child_list_handle = link.title | handleize %}
+  
+  {% if link.links != blank %}
+  <li class="site-nav--has-dropdown{% if link.active %} site-nav--active1{% endif %}" aria-haspopup="true">
+    <a href="{{ link.url }}" class=" main-menu-link name_{{ link.title | handleize }}">
+      {{ link.title }}
+     
+    </a>
+    <ul class="site-nav__dropdown">
+      {% for childlink in link.links %}
+      <li{% if childlink.active %} class="site-nav--active"{% endif %}>
+        <a href="{{ childlink.url }}" class="site-nav__link">{{ childlink.title | escape }}</a>
+      </li>
+      {% endfor %}
+    </ul>    
+  </li>
+  {% elsif is_megamenu %}
+  <li class="{% if link.active %}site-nav--active {% endif %}{% if is_megamenu %}site-nav--is-megamenu{% endif %}">
+    <a href="{{ link.url }}" class="main-menu-link name_{{ link.title | handleize }}">{{ link.title }}</a>
+    {% for block in section.blocks %}
+    	{% if block.type == 'mega_menu' %}
+    		{% if block.settings.menu_item contains link.title %}
+            <div class="mega-menu--wrapper">
+              <div class="menu-wrapper header-padding">
+                <div class="grid-megamenu flex flex-justify-center">     
+                  <!--Start column 1-->
+				  {% if block.settings.column1_enable %}
+                  <div class="grid-megamenu-col{% if block.settings.column1_menu1 != blank or block.settings.column1_menu2 != blank %} is-border{% endif %}">
+                     {% if block.settings.column1_menu1 %}
+                     <h4 class="mega-link__title"><a href="{{block.settings.menu-url-1}}">{{block.settings.menu-title-1}}</a></h4>
+                      <ul class="mega-menu__links">
+                        {% for link in linklists[block.settings.column1_menu1].links %}
+                        <li {% if link.handle contains 'view-all' %}class="view_all__link"{% endif %}>
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}                                          
+                  </div>
+				  {% endif %}
+                  <!--End column 1-->
+                  
+                  <!--Start column 2-->
+				  {% if block.settings.column2_enable %}
+                  <div class="grid-megamenu-col{% if block.settings.column2_menu1 != blank or block.settings.column2_menu2 != blank %} is-border{% endif %}">
+					{% if block.settings.column2_menu1 %}
+                       <h4 class="mega-link__title"><a href="{{block.settings.menu-url-3}}">{{block.settings.menu-title-3}}</a></h4>
+                      <ul class="mega-menu__links">
+                        {% for link in linklists[block.settings.column2_menu1].links %}
+                        <li {% if link.handle contains 'view-all' %}class="view_all__link"{% endif %}>
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+				  {% endif %}
+                  <!--End column 2-->
+                  
+                  <!--Start column 3-->
+				  {% if block.settings.column3_enable %}
+                  <div class="grid-megamenu-col{% if block.settings.column3_menu1 != blank or block.settings.column3_menu2 != blank %} is-border{% endif %}">
+					{% if block.settings.column3_menu1 %}
+                      <h4 class="mega-link__title"><a href="{{block.settings.menu-url-5}}">{{block.settings.menu-title-5}}</a></h4>
+                      <ul class="mega-menu__links">
+                        {% for link in linklists[block.settings.column3_menu1].links %}
+                        <li {% if link.handle contains 'view-all' %}class="view_all__link"{% endif %}>
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+				  {% endif %}
+                  <!--End column 3-->
+                  
+                  <!--Start column 4-->
+				  {% if block.settings.column4_enable %}
+                  <div class="grid-megamenu-col{% if block.settings.column4_menu1 != blank or block.settings.column4_menu2 != blank %} is-border{% endif %}">
+					{% if block.settings.column4_menu1 %}
+                      <h4 class="mega-link__title"><a href="{{block.settings.menu-url-7}}">{{block.settings.menu-title-7}}</a></h4>
+                      <ul class="mega-menu__links">
+                        {% for link in linklists[block.settings.column4_menu1].links %}
+                        <li {% if link.handle contains 'view-all' %}class="view_all__link"{% endif %}>
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+				  {% endif %}
+                  <!--End column 4-->
+                  
+                  <!--Start column 5-->
+				  {% if block.settings.column5_enable %}
+                  <div class="grid-megamenu-col grid-megamenu-col-image{% if block.settings.column5_menu1 != blank or block.settings.column5_menu2 != blank %} is-border{% endif %}">
+					{% if block.settings.column5_image %}
+                    <a class="column__img" href="{{ block.settings.column5_image_link }}">
+                      {% assign image = block.settings.column5_image %}
+                      <img 
+                           class="blur-up lazyload image"
+                           src="{{ image | img_url: '30x' }}"
+                           data-src="{{ image | img_url: '600x' }}"
+                           data-widths="[300,600]"
+                           data-aspectratio="{{ image.aspect_ratio }}"
+                           data-sizes="auto"
+                           tabindex="-1"
+                           alt="{{ image.alt | escape }}">
+                     {% if block.settings.image-title != blank  %} <span>{{block.settings.image-title}}</span> {% endif %}
+                    </a>
+                   {% endif %}
+                  </div>
+				  {% endif %}
+                  <!--End column 5-->
+         
+                </div>
+              </div>
+              
+            </div>            
+    		{% endif %}
+    	{% endif %}
+    {% endfor %}
+  </li>  
+  {% else %}
+  <li {% if link.active %}class="site-nav--active"{% endif %}>
+    <a href="{{ link.url }}" class="main-menu-link name_{{ link.title | handleize }}">{{ link.title }}</a>
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+<!-- //site-nav -->

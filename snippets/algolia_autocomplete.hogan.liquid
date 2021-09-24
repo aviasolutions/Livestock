@@ -1,0 +1,77 @@
+<div class="
+  aa-columns-container
+
+  [[# with.articles ]] aa-with-articles [[/ with.articles ]]
+  [[^ with.articles ]] aa-without-articles [[/ with.articles ]]
+
+  [[# with.collections ]] aa-with-collections [[/ with.collections ]]
+  [[^ with.collections ]] aa-without-collections [[/ with.collections ]]
+
+  [[# with.footer ]] aa-with-footer [[/ with.footer ]]
+  [[^ with.footer ]] aa-without-footer [[/ with.footer ]]
+
+  [[# with.poweredBy ]] aa-with-powered-by [[/ with.poweredBy ]]
+  [[^ with.poweredBy ]] aa-without-powered-by [[/ with.poweredBy ]]
+
+  [[# with.products ]] aa-with-products [[/ with.products ]]
+  [[^ with.products ]] aa-without-products [[/ with.products ]]
+
+  [[# with.pages ]] aa-with-pages [[/ with.pages ]]
+  [[^ with.pages ]] aa-without-pages [[/ with.pages ]]
+">
+  <div class="aa-right-column">
+    <div class="aa-product-row">
+    	<h3 class="aa-collections-header">
+          <span class="rotate-text">
+            <span>Trending</span><br>
+            <span>Suggested</span>
+          </span> 
+          Products
+      </h3>
+      <a href="/pages/search-results-page?q=">View all <span></span>results</a>
+    </div>
+    <div class="aa-dataset-products"></div>
+  </div>
+
+  <div class="aa-left-column">
+    <div class="aa-collections">
+      <h3 class="aa-collections-header">
+        <span class="rotate-text">
+          <span>Trending</span><br>
+          <span>Suggested</span>
+        </span>
+      </h3>
+      <div class="aa-dataset-collections"></div>
+    </div>
+
+    <div class="aa-articles">
+      <div class="aa-articles-header">
+        Blog posts
+      </div>
+      <div class="aa-dataset-articles"></div>
+    </div>
+
+    <div class="aa-pages">
+      <div class="aa-pages-header">
+        Pages
+      </div>
+      <div class="aa-dataset-pages"></div>
+    </div>
+
+    <div class="aa-powered-by">
+      <a
+        class="aa-powered-by-logo"
+        href="https://www.algolia.com/?utm_source=shopify&utm_medium=link&utm_campaign=autocomplete-[[ storeName ]]"
+      ></a>
+    </div>
+  </div>
+</div>
+<div class="autocomplete-menu">
+  <ul class="autocomplete-menu__menu">
+    {% for link in linklists.autocomplete-menu.links %}
+      <li>
+        <a href="{{link.url}}">{{link.title}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

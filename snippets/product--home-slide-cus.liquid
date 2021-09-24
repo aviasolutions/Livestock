@@ -1,0 +1,123 @@
+<!-- /snippets/product-grid-item.liquid -->
+{% comment %}
+
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
+{% endcomment %}
+
+{% unless grid_item_width %}
+	{% if template == "404" %}
+		{% if section.settings.mobile_view_grid == 'half' %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-half' %}
+        {% else %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-whole' %}
+        {% endif %}
+    {% else %}
+        {% if section.settings.mobile_view_grid == 'half' %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-half' %}
+        {% else %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-whole' %}
+        {% endif %}
+    {% endif %}
+{% endunless %}
+
+{% unless width %}
+  {%- assign width = 310 -%}
+{% endunless %}
+{% unless height %}
+  {%- assign height = 450 -%}
+{% endunless %}
+
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+{% capture img_id_class %}ProductImage-{{ product.featured_image.id }}{% endcapture %}
+{% capture img_wrapper_id %}ProductImageWrapper-{{ product.featured_image.id }}{% endcapture %}
+{%- assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+<div class="grid__item  grid-product {{ grid_item_width }}{% if sold_out %} is-sold-out{% endif %} grid_new_design swiper-slide" data-aos="fade-zoom-in"
+     data-aos-easing="ease-in-back"
+     data-aos-delay="300"
+     data-aos-offset="0">
+    <div class="grid-product__wrapper">
+
+	  <div class="grid-product__image-wrapper desktop_hideclass">
+
+      <a class="grid-product__image-link" href="{{block.settings.hov_btn_link}}">
+        
+            {% if block.settings.image_big != blank %}	
+        	  {% assign img_url = block.settings.image_big | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}	
+              <img class="grid-product__image blur-up image lazyload" 
+                   data-src="{{ img_url }}"
+                   data-widths="[540,640]"
+                   data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                   data-sizes="auto"
+                   data-parent-fit="contain"
+                   src="{{block.settings.image_big | img_url:'480x'}}" alt=""/>
+              {% endif %}
+          
+     
+       
+      </a>
+
+     
+    </div>
+      
+      
+      
+  
+      
+            
+
+         <!-- display only for deaktop / hide on mobile --->
+            <div class="grid-product__image-wrapper mobile_hideclass">
+
+            <a class="grid-product__image-link" href="{{block.settings.hov_btn_link}}">
+              
+              {% if block.settings.image_big != blank %}	
+                {% assign img_url = block.settings.image_big | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}	
+                <img class="grid-product__image blur-up image lazyload" 
+                     data-src="{{ img_url }}"
+                     data-widths="[540,640]"
+                     data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                     data-sizes="auto"
+                     data-parent-fit="contain"
+                     src="{{block.settings.image_big | img_url:'480x'}}" alt=""/>
+              {% endif %}
+              
+            </a>
+         
+          </div>
+          <!-- display only for deaktop / hide on mobile --->
+      
+      <div class="grid-hover-div">
+        <a href="{{block.settings.hov_btn_link}}" class=" grid-product__meta">
+          <div class="vendor_grid">{{block.settings.img-text}}</div>
+
+        </a>
+
+      </div>
+      
+    
+  </div>
+</div>
+
+
+
+

@@ -1,0 +1,220 @@
+
+{% assign blog_handle = 'news' %}
+{% paginate blogs[blog_handle].articles by 36 %}
+ 
+  <ul id="packery" class="dd">
+
+    {% for article in blogs[blog_handle].articles %}
+    {% assign instructions = article.metafields.c_f %}
+    
+   
+      {% case instructions.class %}
+    
+        {% when 'exlarge' %}
+        <li class=" item exlarge  {% if article.metafields.c_f.show_bar_on_hover %}show-on-hover{% endif %}">
+          <a href="{% if article.metafields.c_f.custom_link %}{{ article.metafields.c_f.custom_link }}{% else %}{{ article.url }}{% endif %}">
+            {% if article.metafields.c_f.Image_Extra_large %}
+              <img src="{{ article.metafields.c_f.Image_Extra_large }}" alt="{{article.title}}" />
+            {% else %}
+              <img src="{{'default-ex-large.jpg' | file_url }}" alt="{{article.title}}" />
+            {% endif %}
+            {% include 'masonry-hover' %}
+          </a>
+        </li>        
+        {% when 'large' %}
+        <li class=" item large  {% if article.metafields.c_f.show_bar_on_hover %}show-on-hover{% endif %}">
+          <a href="{% if article.metafields.c_f.custom_link %}{{ article.metafields.c_f.custom_link }}{% else %}{{ article.url }}{% endif %}">
+            {% if article.metafields.c_f.image_large %}
+              <img src="{{ article.metafields.c_f.image_large }}" alt="{{article.title}}" />
+            {% else %}
+              <img src="{{'default-large.jpg' | file_url }}" alt="{{article.title}}" />
+            {% endif %}
+            {% include 'masonry-hover' %}
+          </a>
+        </li>
+        {% when 'medium' %}
+        <li class=" item medium  {% if article.metafields.c_f.show_bar_on_hover %}show-on-hover{% endif %} ">
+          <a href="{% if article.metafields.c_f.custom_link %}{{ article.metafields.c_f.custom_link }}{% else %}{{ article.url }}{% endif %}">
+            {% if article.metafields.c_f.image_medium %}
+              <img src="{{ article.metafields.c_f.image_medium }}" alt="{{article.title}}" />
+            {% else %}
+              <img src="{{'default-medium.jpg' | file_url }}" alt="{{article.title}}" />
+            {% endif %}
+            {% include 'masonry-hover' %}
+          </a>
+        </li>
+        {% when 'small' %}
+        <li class=" item small {% if article.metafields.c_f.show_bar_on_hover %}show-on-hover{% endif %}">
+          {% if article.metafields.c_f.image_small_first %}
+            <span class="first-cls">
+              <a href="{% if article.metafields.c_f.image_first_link %}{{ article.metafields.c_f.image_first_link }}{% else %}{{ article.url }}{% endif %}">
+                <img src="{{ article.metafields.c_f.image_small_first }}" alt="{{article.title}}" />
+                {% include 'masonry-hover-small-one' %}
+              </a>
+            </span>
+          {% else %}
+            <span class="first-cls">
+              <a href="{% if article.metafields.c_f.image_first_link %}{{ article.metafields.c_f.image_first_link }}{% else %}{{ article.url }}{% endif %}">
+                <img src="{{'default-small.jpg' | file_url }}" alt="{{article.title}}" />
+                {% include 'masonry-hover-small-one' %}
+              </a>
+            </span>
+          {% endif %}
+          {% if article.metafields.c_f.image_small_second %}
+            <span class="second-cls">
+              <a href="{% if article.metafields.c_f.image_second_link %}{{ article.metafields.c_f.image_second_link }}{% else %}{{ article.url }}{% endif %}">
+                <img src="{{ article.metafields.c_f.image_small_second }}" alt="{{article.title}}" />
+                {% include 'masonry-hover-small-two' %}
+              </a>
+            </span>
+          {% else %}
+            <span class="second-cls">
+              <a href="{% if article.metafields.c_f.image_second_link %}{{ article.metafields.c_f.image_second_link }}{% else %}{{ article.url }}{% endif %}">
+                <img src="{{'default-small.jpg' | file_url }}" alt="{{article.title}}" />
+                {% include 'masonry-hover-small-two' %}
+              </a>
+            </span>
+          {% endif %}
+        </li>
+     
+    	{% else %}
+     {% comment %}
+        <li class="item medium  {% if article.metafields.c_f.show_bar_on_hover %}show-on-hover{% endif %}">
+          <a href="{% if article.metafields.c_f.custom_link %}{{ article.metafields.c_f.custom_link }}{% else %}{{ article.url }}{% endif %}">
+            <img src="{{'default-medium.jpg' | file_url }}" alt="{{article.title}}" />
+          </a>
+        </li>
+   {% endcomment %}
+      {% endcase %}
+    {% endfor %}
+  </ul>
+
+<div class="loadmore">
+<a  id="loadmore">
+  <img width="30px" src="{{'4a83b984ebaf4ee4d565d67c46bb32ca.svg' | asset_url  }}" alt="" />
+</a>
+ </div>
+
+
+{{ 'styles-masonry.css' | asset_url | stylesheet_tag }}
+<script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+<script>
+  $(function() {
+    var winwid = $(window).width();
+    if (winwid >= 1680 && winwid < 1905) // for width 1680
+    {
+      setTimeout(function() {
+        var hight = 2437;
+        $("#packery").height(hight + "px");
+        var clickcount = 2;
+        var hieght2 = 0;
+        $("#loadmore").click(function() {
+          if (clickcount < 10) {
+            hieght2 = Number(hight) * Number(clickcount);
+          } else {
+            //console.log('tet ');
+            var hight1 = 812;
+            hieght2 = Number(hieght2) + Number(hight1);
+          }
+          clickcount++;
+          if (clickcount == 3) {
+            $("#loadmore").hide();
+          }
+          //console.log(hieght2 + '--' + winwid + ' 1680-' + clickcount);
+          $("#packery").height(hieght2 + "px");
+
+        });
+        //console.log('load =  ' + hight);
+      }, 500);
+    } else if (winwid >= 1905) // for width 1920
+    {
+      setTimeout(function() {
+        var hight = 2437;
+        $("#packery").height(hight + "px");
+        var clickcount = 2;
+        var hieght2 = 0;
+        $("#loadmore").click(function() {
+          if (clickcount < 9) {
+            hieght2 = Number(hight) * Number(clickcount);
+          } else {
+            hieght2 = hieght2 + 415;
+          }
+          clickcount++;
+          if (clickcount == 3) {
+            $("#loadmore").hide();
+          }
+          //console.log(hieght2 + '- ' + winwid + '=1920--' + clickcount);
+          $("#packery").height(hieght2 + "px");
+
+        });
+        //console.log('load =  ' + hight);
+      }, 500);
+    } else {
+      setTimeout(function() {
+        var hight = 2437;
+        $("#packery").height(hight + "px");
+        var clickcount = 2;
+        $("#loadmore").click(function() {
+          var hieght2 = Number(hight) * Number(clickcount);
+          $("#packery").height(hieght2 + "px");
+          clickcount++;
+          if (clickcount == 3) {
+            $("#loadmore").hide();
+          }
+          //console.log('---' + clickcount);
+        });
+        //console.log('load =  ' + hight);
+      }, 500);
+    }
+
+    $('#packery').packery({
+      // options
+      itemSelector: '.item',
+      gutter: 10
+    });
+
+
+    //======= for the text height ===
+    $('#packery .item.large').hover(function() {
+      var hts = $(this).find('.hover-bar span.single').height();
+      //console.log('--' + hts);
+      if (hts < 30) {
+        //console.log('-< 30 single-' + hts);
+        $(this).find('.hover-bar .hover-btn').addClass('right');
+      }
+    })
+    $('#packery .item.medium').hover(function() {
+      var hts = $(this).find('.hover-bar span.single').height();
+      if (hts < 30) {
+        $(this).find('.hover-bar .hover-btn').addClass('right');
+      }
+    })
+    //-----------------
+    $('#packery .item.small .first-cls').hover(function() {
+      var hts1 = $(this).find('.hover-bar span.double').height();
+      if (hts1 < 30) {
+        //console.log($(this).find('span').attr('class') + ' double = ' + hts1);
+        $(this).find('.hover-bar .hover-btn').addClass('right');
+      }
+    })
+
+    $('#packery .item.small .second-cls').hover(function() {
+      var hts2 = $(this).find('.hover-bar span.two').height();
+      //console.log('  two==' + hts2);
+      if (hts2 < 30) {
+        $(this).find('.hover-bar .hover-btn').addClass('right');
+      }
+    })
+
+    //====== ===== ====== ====== =====
+    var highest1 = -Infinity;
+    $('#packery li').each(function() {
+      var ht1 = $(this).find('img').height();
+      highest1 = Math.max(highest1, parseFloat(ht1));
+    });
+  });
+</script>
+
+{% endpaginate %}
+
+

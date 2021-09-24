@@ -1,0 +1,271 @@
+<div  data-aos="fade-zoom-in"
+     data-aos-easing="ease-in-back"
+     data-aos-delay="300"
+     data-aos-offset="0" id="hero-slideshow-2" data-section-id="{{ section.id }}" class="section-space  class_{{section.settings.theme}} class_{{section.settings.theme-mobile}}">
+<div class="hero-section">
+  {% if section.settings.btn_link != blank  %}
+  <a class="hero-link-overlay" href="{{section.settings.btn_link}}"></a>
+  {% endif  %}
+  <div class="hero__slide--overlay"></div>
+  <div class="hero-section-img">
+    {% assign desktop_img = section.settings.image %}
+    {% if section.settings.image != blank  %} 
+    {% assign desktop_imgSrc = desktop_img | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
+    <img class="blur-up image desktop-hero lazyload"
+         src="{{ desktop_img | img_url: '30x' }}"
+         data-src="{{ desktop_imgSrc }}"
+         data-widths="[300,600,800,1024,2048]"
+         data-aspectratio="{{ desktop_img.aspect_ratio }}"
+         data-sizes="auto"
+         tabindex="-1"
+         alt="{{ desktop_img.alt | escape }}"> 
+    {% assign mobile_img = section.settings.image_mobile %}
+    {% if section.settings.image_mobile != blank  %} 
+    {% assign mobile_imgSrc = mobile_img | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
+    <img class="mobile-hero blur-up image lazyload"
+         src="{{ mobile_img | img_url: '30x' }}"
+         data-src="{{ mobile_imgSrc }}"
+         data-widths="[300,600,800]"
+         data-aspectratio="{{ mobile_img.aspect_ratio }}"
+         data-sizes="auto"
+         tabindex="-1"
+         alt="{{ mobile_img.alt | escape }}"> {% endif  %}
+    
+    {% else %}
+    <div class="hero-section-video">
+    <video loop muted playsinline autoplay>
+      <source src="{{section.settings.video}}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    </div>
+    {% endif  %}
+    
+  </div>
+    {% if section.settings.content-hide %}
+  <div class="hero-section-content header-padding">
+    {% if section.settings.subheading-hide %}
+  {% if section.settings.subheading != blank  %} <span>{{section.settings.subheading}}</span>  {% endif  %}
+     {% endif  %}
+  {% if section.settings.heading != blank  %} <h1>{{section.settings.heading}}</h1> {% endif  %}
+    
+    {% if section.settings.btn_link != blank  %}
+    <a href="{{section.settings.btn_link}}" class="btn-hero">{{section.settings.btn-text}}</a>  
+    {% endif  %}
+    
+  </div>
+  {% endif  %}
+</div>  
+</div>
+
+
+<style>
+    a.hero-link-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}  
+
+#hero-slideshow-2 .hero-section-img img{display:block;}
+
+#hero-slideshow-2 .hero-section{position:relative;}
+#hero-slideshow-2 .hero-section-content{position:absolute; top:48px; width:100%;}
+#hero-slideshow-2 .hero__slide--overlay {
+           position:absolute;  left:0; right:0; top:0; bottom:0; width:100%;
+      {% assign bg_color = section.settings.caption_background %}
+            {% assign number = section.settings.caption_background_opacity %}
+            {% assign caption_background_opacity = number | divided_by: 100.0 %}
+            {% if section.settings.caption_background == 'rgba(0,0,0,0)' %}
+              background: transparent;
+            {% else %}
+              background: {{ bg_color | color_modify: 'alpha', caption_background_opacity }};
+            {% endif %}
+  }
+  
+#hero-slideshow-2 .hero-section-video{width:100%;}  
+#hero-slideshow-2 .hero-section-video video{width:100%; display:block;}    
+  
+  
+
+  
+  
+  
+@media(min-width:1921px){
+.hero-section-content{top:72px; max-width:1800px; left:0; right:0; margin:0 auto;}
+#hero-slideshow-2 .hero-section-content span{font-size:15px;     margin: 0 0 18px;}
+#hero-slideshow-2 .hero-section-content h1{font-size:36px; line-height:42px;}
+#hero-slideshow-2 .hero-section-content .btn-hero{margin-top: 29px;}  
+}
+  
+
+#hero-slideshow-2 .hero-section-img img{width:100%;}    
+#hero-slideshow-2 .hero-section-content span{15px;  
+letter-spacing:1px; text-transform:uppercase; font-family: 'Roboto Condensed', sans-serif;font-weight: 700; display:block; margin: 0 0 12px;}
+#hero-slideshow-2 .hero-section-content h1{font-size:36px; line-height:38px; max-width: 472px;
+letter-spacing:0px; margin:0; font-family: 'Roboto Condensed', sans-serif; font-weight: 700;}
+ 
+#hero-slideshow-2 .hero-section-content .btn-hero{display:inline-block; 
+font-size:13px;  font-family: 'Roboto Condensed', sans-serif; font-weight: 700;
+  text-transform:uppercase; padding:13.5px 30px; letter-spacing:1px; margin-top:17px;
+}  
+ 
+  
+@media(min-width:768px){
+#hero-slideshow-2 .mobile-hero{display:none !important;}  
+}
+  
+@media(max-width:768px){
+
+#hero-slideshow-2 .hero-section-content{top:30px;}  
+#hero-slideshow-2 .hero-section-content span{ margin: 0 0 1px !important; font-size:13px;}
+#hero-slideshow-2 .hero-section-content h1{font-size:26px; line-height:32px; max-width: 372px;}  
+#hero-slideshow-2 .hero-section-content .btn-hero{margin-top:4px;} 
+#hero-slideshow-2 .hero-section-content .btn-hero{font-size:13px; padding:14px 30px;}   
+}
+  
+@media(max-width:767px){
+
+#hero-slideshow-2 .hero-section-content{top:40px;}    
+#hero-slideshow-2 .desktop-hero{display:none !important;}  
+#hero-slideshow-2 .hero-section-content span{ margin: 0 0 1px !important; font-size:13px;}  
+#hero-slideshow-2 .hero-section-content h1{font-size:32px; line-height:38px; max-width:312px;} 
+  
+}  
+  
+  
+  
+  #hero-slideshow-2 .hero-section-content h2, #hero-slideshow-2 .hero-section-content span{color:#000 !important}   
+ #hero-slideshow-2 .hero-section-content .btn-hero{background:#000; color:#fff;}
+  #hero-slideshow-2 .hero-section-content .btn-hero:hover{background:#555555; color: #fff;}
+  
+  
+ @media(min-width:768px){ 
+#hero-slideshow-2.class_light .hero-section-content h2, #hero-slideshow-2.class_light .hero-section-content span{color:#fff !important}   
+#hero-slideshow-2.class_light .hero-section-content .btn-hero{background:#fff; color:#000;}
+#hero-slideshow-2.class_light .hero-section-content .btn-hero:hover{ background:#F0F0F0; color:#000;}
+ }
+  
+  
+@media(max-width:767px){ 
+#hero-slideshow-2.class_light_m .hero-section-content h2, #hero-slideshow-2.class_light_m .hero-section-content span{color:#fff !important}   
+#hero-slideshow-2.class_light_m .hero-section-content .btn-hero{background:#fff; color:#000;}
+#hero-slideshow-2.class_light_m .hero-section-content .btn-hero:hover{ background:#F0F0F0; color:#000;}
+ }
+  
+  
+  
+</style>
+
+
+{% schema %}
+  {
+    "name": "Hero Section",
+    "settings": [
+        {
+         "type": "checkbox",
+         "id": "content-hide",
+         "default":false,
+         "label": "Content Enable"
+       }, 
+        {
+         "type": "radio",
+         "id": "theme",
+         "label": "Theme Color",
+         "options": [
+           { "value": "dark", "label": "Dark Theme " },
+           { "value": "light", "label": "Light Theme" }
+         ],
+         "default": "dark"
+		}, 
+        {
+         "type": "radio",
+         "id": "theme-mobile",
+         "label": "Mobile Theme Color",
+         "options": [
+           { "value": "dark_m", "label": "Dark Theme " },
+           { "value": "light_m", "label": "Light Theme" }
+         ],
+         "default": "dark_m"
+		}, 
+        {
+          "type":"color",
+          "id": "caption_background",
+          "label":"Overlay Background",
+          "default":"transparent"
+        },
+  	    {
+          "type":"range",
+          "id": "caption_background_opacity",
+          "min":10,
+          "max":100,
+          "step":1,
+          "unit":"%",
+          "label":"Overlay Background opacity",
+          "default":20
+        },
+		{
+         "type": "image_picker",
+         "id": "image",
+         "label": "Image"
+        },
+        {
+         "type": "image_picker",
+         "id": "image_mobile",
+         "label": "Mobile image"
+        },
+       {
+         "type": "checkbox",
+         "id": "subheading-hide",
+         "default":false,
+         "label": "Sub heading Enable"
+       },
+       
+        {
+         "type": "text",
+         "id": "subheading",
+         "label": "Sub Heading",
+         "default": "featured collaboration"
+        },
+       
+        {
+         "type":"text",
+         "id":"heading",
+         "label":"Heading",
+         "default":"Adidas By Pharell Williams “Black Ambition” Pack"
+        },
+        {
+         "type": "text",
+         "id": "btn-text",
+         "label": "Button Text",
+         "default": "Shop Now"
+        },
+        {
+         "type": "url",
+         "id": "btn_link",
+         "label": "Button link"
+        },
+      
+        {
+         "type": "text",
+         "id": "video",
+         "label": "Video Url"
+        }
+],
+ "presets": [
+   {
+      "name": "Hero Section",
+      "category": "Image"
+    }
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

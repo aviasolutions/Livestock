@@ -1,0 +1,45 @@
+main.main-content.home{
+  @media only screen and (max-width: 980px){
+  	margin-top: 75px !important;
+  }
+}
+
+.site-header{
+  @media screen and (max-width: 768px){
+    background: #ffffff;
+  }
+}
+
+.snize-ac-results {
+  display: none !important;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  color: #888;
+}
+
+.breadcrumbs ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs li {
+  display: inline-block;
+}
+
+.breadcrumbs a {
+  color: #888;
+}
+
+.breadcrumbs a:hover {
+  color: #000;
+}
+
+.breadcrumbs li:not(:last-child):after {
+  content: "/";
+  display: inline-block;
+  padding: 0 .75ch;
+  speak: none;
+}

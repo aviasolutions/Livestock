@@ -1,0 +1,344 @@
+{%- comment -%}Sort Article Base On Date{%- endcomment -%}
+
+{% assign current_date = "now" | date: "%Y-%m-%dT%H:%M" | append:':00' %}
+{% assign current_sec = 'now' | date: "%s" | times:1 %}
+
+<script>
+(function(){
+  	window.upcoming_article = window.upcoming_article || {};
+	{%- assign articleStr = '' -%}
+
+	{% for article in blog.articles %}
+      {%- assign released_date = article.metafields.article.released_date | default:'now' | date: '%F' -%}
+  	  {%- assign raffle_link = article.metafields.article.raffle_link -%}
+  
+      {%- assign time = article.metafields.time.time | default:'00:00am' -%}
+		{% if time contains 'am' %}
+  			{% assign new_time_arr = time | remove:'am' | strip | split:':' %}
+  			{% assign hours = new_time_arr | first | times: 1 %}
+  		{% else %}
+  			{% assign new_time_arr = time | remove:'pm' | strip | split:':' %}
+  			{% assign hours = new_time_arr | first | times: 1 %}
+  
+  			{% comment %} Convert into 24 hours format {% endcomment %}
+  			{% assign hours = hours | plus: 12 %}
+  		{% endif %}
+  
+  		{% assign minutes = new_time_arr | last %}
+  		{% if hours < 10 %}		
+  			{% assign hours = hours | prepend:'0' %}
+        {% endif %}  
+        {% assign new_time = hours | append: ':' | append: minutes | append: ':00' | strip %}
+            
+       
+      {%- assign fullTime = released_date | strip | append:'T' | append: new_time -%}
+      {%- assign sec_in_30min = 1800 -%}
+      {%- assign fullTime_end = fullTime | date: "%s" | times:1 | plus: sec_in_30min | date: "%Y-%m-%dT%H:%M:00" -%}
+            
+      {%- assign article_date_sec = released_date | date: "%s" | times:1 -%}
+      {%- assign articleProductURL = article.metafields.c_f.buynow_btn_link -%}
+  	  {%- assign art_date_sec = fullTime | date: "%s" | times:1 -%}
+      {%- assign default_url = shop.url | append: blog.url -%}
+
+      {% if art_date_sec > current_sec or raffle_link != blank %}
+          {%- assign articleStr = articleStr | strip | append:article_date_sec | strip -%}
+          {%- unless forloop.last -%}
+              {%- assign articleStr = articleStr | append: ';' | strip -%}
+          {%- endunless -%}
+  
+          if(!window.upcoming_article['{{- article.id -}}']){
+            window.upcoming_article['{{- article.id -}}'] = {
+               id:{{- article.id| json -}},
+               articleTitle:{{ article.title | json }},
+               articlePrice: {{ article.metafields.article.articleprice | json }},
+               productURL: {{- articleProductURL | default: default_url | json -}},
+               productCode: {{- article.metafields.article.product_code | json -}},
+               time: {{- time | json -}},
+               fullTime: {{- fullTime | json -}},
+               released_date: {{- released_date | json -}},
+               released_end: {{- fullTime_end | json -}},
+			   dateObj: new Date({{ fullTime | json }}),
+               today: {{- current_date | json -}}
+            };
+          }
+      {%- endif -%}
+	{% endfor %}
+})();
+</script>
+
+
+<div class="release-calendar-template upcoming-template">
+  <div class="header-padding">
+    <div class="grid--rev">
+      <div class="grid__item large--one-whole">
+     <div class="article_paginate">
+          {% if section.settings.upcomming_heading != blank %}
+          <h2 class="article_type_title">{{ section.settings.upcomming_heading }}</h2>
+          {% endif %}
+
+          <div class="article-items">
+            {% assign first_limit = section.settings.upsell_limit | times: 1 %}
+            {% assign count = 1 %}
+            
+              {% for article in blog.articles %}
+            
+            	{%- assign released_date = article.metafields.article.released_date | date: '%F' -%}
+            	{%- assign raffle_link = article.metafields.article.raffle_link -%}
+            
+                {%- assign article_date_sec = article.metafields.article.released_date | date: "%s" -%}
+                
+            	{%- assign time = article.metafields.time.time | default:'00:00am' | downcase -%}
+                {% if time contains 'am' %}
+                  {% assign new_time_arr = time | remove:'am' | strip | split:':' %}
+                  {% assign hours = new_time_arr | first | times: 1 %}
+                {% else %}
+                  {% assign new_time_arr = time | remove:'pm' | strip | split:':' %}
+                  {% assign hours = new_time_arr | first | times: 1 %}
+
+                  {% comment %} Convert into 24 hours format {% endcomment %}
+                  {% assign hours = hours | plus: 12 %}
+                {% endif %}
+
+                {% assign minutes = new_time_arr | last %}
+                {% if hours < 10 %}		
+                	{% assign hours = hours | prepend:'0' %}
+                {% endif %}  
+                {% assign new_time = hours | append: ':' | append: minutes | append: ':00' | strip %}
+            
+      			{%- assign fullTime = released_date | strip | append:'T' | append: new_time -%}
+            	{%- assign art_date_sec = fullTime | date: "%s" | times:1 -%}
+            
+            	{% assign rd = article.metafields.article.released_date %}
+                {% assign rd_time = article.metafields.time.time %}
+            
+                 {% if art_date_sec > current_sec or raffle_link != blank %}
+                      <div data-id="{{- article.id -}}" class="article article-item">
+                         
+                        <div class="article__img">
+                          {% if article.image %}
+                          <div class="article__featured-image">
+                            <a href="javascript:void(0);">
+                            {{ article | img_url: '1024x1024' | img_tag: article.title }}
+                            </a>
+                          </div>
+                          {% endif %}
+                          
+                          {% if rd != blank %}
+                            <span class="drop_date">
+                              {{article.metafields.article.released_date | date: '%m.%d'}}                
+                            </span>
+                          {% else %}
+                          	<span class="drop_date">
+                              TBD
+                            </span>
+                          {% endif %}
+
+
+
+                        </div>
+                        <div class="article article-item-inner">
+                        <div class="article__meta_info">
+                          {% if article.metafields.article.articleprice != blank %}
+                          <span class="pro_price">
+                            {{ article.metafields.article.articleprice }}
+                          </span>
+                          {% endif %}
+                          <h2 class="h3">{{ article.title }}</h2>
+
+                        </div>
+                            </div>  
+                        <div class="cd-modal-action">
+                          {% if article.metafields.article.product_state_dropdown == 'Raffle state' %}
+                            {% if article.metafields.article.raffle_link != blank %}
+                             <a href="{{ article.metafields.article.raffle_link }}" class="view_btn ctm_raffle_btn">ENTER RAFFLE</a>
+                            {% endif %}
+                          {% endif %}
+                          {% if article.metafields.article.product_state_dropdown == 'Released state' %}
+                            {% if article.metafields.article.product_button_link != blank %}
+                              <a href="{{ article.metafields.article.product_button_link }}" class="view_btn ctm_raffle_btn">Shop Now</a>
+                          	{% else %}
+                          	  <a href="#modal-opened-{{- article.id -}}" class="view_btn" id="modal-closed-{{ forloop.index }}">View Details</a>
+                            {% endif %}
+                          {% endif %}
+                          {% unless article.metafields.article.product_state_dropdown %}
+                            <a href="#modal-opened-{{- article.id -}}" class="view_btn" id="modal-closed-{{ forloop.index }}">View Details</a>
+                          {% endunless %}
+                          
+                        </div>                
+
+                        <!--start popup-->
+                        <div class="modal-container" id="modal-opened-{{- article.id -}}">
+                          
+                          
+                          <div class="modal">
+                            <a href="#modal-closed-{{ forloop.index }}" class="modal-close">
+
+                              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.3325 0.0169678L10.9992 9.3503L1.66587 0.0169678L0.015625 1.66663L9.34954 11L0.015625 20.3333L1.66587 21.983L10.9992 12.6496L20.3325 21.983L21.9822 20.3333L12.6489 11L21.9822 1.66663L20.3325 0.0169678Z" fill="white"/>
+                              </svg>
+
+                            </a>
+                             <div class="modal-inner">
+                            <div class="popup_rows">
+                              <div class="popup_column image_column" style="background:{{ section.settings.popup_bg }};">
+                                <div class="image_wrap">
+                                  {{ article | img_url: '1024x1024' | img_tag: article.title }}
+                                </div>
+
+                              </div>
+                              <div class="popup_column text_column">
+                                <div class="text_column__iner">
+                                  <h2 class="h3">{{ article.title }}</h2>
+                                  {% if article.metafields.article.product_code != blank %}
+                                  <span class="pro_code">
+                                    Product Code: {{article.metafields.article.product_code}}
+                                  </span>  
+                                  {% endif %}
+
+
+
+                                  <div class="rte">
+                                    {% if article.metafields.article.articleprice != blank %}
+                                    <span class="pro_price">
+                                      {{ article.metafields.article.articleprice }}
+                                    </span>
+                                    {% endif %}
+                                    {% if article.metafields.article.size_run_text != blank  %}
+                                    <p> {{ article.metafields.article.size_run_text }}</p>
+                                    {% endif %}
+                                    {% if article.metafields.article.no_size != blank  %}
+                                    <span>{{article.metafields.article.no_size}}</span>
+                                    {% endif %}
+                                  </div>
+                                  <div class="pop_footer">
+
+									{% if art_date_sec > current_sec %}
+                                      {% if article.metafields.article.notification_link != blank %}
+                                      <a class="signup_btn" href="{{ article.metafields.article.notification_link }}">
+                                       {{ article.metafields.article.sign_up_button_text }}                                    
+                                      </a>
+                                      {% endif %}
+                                    {% else %}
+                                    	{% if article.metafields.article.raffle_link != blank %}
+                                          <a class="signup_btn text-center" href="{{ article.metafields.article.raffle_link }}">
+                                            {{ article.metafields.article.raffle_button_text }}
+                                          </a>
+                                    	{% endif %}
+                                    {% endif %}
+
+                                    {% comment %}
+                                    {% if article.metafields.article.product_button_link != blank %}
+                                    <a class="signup_btn text-center" href="{{ article.metafields.article.product_button_link }}">
+                                      {{ article.metafields.article.shop_button_text }}
+                                    </a>
+                                    {% endif %}
+
+
+                                    {% endcomment %}
+
+									{% if rd != blank and rd_time != blank %}
+                                    <ul class="Add-google flex" data-id="{{- article.id -}}">
+                                      <li class="addevent-google"><a href="#">Add to Google Cal</a></li>
+                                      <li><a href="#">|</a></li>
+                                      <li class="addevent-apple"><a href="#">Add to iCal</a></li>
+                                    </ul>
+                                    {% endif %}
+
+                                    <p class="social_title">{{ section.settings.social_title }}</p>
+                                    {% comment %}
+                                    	{% include 'social-links', share_url: true %} 
+                                    {% endcomment %}
+                          {% include 'social-links' , article:article %} 
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                             </div>
+                          </div>
+                        </div>
+                        <!--end popup-->
+
+
+                      </div>
+                 {% endif %}
+              
+            {% endfor %}
+          </div>
+       </div>
+        
+ </div>      
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Release Upcoming",
+    "settings": [
+		
+		{
+          "type": "text",
+          "id": "upcomming_heading",
+          "label": "Upcomming Heading"
+        },
+		{
+          "type": "range",
+          "id": "upsell_limit",
+          "min": 2,
+          "max": 24,
+          "step": 2,
+          "label": "Upsell Product Limit",
+          "default": 4
+        },
+		{
+          "type": "color",
+          "id": "popup_bg",
+          "label": "Popup image background color"
+        },
+		{
+          "type": "text",
+          "id": "shopnow_btn",
+          "label": "Shop Now Button Text"
+        },
+		{
+          "type": "text",
+          "id": "notify_btn",
+          "label": "Notify Button Text"
+        },
+		{
+          "type": "text",
+          "id": "raffle_btn",
+          "label": "Raffle Button Text"
+        },
+		{
+          "type": "text",
+          "id": "social_title",
+          "label": "Social Title Text"
+        }
+	],
+     "blocks": [
+      {
+        "type": "grid",
+        "name": "article select",
+        "settings": [
+         {
+          "type": "article",
+          "id": "article",
+          "label": "Select Article"
+        }
+        
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+
+

@@ -1,0 +1,95 @@
+<div class="ais-page">
+  <div class="ais-breadcrumbs">
+    {% include 'breadcrumbs' %}
+  </div>
+  <div class="ais-page-title">
+    <h1>
+      {% if template == 'collection' %}
+      	{{ collection.title | replace: 'Accessories ', '' | replace: 'Footwear ', '' | replace: 'Apparel ', '' | replace: 'Brands ', '' }}
+      {% else %}
+      	Search Results
+      {% endif %}
+    </h1>
+    <div class="ais-search-header">
+      <div class="ais-stats-container"></div>
+      <div class="ais-change-display">
+        <span class="ais-change-display-block ais-change-display-selected"><i class="fa fa-th-large"></i></span>
+        <span class="ais-change-display-list"><i class="fa fa-th-list"></i></span>
+      </div>
+      <div class="ais-sort">
+        [[# multipleSortOrders ]]
+        <span class="ais-sort-orders-container"></span>
+        [[/ multipleSortOrders ]]
+
+        [[^ multipleSortOrders ]]
+        [[ translations.relevance ]]
+        [[/ multipleSortOrders ]]
+      </div>
+    </div>
+  </div>
+  <div class="ais-facets-button">
+    Sort &amp; Filter
+  </div>
+  <div class="ais-facets">
+    <div class="ais-facets__content">
+      <div class="ais-facets__title">
+          <button class="ais-facets__close">
+            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.50002 2.88377L11.0581 7.44189L11.9419 6.55815L6.50002 1.11627L1.05814 6.55814L1.9419 7.44189L6.50002 2.88377Z" fill="black" stroke="black"/></svg> Back
+          </button>
+          <h2>Filter By</h2>
+          <div class="ais-clear-refinements-container"></div>
+          <div class="ais-current-refined-values-container"></div>
+      </div>
+      <div class="ais-facet ais-facet--sort">
+        <div class="ais-facet__header">
+          Sort By
+          <div class="ais-facet__toggle-icon">
+            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.50002 2.88377L11.0581 7.44189L11.9419 6.55815L6.50002 1.11627L1.05814 6.55814L1.9419 7.44189L6.50002 2.88377Z" fill="black" stroke="black"/></svg>
+          </div>
+        </div>
+        <div class="ais-facet__container ais-facet__container--sort">
+          <div class="ais-sort">
+            [[# multipleSortOrders ]]
+            <span class="ais-sort-orders-container-mobile"></span>
+            [[/ multipleSortOrders ]]
+
+            [[^ multipleSortOrders ]]
+            [[ translations.relevance ]]
+            [[/ multipleSortOrders ]]
+          </div>
+        </div>
+      </div>
+      [[# facets ]]
+        <div class="ais-facet ais-facet--[[ escapedName ]] ais-facet--[[ type ]]">
+          <div class="ais-facet__header">
+            [[ title ]]
+            <div class="ais-facet__toggle-icon">
+              <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.50002 2.88377L11.0581 7.44189L11.9419 6.55815L6.50002 1.11627L1.05814 6.55814L1.9419 7.44189L6.50002 2.88377Z" fill="black" stroke="black"/></svg>
+            </div>
+          </div>
+          <div class="ais-facet__container ais-facet__container--[[ escapedName ]]"></div>
+        </div>
+      [[/ facets ]]
+    </div>
+    <div class="ais-facets__mobile-buttons">
+      <button class="btn ais-facets__close">Apply</button>
+      <button class="btn btn--secondary ais-ClearRefinements-button">Cancel</button>
+    </div>
+  </div>
+  <div class="ais-block">
+    <div class="ais-input">
+      <div class="ais-input--label">
+        [[ translations.search ]]
+      </div>
+      <div class="ais-search-box-container"></div>
+      <div class="ais-input-button">
+        <div class="ais-clear-input-icon"></div>
+        <a title="Search by Algolia - Click to know more" href="https://www.algolia.com/?utm_source=shopify&utm_medium=link&utm_campaign=instantsearch-[[ storeName ]]">
+          <div class="ais-algolia-icon"></div>
+        </a>
+      </div>
+    </div>
+    <div class="ais-hits-container ais-results-as-block"></div>
+  <div class="ais-pagination-container"></div>
+  </div>
+</div>

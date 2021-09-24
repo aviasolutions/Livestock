@@ -1,0 +1,25 @@
+<a 
+   data-algolia-index="[[ index ]]" 
+   data-algolia-position="[[ productPosition ]]" 
+   data-algolia-queryid="[[ queryID ]]" 
+   data-algolia-objectid="[[ objectID ]]" 
+   class="product"
+   data-handle="[[ handle ]]" 
+   data-variant-id="[[ objectID ]]"
+   data-distinct="[[ _distinct ]]"
+   href="[[# helpers.instantsearchLink ]][[/ helpers.instantsearchLink ]]" 
+   onclick="void(0)"
+   title="[[# helpers.fullTitle ]][[/ helpers.fullTitle ]]"
+   >
+  <div class="product__image">
+  	<img src="[[# helpers.sizedImage]]400x400[[/ helpers.sizedImage]]" class="product__image-main" />
+    <img src="[[# helpers.secondaryImage]]400x400[[/ helpers.secondaryImage]]" class="product__image-hover" />
+  </div>
+  <h4 class="product__brand">[[ vendor ]]</h4>
+  <div class="product__name">
+    [[# helpers.fullEscapedHTMLTitle ]][[/ helpers.fullEscapedHTMLTitle ]]
+  </div>
+  <div class="product__price">
+    [[# helpers.autocompletePrice ]][[/ helpers.autocompletePrice ]]
+  </div>
+</a>

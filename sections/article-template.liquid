@@ -1,0 +1,156 @@
+
+<div class="grid">
+    <div class="grid__item large--five-sixths push--large--one-twelfth">
+      <div class="grid">
+        <div class="grid__item large--five-sixths push--large--one-twelfth">
+        {% assign blog_handle = 'news' %}
+        {% paginate blogs[blog_handle].articles by 15 %}
+          <div class="sixteen columns">
+            <div class="clearfix breadcrumb">
+        {% comment %}      <div class="right mobile_hidden single-post-nav">       
+                {% if blog.previous_article %}
+                  <a href="{{ blog.previous_article }}" title="Previous Article">
+                    <img src="{{ 'blue-arrow-left-prev.png' | asset_url }}" alt="Prev" />
+                  </a>
+                  {% if blog.next_article %}&nbsp; | &nbsp;{% endif %}
+                {% endif %}
+
+                {% if blog.next_article %}
+                  <a href="{{ blog.next_article }}" title="Next Article">
+                    <img src="{{ 'blue-arrow-left-next.png' | asset_url }}" alt="Next" />
+                  </a>
+                {% endif %}
+              </div>{% endcomment %}
+        {% comment %}      <div class="breadcrumb">
+                <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="url"><span itemprop="title">Home</span></a></span> 
+                &nbsp; / &nbsp;
+                <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ blog.url }}" title="{{ blog.title | escape }}" itemprop="url"><span itemprop="title">{{ blog.title }}</span></a></span>       
+                &nbsp; / &nbsp;
+                <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">{{ article.title }}</span>
+              </div>{% endcomment %}
+            </div>
+          </div>
+          {% comment %}<br><br>{% endcomment %}
+          <div class="sixteen columns single-post">
+            {% comment %}
+            <div class="five columns alpha omega blog_meta">
+              <h6>
+                {% comment %}{{ article.published_at | date: "%B %d, %Y" }}{% endcomment %}
+                {{ article.published_at | date: "%x" }}
+              </h6>
+
+              {% if article.comments_enabled? %}
+                <p>
+                  <a href="{{ article.url }}#comments" class="title" title="{{ article.title | escape }} Comments">{{ article.comments_count }} {{ article.comments_count | pluralize: 'Comment', 'Comments' }}</a>
+                </p>
+              {% endif %}
+
+              {% if settings.blog_tags %}
+                <p class="meta">
+                  {% for tag in article.tags %}
+                    <a href="{{ shop.url }}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} tagged {{ tag | escape }}" class="tag">{{ tag }} &rsaquo;</a>
+                  {% endfor %}
+                </p>
+              {% endif %}
+
+              <hr />
+
+              {% include "social-buttons" with "article" %}
+
+              {% if settings.display_recent_articles %}
+
+                <h4 class="sidebar_title" style="margin-top:10px">Recent Articles</h4>
+                <ul class="none recent_articles">
+                  {% for article in blog.articles limit:5 %}
+                    <li>
+                      <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+              {% if settings.blog_content_page != blank %}
+                <hr />
+                {{ pages[settings.blog_content_page].content }}
+              {% endif %}
+
+              <form class="search" action="/search">
+                <input type="hidden" name="type" value="article" />
+                <input style="width: 90%" type="text" name="q" class="search_box" placeholder="Search {{ blog.title | escape }}..." value="{{ search.terms }}" />
+              </form>
+            </div>
+        {% endcomment %}
+            <div class="ten columns alpha blog_content">
+              <div class="title-date-block clearfix">
+                <div class="title-date">
+                  <h1><a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a></h1>
+                  <h6>{{ article.published_at | date: "%x" }}</h6>
+                </div>
+              {% comment %}   <div class="right mobile_hidden single-post-nav">       
+                  {% if blog.previous_article %}
+                    <a href="{{ blog.previous_article }}" title="Previous Article">
+                      <img src="{{ 'blue-arrow-left-prev.png' | asset_url }}" alt="Prev" />
+                    </a>
+                    {% if blog.next_article %}&nbsp; | &nbsp;{% endif %}
+                  {% endif %}
+
+                  {% if blog.next_article %}
+                    <a href="{{ blog.next_article }}" title="Next Article">
+                      <img src="{{ 'blue-arrow-left-next.png' | asset_url }}" alt="Next" />
+                    </a>
+                  {% endif %}
+                </div>{% endcomment %}
+              </div>
+        {% comment %}      {% if article.metafields.c_f.Slideshow %}
+                {{ article.metafields.c_f.Slideshow }}
+              {% endif %}{% endcomment %}
+
+              {% assign content = article.excerpt | replace : 'http://deadstock.ca/uploads/', 'http://blog.deadstock.ca/uploads/' %}
+              
+              {{ content | replace : 'http://deadstock.ca/livestock/', 'http://blog.deadstock.ca/livestock/' }}
+
+              {% if article.metafields.c_f.collectionHandle %}
+                <div class="products-blog-block clearfix {% if article.metafields.c_f.collection-single %}is-one{% endif %}">
+                  {%capture blogCollection%}{{ article.metafields.c_f.collectionHandle }}{%endcapture%}
+                  {% for collection in collections %}
+                    {% if blogCollection == collection.handle %}
+                      <h3>Shop {{ collection.title | remove:"article-" }}</h3>
+                    {%endif%}
+                  {% endfor %}
+                  {% for product in collections[blogCollection].products %}
+                    {% if article.metafields.c_f.collection-single %}
+
+                    {% else %}
+                      {% capture modulo %}{{ forloop.index | modulo: 5 }}{% endcapture %}
+                      {% if modulo == '1' %}
+
+                      {% endif %}
+                        {% include 'product-blog' %}
+                      {% if modulo == '0' or forloop.last %}
+
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endpaginate %}
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

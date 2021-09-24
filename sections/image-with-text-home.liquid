@@ -1,0 +1,170 @@
+<div class="section-space class_{{section.settings.theme}}"  data-section-id="{{ section.id }}"  data-aos="fade-zoom-in"
+     data-aos-easing="ease-in-back"
+     data-aos-delay="300"
+     data-aos-offset="0">
+  <div class="header-padding">
+    <div class="image-with-text flex flex-align flex-break">
+      <div class="image-with-text-left">
+        {% assign image = section.settings.image %}
+        {% if section.settings.image != blank  %}   
+            {% assign imageSrc = image | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
+        <img 
+             class="blur-up lazyload image"
+             src="{{ image | img_url: '30x' }}"
+             data-src="{{ imageSrc }}"
+             data-widths="[300,600,800,1024]"
+             data-aspectratio="{{ image.aspect_ratio }}"
+             data-sizes="auto"
+             tabindex="-1"
+             alt="{{ image.alt | escape }}">
+        {% endif  %}
+      </div>
+      <div class="image-with-text-right">
+         <div class="image-with-text-right-inner">
+        {% if section.settings.subheading != blank  %} <span>{{section.settings.subheading}}</span>  {% endif  %}
+  		{% if section.settings.subheading != blank  %} <h2>{{section.settings.heading}}</h2> {% endif  %}
+       {% if section.settings.description != blank  %} <div class="des-con">{{section.settings.description}}</div>  {% endif  %}
+        
+        
+        {% if section.settings.btn_link != blank  %}
+        <a href="{{section.settings.btn_link}}" class="btn-hero">{{section.settings.btn-text}}</a>  
+        {% endif  %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>  
+
+
+<style>
+  .image-with-text{background:{{section.settings.bg}};} 
+.image-with-text-left{width:50%;}
+.image-with-text-right{width:50%;}
+  .image-with-text-right-inner{max-width:495px; padding:0 30px; box-sizing:border-box; margin:0 auto;} 
+.image-with-text-left img{display:block;}  
+ .image-with-text-right span{font-size:15px; 
+letter-spacing:1px; text-transform:uppercase; font-family: 'Roboto Condensed', sans-serif;font-weight: 700; display:block; margin:0px;}
+.image-with-text-right h2{font-size:32px;line-height:38px;
+letter-spacing:0px; margin:0; padding:12px 0 12px; font-family: 'Roboto Condensed', sans-serif; font-weight: 700;}
+ 
+.image-with-text-right  .des-con{line-height:24px; font-size:16px; color:{{section.settings.des_color}}; font-family: 'Roboto', sans-serif; font-weight:400;} 
+.image-with-text-right  .des-con p{font-size:16px; font-family: 'Roboto', sans-serif; font-weight:400;
+    margin: 0;
+    padding: 0 0 23px;
+}
+  
+  
+.image-with-text-right .btn-hero{display:inline-block; background:{{section.settings.btn_bg}}; color:{{section.settings.btn_text_color}}; 
+font-size:13px;  font-family: 'Roboto Condensed', sans-serif; font-weight: 700;
+  text-transform:uppercase; padding:14px 30px; letter-spacing:1px; margin-top:0px;}  
+.image-with-text-right .btn-hero:hover{ background:{{section.settings.btn_bgh}}; color:{{section.settings.btn_text_colorh}}; }  
+ 
+  
+  .image-with-text-right span{color:#000;}
+  .image-with-text-right h2{color:#000;}
+  .image-with-text-right  .des-con, .image-with-text-right  .des-con p{color:#000;}
+  .image-with-text-right .btn-hero{}
+  .image-with-text-right .btn-hero{background:#000; color:#fff;}
+  .image-with-text-right .btn-hero:hover{background:#555555; color: #fff;}
+  
+  
+  .class_light .image-with-text-right span{color:#fff;}
+  .class_light .image-with-text-right h2{color:#fff;}
+  .class_light  .image-with-text-right  .des-con, .class_light .image-with-text-right  .des-con p{color:#fff;}
+  .class_light  .image-with-text-right .btn-hero{background:#fff; color:#000;}
+  .class_light  .image-with-text-right .btn-hero:hover{ background:#F0F0F0; color:#000;} 
+  
+  
+  
+@media(max-width:860px){
+.image-with-text-right span{font-size:13px;}
+.image-with-text-right h2{font-size:26px; bottom-padding:12px;}  
+.image-with-text-right .des-con{font-size:15px; line-height:21px;}  
+  .image-with-text-right .des-con p{font-size:15px; padding:0 0 17px}  
+}
+  
+@media(max-width:767px){
+.image-with-text-left{width:100%;}  
+.image-with-text-right{width:100%;}  
+.image-with-text-right-inner { max-width: 100%;  padding: 32px 20px;   } 
+.image-with-text-right h2{font-size:32px;line-height:32px}  
+.image-with-text-right .des-con{font-size:16px; line-height:24px;}  
+ 
+  
+}
+  
+</style>
+
+{% schema %}
+  {
+    "name": "Image With Text",
+    "settings": [
+    {
+      "type": "radio",
+      "id": "theme",
+      "label": "Theme Color",
+      "options": [
+           { "value": "dark", "label": "Dark Theme " },
+           { "value": "light", "label": "Light Theme" }
+         ],
+         "default": "dark"
+	 }, 
+    {
+     "type": "color",
+     "id": "bg",
+     "label":"Background",
+     "default":"#F7F7F7"
+    }, 
+    {
+     "type":"image_picker",
+     "id":"image",
+     "label":"Image"
+    },   
+    {
+     "type": "text",
+     "id": "subheading",
+     "label": "Sub Heading",
+     "default": "featured collaboration"
+    },
+  
+    {
+     "type":"text",
+     "id":"heading",
+     "label":"Heading",
+     "default":"Adidas By Pharell Williams “Black Ambition” Pack"
+    },
+    {
+     "type": "richtext",
+     "id": "description",
+     "label": "Description",
+     "default": "<p>Default <em>richtext</em> <a href=\"https://example.com/\">content</a></p>"
+	},
+    {
+     "type": "text",
+     "id": "btn-text",
+     "label": "Button Text",
+     "default": "Shop Now"
+    },
+    {
+     "type": "url",
+     "id": "btn_link",
+     "label": "Button link"
+    }
+    
+    
+],
+	"presets": [
+      {
+        "name": "Image With Text",
+        "category": "Image"
+  
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

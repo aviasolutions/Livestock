@@ -1,0 +1,23 @@
+<style>
+.ais-breadcrumbs, .ais-page-title, .ais-facets, .ais-pagination-container, .ais-facets-button { display: none !important; }
+.ais-block { padding-left: 0; }
+</style>
+
+<div class="ais-hit-empty">
+  <h1 class="ais-hit-empty__title">We couldn't find anything for "[[query]]"</h1>
+  <p>We don't have what you're looking for this time, but check out some of our suggested categories and products below.</p>
+  <!--<div class="ais-hit-empty__recommended">
+    <h2 class="ais-hit-empty__subtitle">Recommended for you</h2>
+    <div class="ais-hit-empty__recommendations"></div>
+  </div>-->
+  <div class="ais-hit-empty__quick-links">
+    <h2 class="ais-hit-empty__subtitle">Quick Links</h2>
+    <ul class="ais-hit-empty__menu">
+   		{% for link in linklists.no-search-results-menu.links %}
+          <li>
+            <a href="{{link.url}}">{{link.title}}</a>
+          </li>
+        {% endfor %}
+    </ul>
+  </div>
+</div>

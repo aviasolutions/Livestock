@@ -1,0 +1,38 @@
+{% assign collection_banner_image_desc = section.settings.collection_banner_image_desc %}
+{% assign collection_banner_image_mobile = section.settings.collection_banner_image_mobile %}
+{% assign handles_of_collection = section.settings.handles_of_collection | split: "," %}
+
+{% assign hide_image = false %}
+{% for handle in handles_of_collection %}
+	{% if collection.handle == handle %}
+		{% assign hide_image = true %}
+	{% endif %}
+{% endfor %}
+<div class="grid">
+  <div class="grid__item one-whole">
+    {% unless hide_image %}
+      {% if collection_banner_image_desc != blank %}
+      <div class="small--hide">
+        <div class="sq-new-banner">
+          {% if section.settings.link_to_image != blank %}<a href="{{section.settings.link_to_image}}"> {% endif %}
+              <img class="collection_img" src="{{collection_banner_image_desc | img_url:'master'}}" />
+          {% if section.settings.link_to_image != blank %}</a> {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      {% if collection_banner_image_mobile != blank %}
+        <div class="hide small--show">
+          {% if section.settings.link_to_image != blank %}<a href="{{section.settings.link_to_image}}"> {% endif %}
+            <img class="collection_img" src="{{collection_banner_image_mobile | img_url:'master'}}" />
+           {% if section.settings.link_to_image != blank %}</a> {% endif %}
+        </div>
+      {% elsif collection_banner_image_desc != blank %}
+        <div class="hide small--show">
+          {% if section.settings.link_to_image != blank %}<a href="{{section.settings.link_to_image}}"> {% endif %}
+            <img class="collection_img" src="{{collection_banner_image_desc | img_url:'master'}}" />
+           {% if section.settings.link_to_image != blank %}</a> {% endif %}
+        </div>
+      {% endif %}
+    {% endunless %}
+  </div>
+</div>

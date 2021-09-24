@@ -1,0 +1,88 @@
+{% include 'collection_banner' %}
+
+{% if section.settings.enable_sorting %}
+	{% include 'collection-sortby-menu' %}
+{% endif %}
+
+{% if collection.image %}
+  <div class="collection-hero">
+    <noscript>
+      <div class="collection-hero__image-no-js" style="background-image:url({{ collection.image | img_url: '2048x2048' }});"></div>
+    </noscript>
+    <div class="collection-hero__image-wrapper">
+      {% assign img_url = collection.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+      <img class="collection-hero__image lazyload"
+        src="{{ collection.image | img_url: '300x' }}"
+        data-src="{{ img_url }}"
+        data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+        data-aspectratio="{{ collection.image.aspect_ratio }}"
+        data-sizes="auto"
+        data-parent-fit="cover"
+        alt="{{ collection.image.alt | escape }}">
+    </div>
+  </div>
+{% endif %}
+
+<div id="CollectionSection" class="wrapper" data-section-id="{{ section.id }}" data-section-type="collection-template" data-grid-type="{{ section.settings.collection_products_grid }}">
+  {% include 'collection-template' %}
+</div>
+
+{% schema %}
+  {
+    "name": "Collection image pages",
+    "settings": [
+	  {
+		"type": "image_picker",
+        "id": "collection_banner_image_desc",
+        "label": "Collection Banner image for desktop"
+	  },
+      {
+        "type": "image_picker",
+        "id": "collection_banner_image_mobile",
+        "label": "Collection Banner image for Mobile"
+      },
+	  {
+		"type": "url",
+        "id": "link_to_image",
+        "label": "Link to image"
+	  },
+	  {
+		"type": "textarea",
+        "id": "handles_of_collection",
+        "label": "Add Handle of Collection saperate with Comma",
+        "label": "Image will not display for these Collections"
+	  },
+      {
+        "type": "select",
+        "id": "collection_products_grid",
+        "label": "Grid style",
+        "options": [
+          {
+            "value": "collage",
+            "label": "Collage"
+          },
+          {
+            "value": "grid",
+            "label": "Grid"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sorting",
+        "label": "Enable Collection Sorting",
+		"default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_tags_enable",
+        "label": "Show collection tags"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_vendor_enable",
+        "label": "Show product vendor"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,170 @@
+<!-- /templates/404.liquid -->
+<section class="template-404">
+<header class="section-header section-header--404 text-center">
+  <h1>
+    {% comment %}{{ 'general.404.title' | t }}   {% endcomment %}
+  The product or page you’re looking for is not available
+  </h1>
+
+<!--   <p>{{ 'general.404.subtext_html' | t }}</p> -->
+  <p class="page-404_subtitle">{{section.settings.subtitle}}</p>
+  
+  
+  
+  
+</header>
+<div class="grid search_404-page">
+    <div class="grid__item">
+      <header class="section-header text-center">
+        {% if search.performed %}
+          {% if search.results_count == 0 %}
+            <h1 class="text-center">{{ 'general.search.no_results_html' | t: terms: search.terms }}</h1>
+          {% else %}
+            <h1 class="text-center">{{ 'general.search.results_for_html' | t: terms: search.terms }}</h1>
+          {% endif %}
+        {% else %}
+<!--           <h1 class="text-center">{{ 'general.search.title' | t }}</h1> -->
+        {% endif %}
+
+      </header>
+
+      {% include 'search-bar', search_btn_style: 'btn', search_bar_location: 'search-bar--page' %}
+
+      {% if search.performed %}
+
+        <hr class="hr--medium hr--clear">
+
+        <div class="grid-uniform">
+          {% for item in search.results %}
+
+            {% if item.object_type == 'product' %}
+              {% assign product = item %}
+              {% include 'product-grid-item' %}
+            {% else %}
+              <div class="grid__item grid-search large--one-third medium--one-half test">
+                <div class="grid-search__page">
+                  <a href="{{ item.url }}" class="grid-search__page-link">
+                    <span class="grid-search__page-content">
+                      <span class="h4 text-center">{{ item.title }}</span>
+                      {{ item.content | strip_html | truncatewords: 45 }}
+                    </span>
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          {% include 'pagination' %}
+        {% endif %}
+
+      {% endif %}
+    </div>
+</div>
+<div class="grid">
+  
+  {% comment %}
+  {% for product in collections[section.settings.collection].products limit:48 %}
+  {% include 'product-grid-item' %}
+  {% endfor %}
+  {% endcomment %}
+  <div class="collection-products">
+    {% comment %}
+    Collection template, used on collection.liquid and collection.image.liquid
+    {% endcomment %}
+    {% assign collection = collections[section.settings.collection] %}
+
+    {% paginate collection.products by 48 %}
+
+    <div class="grid-uniform">
+
+      {% for product in collection.products %}
+      {% include 'product-grid-item' %}
+      {% endfor %}
+    </div>
+    <div class="footer-page">
+      {% if paginate.pages > 1 %}
+      {% include 'pagination' %}
+      {% endif %}
+    </div>
+    {% endpaginate %}
+  </div>
+
+</div>
+
+</section>
+<style>
+  .template-404 main.main-content {
+    margin-top: 45px;
+}
+  .section-header--404{padding-bottom:0px; padding-top:0;}
+  .section-header--404 h1 {    margin: 0; font-size:22px;font-weight:400; padding: 0 0 4px;
+  font-family: "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;}
+  .page-404_subtitle{font-size:18px; margin:0; padding:0;}
+  .search_404-page .search-bar--page {    max-width: 802px;    margin: 0 auto;    width: 100%; position:relative;}
+  .search_404-page button.icon-fallback-text {    position: absolute;    top: 12px;    right: 6px;}
+  .search_404-page input.input-group-field.snize-input-style {    padding-right: 39px;     color: #000 !important;
+  }
+
+
+  .search_404-page input.input-group-field.snize-input-style::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #000 !important;opacity:1;
+  }
+  .search_404-page input.input-group-field.snize-input-style::-moz-placeholder { /* Firefox 19+ */
+    color: #000 !important; opacity:1;
+  }
+  .search_404-page input.input-group-field.snize-input-style:-ms-input-placeholder { /* IE 10+ */
+    color: #000 !important; opacity:1;
+  }
+  .search_404-page input.input-group-field.snize-input-style:-moz-placeholder { /* Firefox 18- */
+    color: #000 !important; opacity:1;
+  }
+  /*   @media only screen and (max-width:1499px) and (min-width:1200px) {
+  #shopify-section-404 .grid-product{
+  width: 33.33%;
+  }
+  }
+  */
+  .template-404 .collection-products{
+    margin-top: 60px;
+  }
+
+    @media(max-width:980px){
+   .section-header--404{padding-top:30px; }
+    }
+  @media(max-width:767px){
+    .section-header--404 h1{font-size:20px;}
+    .page-404_subtitle{font-size:16px;}
+     
+  }  
+
+</style>
+
+
+
+{% schema %}
+  {
+    "name": "404 sections",
+    "settings": [
+	{
+      "id": "subtitle",
+      "type": "textarea",
+      "label": "Link to Continue Shopping"
+	},
+	{
+      "id": "collection",
+      "type": "collection",
+      "label": "Collection"
+	}
+
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

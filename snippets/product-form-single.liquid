@@ -1,0 +1,368 @@
+{% if product.available %}
+  <form class="clearfix product_form" data-money-format="{{ shop.money_format }}" data-shop-currency="{{ shop.currency }}" id="product-form-{{ product.id }}" >
+
+     {% if product.tags contains 'bot-protect' %}
+  			<input type="hidden" id="key" name="properties[key]" value="{{ settings.bot-key }}" />
+	   {% endif %}
+    
+    <h2>{{ product.title }}</h2>
+    
+    {% if settings.display_inventory_left %}
+      <div class="items_left">
+        {% if product.variants.first.inventory_management == "shopify" and product.variants.first.inventory_quantity > 0 %}
+          <p><em>{{ product.variants.first.inventory_quantity }} {{ settings.inventory_left_text | escape }}</em></p>
+        {% endif %}
+      </div>
+    {% endif %}
+   
+ <script data-product="{{ product | json | escape }}" id="out-of-stock" src="//setup.shopapps.io/out-of-stock/script/deadstock-ca.js"></script>
+
+      <div style="position:relative; height:auto; display:block; width:inherit; font-size:10px;">
+        <span style="font-size:10px; color:#666666; float:left;margin-top:5px; "><strong>SELECT US SIZE:</strong></span>
+
+
+    {% if product.variants.size >= 1 %}
+      <div class="selector">
+          {% for variant in product.variants %}
+            <input type="radio" class="variant-radio" id="variant-select-{{ variant.id }}" name='id' {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %} value="{{ variant.id }}" data-qty-limit="{{ product.metafields.Limit['default'] }}" /> 
+            <label class="radio-label {% unless variant.available %}sold-out {% assign unavailable = 'true' %}{% endunless %}" for="variant-select-{{ variant.id }}">{{ variant.title }}</label>
+          {% endfor %}
+      </div>
+    {% else %}
+      <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+    {% endif %}
+
+    {% if unavailable == 'true' %}
+      <a href="#" id="BIS_trigger"><i class="fa fa-caret-right"></i> Size Not Available?</a>
+    {% endif %}
+
+    {% if settings.display_product_quantity %}
+      <div class="left">
+        <label for="quantity">Quantity:</label>
+        <input type="number" min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" />
+      </div>
+    {% endif %}
+
+      <div class="middle-section clearfix">
+        <p class="modal_price">
+          <span class="sold_out">{% if product.available == false %}{{ settings.sold_out_text }} - {% endif %}</span>
+          <span class="current_price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
+            {{ product.price | money | remove: '.00' }}
+          </span>
+          <span class="was_price">
+            {% if product.price < product.compare_at_price_max %}
+              {{ product.compare_at_price | money | remove: '.00' }} 
+            {% endif %}
+          </span>
+        </p>
+
+        <div class="purchase{% if settings.display_product_quantity %} inline_purchase{% endif %}">
+          {% if settings.cart_return == 'back' %}
+            <input type="hidden" name="return_to" value="back" />
+          {% endif %}
+          <input type="submit" name="add" value="{{ settings.select_size_text | escape }}" class="action_button add_to_cart" />
+          {% include 'modal-limit' %}
+        </div>
+      </div>      
+
+      </div>
+
+      <div class="view-store-inventory-msg mobile_hidden">
+        <p><a id="availability-cat" class="view-store-inventory-btn"><i class="fa fa-caret-right"></i> View In-Store Availability</a>/ Don’t see your size? Check the in-store Availability.</p>  
+      </div>
+      <div class="view-store-inventory-msg mobile_only">
+        <p><a class="view-store-inventory-btn-mobile"><i class="fa fa-caret-right"></i> View In-Store Availability</a>/ Don’t see your size? Check the in-store Availability.</p>  
+      </div>
+      <div class="social-share-single">
+        {% include "social-buttons" with "product" %}
+      </div>
+      {% include 'modal' %}
+      <script>
+          $(function() { 
+              $('.view-store-inventory-btn-mobile').click(function(e){
+                  e.preventDefault();
+                  $('#in-store-merchandise').toggle();
+              });
+
+              $('.store-name').click( function(){
+                  $(this).siblings('.store-address').first().toggle();
+              });
+          });
+      </script>
+
+      <div id="in-store-merchandise">
+      <div class="store-name" style="margin:0;float:left;padding-left:10px;box-sizing: border-box;"><strong>LOCATIONS</strong></div>
+      <div class="store-name"  style="margin:0;padding-left:30px;box-sizing: border-box;"><strong>AVAILABLE SIZES</strong></div>
+      {% assign store = 'livestockchinatown_inventory' %}
+        <div class="store-availability">
+          <div class="store-name">
+            <h4>+ Livestock/ <span>Chinatown</span></h4>
+          </div>
+          <div class="store-inventory">
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% if variant.metafields.Channels[store] == 'Available' %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}} 
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-address">
+            <address>
+              141 East Pender St</br>
+              Vancouver BC
+            </address> 
+            <span>Phone: 604 559 0877</span>
+            <span>Hours: 11am - 8pm</span>
+          </div>
+        </div>
+      
+      {% assign store = 'livestocktoronto_inventory' %}
+        <div class="store-availability">
+          <div class="store-name">
+            <h4>+ Livestock/ <span>Toronto</span></h4>
+          </div>
+          <div class="store-inventory">
+            {% assign counter = 0 %}
+          {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% if variant.metafields.Channels[store] == 'Available' %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}} 
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-address">
+            <address>
+              116 Spadina - Unit G1</br>
+              Toronto ON
+            </address>
+            <span>Phone: 416 360 5483</span>
+            <span>Hours: 11am - 8pm</span>
+          </div>
+        </div>
+
+      {% assign store = 'livestockwest4th_inventory' %}
+        <div class="store-availability">
+          <div class="store-name">
+            <h4>+ Livestock/ <span>West 4th</span></h4>
+          </div>
+          <div class="store-inventory">
+           {% assign counter = 0 %}
+          {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% if variant.metafields.Channels[store] == 'Available' %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}} 
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-address">
+            <address>
+              1709 West 4th Ave.</br>
+              Vancouver BC
+            </address>
+            <span>Phone: 604 568 1444</span>
+            <span>Hours: 11am - 6:30pm</span>
+          </div>
+        </div>
+      
+    {% assign store = 'lsegastown_inventory' %}
+        <div class="store-availability">
+          <div class="store-name">
+            <h4>+ Livestock Special Engagements/ <span>Gastown</span></h4>
+          </div>
+          <div class="store-inventory">
+            {% assign counter = 0 %}
+          {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% if variant.metafields.Channels[store] == 'Available' %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}} 
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-address">
+            <address>
+              239 Abbott St</br>
+              Vancouver BC
+            </address>
+            <span>Phone: 604 685 1433</span>
+            <span>Hours: 11am - 8pm</span>
+          </div>
+        </div>
+
+      {% assign store = 'livestockds_inventory' %}
+        <div class="store-availability">
+          <div class="store-name">
+            <h4>+ Livestock/ <span>Online</span></h4>
+          </div>
+          <div class="store-inventory">
+            {% assign counter = 0 %}
+          {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% if variant.metafields.Channels[store] == 'Available' %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}} 
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-address">
+            <span>Phone: 1 (855) 360 LIVE</span>
+          </div>
+        </div>
+      </div>
+
+</form>
+
+<script type="text/javascript">
+  $(function() {
+
+    var $submit = $("input[name=add]");
+
+    $('label.radio-label').on('click', function() {
+      var $this = $(this);
+      $("#qty-limit-message").hide();
+      if($this.hasClass("sold-out")) {
+        //Update the Add to Cart button to say that it's sold out
+        $submit .val('{{ settings.sold_out_text | escape }}')
+                .attr('disabled','disabled');
+      } else {
+        $submit .val('{{ settings.add_to_cart_text | escape }}')
+                .removeAttr('disabled');
+      }
+    });
+
+    $submit.on('click', function(e) {
+
+      $('#cart').mmenu({
+        offCanvas: { position: 'right' },
+        classes: "mm-{{ settings.mobile_menu_color }}"
+      });
+
+      e.preventDefault();
+      $("#qty-limit-message").hide();   
+      var selection = $("input[name=id]:checked").val();
+      if(typeof selection != 'undefined') {
+          BCCShopify.getCart(function(cart){
+            var qty_in_cart = parseInt(0);
+
+            $.each(cart.items, function(index, item){
+                if('{{ product.id }}' == item.product_id ) {
+                  qty_in_cart+= item.quantity;             
+                } 
+            });
+            
+         
+            var limit = parseInt($('#variant-select-'+selection).attr('data-qty-limit'));
+
+            if( qty_in_cart >= limit){
+                //Disallow purchase
+                $submit .val("Sorry, you only can buy " + limit);
+                $('#limit').text(limit);
+                $(".modal-back").fadeIn();
+                $("#limit-modal.modal-front").fadeIn();
+            } 
+            else {
+
+                //Attempt to fulfill purchase
+                BCCShopify.addItemFromForm('product-form-{{ product.id }}', function(cartData){
+                  if(typeof cartData === 'object') {
+                    //Successfully added to cart
+                    BCCShopify.getCart( function(cart){
+
+                      var $cart = $("#cart > ul");
+
+                     //Check if cart count exists
+                      if ($('cart-count').length === 0) {
+                            $('.cart-button').prepend('<div class="cart_count">' + cart.item_count + '</div>');
+                      }
+
+                      //Update icon count
+                      $('.cart_count').text(cart.item_count);
+
+                      //Recreate the section with listing of cart_items
+                      $cart.html("<li class='mm-subtitle'><a class='mm-subclose continue' href='#cart'>Continue Shopping</a></li>");
+
+                      cart.items.forEach( function(line_item, index, array){
+                        $cart.append("<li class='cart_item'><a href='" + line_item.url + "'><div class='cart_image'><img src='" + line_item.image + "' alt='" + line_item.title + "'/></div><div><strong>" + line_item.quantity + " x</strong>" + line_item.title + "</div><strong class='price'>" + BCCShopify.formatMoney(line_item.price) + " {{ shop.currency }}</strong></a></li>");
+                      });
+
+                      $cart.append("<li class='mm-selected'><em class='mm-counter'>" + BCCShopify.formatMoney(cart.total_price) + "</em> <a href='/cart'><strong>Subtotal</strong></a></li>")
+                           .append(" <li class='mm-subtitle clearfix'> <a href='/cart' class='action_button right'>Proceed to Cart</a><a href='/cart' class='action_button edit_cart left'>Edit Cart</a></li>");
+
+                      // Update submit text
+                      $submit.val('Item added to cart').addClass('success');
+
+
+                      // If on product page
+                      if($('body').is('.product, .article') ) {
+
+                        // Trigger cart
+                        $('#cart').trigger('open');
+
+                        $.fancybox.close();
+                      }
+
+
+                    });
+                  }
+
+                });
+
+                // //Attempt to fulfill purchase
+                // BCCShopify.addItemFromForm('product-form-{{ product.id }}', function(cartData){
+                //   if((typeof cartData) === 'object') {
+                //     //Successfully added to cart
+                //     //(Update the cart intead.)
+                //     location.reload(); 
+                //   }
+                  
+                // });
+            }
+          });
+      } else {
+        $submit.val("{{ settings.select_size_text | escape }}");
+      }
+    });
+
+    if($('body').is('.article') ) {
+      $(document).on('click', '.mm-subclose', function() {
+        $('#cart').trigger('close');
+      });
+    }
+
+    BCCShopify.onError = function(XMLHttpRequest, textStatus) {
+      var resp = JSON.parse(XMLHttpRequest.responseText);
+      $('#inventory').text(resp.description);
+      $(".modal-back").fadeIn();
+      $("#inventory-modal.modal-front").fadeIn();
+    }
+  });
+
+</script>
+
+{% include 'modal-inventory'%}
+
+{% endif %} {%comment%} for 'if product.available' {%endcomment%}

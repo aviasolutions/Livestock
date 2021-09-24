@@ -1,0 +1,97 @@
+
+{% if section.settings.enable_linkableimg %}
+<div  class="grid-uniform custom-four-coll">
+
+  {% for block in section.blocks %}
+  <div class="grid__item grid-custom medium--one-half large--one-quarter small--one-half">
+    <div class="grid-product__wrapper">
+      {% assign count = 0  %}
+      {% assign collect = collections[block.settings.collection] %}
+
+      {% for product in collections[collect.handle].products %}
+
+      {% if product.available and count < 1 %}
+
+      {% assign on_sale = false %}
+      {% if product.compare_at_price > product.price %}
+      {% assign on_sale = true %}
+      {% endif %}
+
+
+      {% assign count = count | plus:1  %}    
+
+      <a href="{{product.url}}">
+        <img src="{{ product.featured_image.src | img_url: '1024x' }}" />         
+      </a>
+      <div class="grid-product__meta">
+        <span class="top-left grid-product__title">{{product.title}}</span>
+        <span class="grid-product__price-wrap">
+          <span class="grid-product__price">
+            {% if on_sale %}           
+
+            <span id="ComparePrice" class="product-single__price--compare-at">
+              {% if product.compare_at_price > product.price %}
+              {{ product.compare_at_price | money }}
+              {% endif %}
+            </span>
+
+
+            {% else %}
+            <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+            {% endif %}
+            {% if product.price_varies %}
+            {{ product.price_min | money }}
+            <span class="icon-fallback-text">
+              <span class="icon icon-plus grid-product__price-min" aria-hidden="true"></span>
+              <span class="fallback-text">+</span>
+            </span>
+            {% else %}
+            {{ product.price | money }}
+            {% endif %}
+          </span>
+        </span>
+      </div>
+
+      {% endif %}
+
+    {% endfor %}
+  </div>
+
+</div>
+{% endfor %}
+
+
+</div>
+{% endif %}
+
+{% comment %}
+<script>
+  {% endcomment %}
+  {% schema %}
+  { 
+    "name": "4 collection 1",
+      "class": "custom-section-3",
+        "max_blocks": 4,
+          "settings": [
+            {
+              "type": "checkbox",
+              "id": "enable_linkableimg",
+              "label": "Enable this section",
+              "default": true
+            }   
+          ],
+            "blocks" : [
+              {
+                "type": "collection",
+                "name": "collection",
+                "settings": [
+                  {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "Select Collection"
+                  }
+                ]
+              }
+            ]
+  }
+  {% endschema %}

@@ -1,0 +1,101 @@
+{% assign show_form = settings.notify_me_form %}
+
+{% if product.tags contains 'bis_hidden' %}
+  {% assign show_form = false %}
+{% endif %}
+
+{% if show_form %}
+  <div class="notify_form notify-form-{{ product.id }}" id="notify-form-{{ product.id }}" {% if product.available %}style="display:none;"{% endif %}>
+    <form action="/contact" method="post" data-first-variant="{{product.variants.first.id}}" id="BIS_form" onsubmit="return createNotification{{product.id}}(this); return false;">
+      {% if product.available == false and product.variants.size > 1 %}
+        <div class="select">
+          <label>{{ product.options[0] }}:</label>
+          <select id="product-select-{{ product.id }}" name='id'>
+          {% for variant in product.variants %}
+            <option value="{{ variant.id }}">{{ variant.title }}</option>
+          {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+        <p>
+          <label for="contact[email]">Notify me when this product is available:</label>
+
+          {% if customer %}
+            <input type="hidden" name="contact[email]" value="{{ customer.email }}" />
+          {% else %}
+            <input required type="email" name="contact[email]" id="contact[email]" placeholder="Enter your email address..." value="{{ contact.fields.email }}" style="display:inline;margin-bottom:0px" />
+          {% endif %}
+
+          
+
+          <input class="submit" type="submit" value="Send" style="margin-bottom:0px" />    
+        </p>
+      <p class="BIS_response"></p>
+    </form>
+    </div>
+
+    <style>
+      .notify_form{display:none;margin-top:15px;text-align:left;}
+      .bis-integrations {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        display: block;
+      }
+      
+      .select select {font-size: unset;height:34px;}
+      .notify_form p {padding-top:15px;}
+      #BIS_form input{font-size:unset;}
+      .smk_accordion {margin-top:15px;}
+
+      .bis-integrations .bis-checkbox {
+        vertial-align: baseline;
+      }
+
+      .bis-integrations .bis-checkbox-label {
+        display: inline-block;
+      }
+
+
+      @media only screen and (min-width: 1199px)  {
+        #BIS_form input[type=submit] {
+          margin-top: 8px;
+        }
+      }
+
+      @media only screen and (min-width: 1199px)  {
+        #BIS_form input[type=email] {
+/*           width: 398px; */
+        }
+      }
+    </style>
+
+  <script>
+    var createNotification{{product.id}} = function(form) {
+      if (typeof BISMobiliaForm != 'undefined') {
+        var bis = new BISMobiliaForm(form);
+      }
+
+      return false;
+    };
+
+    var clearBISResponse = function() { 
+      $('#BIS_form .BIS_response').text('');
+    };
+
+    $(function() {
+      $('#BIS_form input').on('focus change', clearBISResponse);
+      $('.product_form select').on('change', clearBISResponse);
+
+      // hide the Notify me form if the variant options combination does not exist
+      var _origSelectCallback = window.selectCallback;
+      window.selectCallback = function(variant, selector) {
+        _origSelectCallback.apply(window, arguments);
+        if (variant == null) {
+          $('#notify-form-{{product.id}}').stop().hide();
+        }
+      }
+    });
+
+  </script>
+
+{% endif %}

@@ -1,0 +1,55 @@
+{% if section.blocks.size > 0 %}
+<div class="section-block-header">
+  <div class="wrapper">
+    <div class="floopwrap">
+      {% assign fcount = -1 %}
+      {% for block in section.blocks %}
+      {% assign fcount = fcount | plus: 1 %}
+      <div {% if fcount == 0%} class='fploop' {% endif %} {% if fcount == 1 or fcount == 2 or fcount == 3 or fcount == 4%} class='fploop fploopsmall'{% endif %} {% if fcount == 5 or fcount == 6 or fcount == 7 or fcount == 8%} class='fploop fplooplarge'{% endif %} >
+        <a href="{{ block.settings.link}}">
+          <div class="desktop-img" style="background-image:url({{ block.settings.image | img_url: '1024x' }})"></div>
+          <span class="mobile-img large--hide"><img src="{{ block.settings.image | img_url: '1024x' }}" /></span>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+"name": "Featured images",
+"settings": [],
+"blocks": [
+{
+"type": "slide",
+"name": "Image",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},  
+{
+"type": "url",
+"id": "link",
+"label": "link"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Featured images",
+"category": "Image"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+{% include 'limespot' %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+    {{ content_for_header }}
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{ 'checkout.scss.css' | asset_url | stylesheet_tag }}
+    {{ 'checkout_script.js' | asset_url | script_tag }}
+
+    <link rel="preconnect" href="//cdn.dynamicyield.com">
+    <link rel="preconnect" href="//st.dynamicyield.com">
+    <link rel="preconnect" href="//rcom.dynamicyield.com">
+    <link rel="dns-prefetch" href="//cdn.dynamicyield.com">
+    <link rel="dns-prefetch" href="//st.dynamicyield.com">
+    <link rel="dns-prefetch" href="//rcom.dynamicyield.com">
+    <script>
+      window.DY = window.DY || {};
+      DY.recommendationContext = {type: 'OTHER'};
+    </script>
+    <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_dynamic.js"></script>
+    <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_static.js"></script>
+    
+    <script>
+      $(document).ready(function(){
+        if(Shopify.Checkout.step == "contact_information"){
+          $('.custom-page-title').text("{{settings.title_checkout}}"); 
+        }
+        if(Shopify.Checkout.step == "shipping_method"){
+            $('.custom-page-title').text("{{settings.title_shipping}}"); 
+        }
+        if(Shopify.Checkout.step == "payment_method"){
+            $('.custom-page-title').text("{{settings.title_payment}}"); 
+        }
+      })
+    </script>
+    <!-- Algolia head -->
+    {{ 'algolia_config.js' | asset_url | script_tag }}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hogan.js@3.0.2/dist/hogan-3.0.2.min.js" integrity="sha256-jIAAmB65ff5CEFvV6DRfRWjHFwqq+AHeV4le8f8PYp4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js" integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/search-insights@1.6.3/dist/search-insights.min.js" integrity="sha256-8r3eU2ketKjC+f59eAY6ejwSsgPjNY5Ca1yt67nz2TM=" crossorigin="anonymous"></script>
+  {{ 'algolia_dependency_font-awesome-4-4-0.min.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'algolia_externals.js' | asset_url }}"></script>
+  {{ 'algolia_init.js' | asset_url | script_tag }}
+  <script src="{{ 'algolia_analytics.js' | asset_url }}" defer></script>
+  <!-- /Algolia head -->
+  </head>
+  <body>
+    {{skip_to_content_link}}
+    
+    <div class="medium-up--hide mobile--breadcrumb wrap">
+       {{ breadcrumb }}
+    </div>
+    
+    <div class="banner" data-header>
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </div>
+    
+
+    {{ order_summary_toggle }}
+
+    <div class="content" data-content>
+      <div class="wrap">
+       
+        <div class="main" role="main">
+          <div class="main__header">
+            
+            <div class="small--hide">
+              {{ breadcrumb }}
+            </div>
+            
+         {% comment %} {{ content_for_logo }} {% endcomment %}
+            
+            <a class="logo logo--left" href="https://www.deadstock.ca/">
+            <svg width="155" height="24" viewBox="0 0 155 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M106.19 22.875C105.4 22.9863 104.857 22.4546 105.056 21.7059C105.169 21.2818 105.36 20.8661 105.586 20.4853C106.594 18.7763 107.608 17.07 108.659 15.3849C109.067 14.73 109.576 14.133 110.038 13.5094C110.082 13.4505 110.116 13.3852 110.201 13.2481C110.009 13.3254 109.889 13.3705 109.772 13.4201C106.608 14.7612 103.376 15.9174 100.028 16.7398C99.3086 16.9164 98.5563 16.9817 97.8144 17.0525C97.5008 17.0829 97.1635 17.0378 96.8555 16.9578C95.8512 16.6947 95.4201 15.7565 95.8389 14.8293C96.1241 14.1974 96.594 13.7117 97.1009 13.25C98.3024 12.1554 99.6573 11.2576 101.013 10.3608C104.651 7.95455 108.483 5.86563 112.342 3.81994C112.68 3.64058 113.097 3.544 113.484 3.521C114.007 3.49065 114.307 3.83742 114.293 4.34792C114.278 4.90441 113.997 5.34041 113.571 5.68626C113.376 5.84447 113.15 5.96957 112.926 6.09007C109.209 8.09712 105.577 10.2385 102.071 12.5767C101.437 12.9998 100.83 13.4624 100.213 13.9086C100.127 13.9702 100.051 14.0428 100 14.1725C100.189 14.1284 100.379 14.0916 100.565 14.0401C103.91 13.1147 107.126 11.8546 110.298 10.4831C111.153 10.1134 111.997 9.71416 112.847 9.3306C113.945 8.8339 114.929 8.20382 115.831 7.39437C117.914 5.52437 120.166 3.85214 122.562 2.37122C122.986 2.11 123.391 1.81841 123.825 1.57558C124.101 1.42105 124.407 1.30147 124.715 1.22053C125.048 1.13314 125.397 1.15798 125.637 1.44496C125.879 1.73471 125.846 2.08148 125.728 2.40342C125.509 2.99946 125.06 3.4097 124.524 3.75188C120.871 6.08363 117.541 8.78698 114.605 11.9365C114.081 12.4985 113.584 13.0826 113.078 13.6602C112.956 13.7982 112.85 13.949 112.738 14.0944C112.753 14.1128 112.767 14.1321 112.782 14.1505C112.842 14.1293 112.902 14.1118 112.96 14.0852C117.617 11.9411 122.278 9.80523 126.928 7.64824C130.068 6.19125 133.192 4.70205 136.328 3.23494C136.606 3.10524 136.906 2.98843 137.208 2.94243C137.893 2.83757 138.293 3.26713 138.171 3.9386C138.011 4.82623 137.498 5.44711 136.664 5.83987C134.877 6.67967 133.099 7.53971 131.31 8.3749C127.549 10.129 123.784 11.8711 120.021 13.6197C119.944 13.6556 119.871 13.6988 119.812 13.8C120.392 13.7559 120.972 13.7071 121.554 13.6694C123.202 13.5627 124.848 13.4128 126.497 13.3668C129.82 13.2739 133.146 13.1718 136.469 13.1957C141.895 13.2343 147.305 13.6041 152.7 14.1808C153.537 14.27 153.87 14.7171 153.707 15.521C153.514 16.4712 152.535 17.1767 151.542 17.0654C146.128 16.4601 140.699 16.0545 135.251 15.9607C131.022 15.888 126.794 15.9901 122.571 16.2523C119.652 16.4335 116.743 16.6846 113.853 17.1233C112.983 17.2558 112.118 17.4186 111.248 17.5547C111.042 17.5869 110.811 17.62 110.621 17.5621C110.344 17.4775 110.195 17.54 110.056 17.7727C109.344 18.9593 108.622 20.1394 107.901 21.3214C107.73 21.601 107.565 21.8843 107.377 22.152C107.088 22.5521 106.694 22.8042 106.19 22.875Z" fill="black"></path>
+<path d="M2.33634 22.6476C1.65604 22.6844 1.28841 22.2935 1.25903 21.6312C1.23061 20.9984 1.4817 20.4474 1.80006 19.9176C2.50879 18.7384 3.46103 17.7487 4.43317 16.7783C8.02799 13.1882 11.7536 9.73243 15.7482 6.56088C17.0937 5.49297 18.5045 4.5014 19.8955 3.48775C20.3787 3.13546 20.9377 2.99197 21.5413 3.11615C22.5229 3.31943 22.8877 4.31376 22.2746 5.11492C22.1695 5.25197 22.0415 5.38259 21.8994 5.48193C18.9318 7.55337 16.1841 9.88236 13.4818 12.2629C11.5574 13.9581 9.66432 15.6874 7.75795 17.4019C7.70205 17.4525 7.65278 17.5104 7.6272 17.6208C7.74753 17.5693 7.8707 17.5233 7.98819 17.4645C12.2444 15.3433 16.511 13.2415 20.752 11.0928C26.2617 8.30118 31.7913 5.55459 37.5038 3.16766C37.9823 2.96806 38.4665 2.82272 38.9962 2.93586C39.721 3.09039 40.0744 3.72967 39.7343 4.37262C39.577 4.66973 39.3363 4.96315 39.0577 5.15539C34.9475 7.98844 31.2598 11.2878 27.7588 14.7914C26.8189 15.7315 25.9017 16.6927 24.9769 17.6466C24.5809 18.055 24.1137 18.33 23.531 18.3898C22.6982 18.4744 22.1249 17.9336 22.1875 17.1232C22.2263 16.6145 22.4584 16.1905 22.8157 15.8281C24.4198 14.2009 26.0248 12.5747 27.6337 10.9512C27.7095 10.8748 27.8166 10.8289 27.9094 10.7681C27.8772 10.7323 27.845 10.6955 27.8137 10.6596C27.1183 11.0211 26.4256 11.389 25.7273 11.7441C20.4507 14.4244 15.1892 17.1342 9.88604 19.7658C7.94366 20.7298 5.91222 21.5273 3.90162 22.3542C3.42029 22.552 2.86315 22.6201 2.33634 22.6476Z" fill="black"></path>
+<path d="M52.498 7.96644C52.9897 7.88366 53.4805 7.79259 53.9751 7.72269C54.2044 7.69049 54.4451 7.66842 54.6735 7.69601C55.4703 7.78984 55.9005 8.51466 55.603 9.23212C55.3149 9.92474 54.7777 10.3157 54.0301 10.4472C52.3511 10.7434 50.6731 11.0442 48.9913 11.3284C48.6909 11.379 48.454 11.4894 48.2446 11.7074C47.2318 12.7596 46.2066 13.8009 45.188 14.8476C45.1132 14.9249 45.0506 15.0123 44.9218 15.1668C45.4997 15.0675 45.9943 14.9884 46.487 14.8964C50.08 14.224 53.6786 13.5783 57.1881 12.5444C57.4155 12.4773 57.677 12.4589 57.913 12.4874C58.8396 12.6005 59.3105 13.4559 58.9183 14.2792C58.6691 14.8007 58.2588 15.1539 57.6865 15.3002C55.53 15.8521 53.383 16.4398 51.2103 16.9246C49.0263 17.4121 46.8177 17.7966 44.6186 18.2151C44.3258 18.2712 44.0188 18.297 43.7213 18.2804C41.939 18.1829 40.9337 16.7112 41.5704 15.0932C41.7505 14.637 42.0205 14.1909 42.3398 13.8128C43.8283 12.0514 45.5187 10.4748 47.2204 8.91018C47.3 8.83659 47.3786 8.76301 47.4298 8.63239C47.3095 8.68758 47.1872 8.73817 47.0697 8.79704C42.6212 11.0111 38.2637 13.386 33.9573 15.8502C33.728 15.9818 33.4911 16.1151 33.239 16.1915C32.6942 16.3571 32.1684 16.3157 31.7619 15.8751C31.3573 15.4363 31.3516 14.9194 31.5847 14.4153C31.7287 14.1035 31.9495 13.822 32.1589 13.5433C34.1259 10.9209 36.2351 8.41531 38.6673 6.18291C40.2752 4.70659 41.9968 3.36641 43.8549 2.19456C44.3381 1.8901 44.8573 1.71901 45.4363 1.76224C46.3743 1.83215 46.7485 2.58916 46.2047 3.3333C46.0597 3.53198 45.8645 3.70858 45.6599 3.85208C43.2399 5.55835 41.0474 7.50653 39.0501 9.66443C38.9989 9.71962 38.9582 9.78217 38.944 9.89807C39.0453 9.853 39.1496 9.81252 39.2472 9.76101C43.0485 7.7926 46.9087 5.94283 50.8721 4.30279C51.8764 3.88703 52.9035 3.5191 53.9325 3.16405C54.2499 3.05459 54.61 3.01872 54.9482 3.02884C55.1766 3.03528 55.4703 3.1199 55.6105 3.27535C55.8351 3.52462 56.0464 3.52922 56.3401 3.48139C58.0551 3.19992 59.7729 2.92858 61.4917 2.66735C61.7627 2.62595 62.0536 2.614 62.3207 2.66275C63.0361 2.79244 63.3043 3.42528 62.9186 4.02316C62.5197 4.6422 61.9541 5.03589 61.2065 5.16374C59.0538 5.53075 56.9001 5.88948 54.7493 6.26845C54.5105 6.31076 54.2594 6.41838 54.068 6.56279C53.5166 6.97947 52.9926 7.43111 52.4582 7.86894C52.4705 7.90205 52.4838 7.93425 52.498 7.96644Z" fill="black"></path>
+<path d="M80.8257 9.6479C81.7997 8.86145 82.7311 8.10995 83.6805 7.34374C82.7245 7.51207 81.7969 7.68408 80.8655 7.83493C80.404 7.90943 79.936 7.9545 79.4698 7.99222C78.9098 8.03637 78.4967 7.83677 78.3243 7.43664C78.1224 6.97029 78.2759 6.57293 78.6161 6.21972C78.9657 5.85731 79.3874 5.62643 79.8943 5.57309C82.5767 5.29254 85.187 4.68822 87.7699 3.9542C89.086 3.58075 90.4011 3.20638 91.7201 2.84213C91.9532 2.77775 92.2014 2.72624 92.4421 2.72808C93.1044 2.73359 93.4227 3.21834 93.1878 3.8199C92.966 4.38835 92.5501 4.76456 92.0005 5.03775C90.9981 5.53721 89.9767 6.00908 89.0159 6.57661C85.4277 8.69496 82.2289 11.2511 79.7739 14.5993C78.7241 16.0324 77.8448 17.5648 77.1863 19.2094C76.9845 19.7144 76.614 20.0263 76.0701 20.1403C75.5869 20.2415 75.1473 20.1412 74.8176 19.7788C74.4859 19.4146 74.4404 18.9712 74.6214 18.5279C75.3813 16.668 76.3392 14.9111 77.5672 13.2987C77.6572 13.1809 77.7444 13.0604 77.7823 12.8765C77.6421 12.951 77.5009 13.0255 77.3606 13.1009C73.2532 15.3066 69.0397 17.2833 64.5694 18.7072C63.998 18.8894 63.42 19.0568 62.8383 19.2058C62.1153 19.3916 61.4767 19.1708 61.1574 18.6557C60.8277 18.1231 60.9073 17.3818 61.4208 16.8924C61.6738 16.6523 62.0073 16.4371 62.3437 16.3433C66.2199 15.2588 69.8953 13.7025 73.4825 11.9346C74.1088 11.6255 74.7342 11.3146 75.3595 11.0028C75.4647 10.9504 75.5661 10.8887 75.6561 10.7563C75.2638 10.7342 74.8697 10.6818 74.4783 10.6937C72.3938 10.7554 70.3103 10.8317 68.2267 10.9062C66.1716 10.9798 64.1164 11.0046 62.0983 10.5493C61.5421 10.4242 60.9821 10.2154 60.4922 9.93396C59.4453 9.33056 59.3287 8.21297 60.1578 7.34374C60.6628 6.81484 61.2863 6.44784 61.9685 6.20408C63.6114 5.61908 65.2629 5.05155 66.9248 4.51989C67.9093 4.20531 68.9193 3.96892 69.9218 3.70953C70.1236 3.6571 70.3406 3.62858 70.5491 3.63778C71.4463 3.67733 71.8528 4.35984 71.4397 5.13709C71.1005 5.77453 70.5178 6.10474 69.8289 6.3117C68.2523 6.78541 66.6813 7.27844 65.1085 7.76502C64.9976 7.79905 64.8915 7.85056 64.7949 7.96186C64.9569 7.97934 65.118 8.00234 65.2809 8.01521C67.3143 8.17158 69.3381 7.98486 71.3649 7.86528C73.7857 7.72271 76.2047 7.71627 78.6047 8.13847C78.7364 8.16146 78.8681 8.18906 78.997 8.22309C79.8166 8.43649 80.5916 8.70508 80.8257 9.6479Z" fill="black"></path>
+<path d="M96.4251 5.55208C97.0476 5.4555 97.6483 5.32764 98.2556 5.27797C98.9085 5.22462 99.5736 5.18507 100.223 5.2467C101.844 5.40031 102.399 6.60712 101.462 7.91142C101.197 8.28027 100.865 8.61417 100.52 8.91679C98.6545 10.5532 96.5103 11.8023 94.3642 13.0486C92.6474 14.0466 90.8689 14.9232 88.9815 15.58C88.1903 15.855 87.3764 16.0518 86.5256 16.0059C84.9717 15.9231 84.1777 14.7632 84.6552 13.3283C84.9925 12.3164 85.6529 11.5226 86.3976 10.7822C88.3912 8.80089 90.7022 7.21604 93.1088 5.7526C93.5342 5.49413 93.954 5.22646 94.3889 4.98363C94.5992 4.86589 94.8295 4.76563 95.0635 4.71044C95.8111 4.53752 96.245 4.8061 96.4251 5.55208ZM98.1135 7.88935C98.1021 7.85807 98.0917 7.8268 98.0804 7.79645C97.9733 7.80288 97.8643 7.80196 97.7582 7.81576C96.2394 8.01904 94.7613 8.37593 93.3192 8.88643C92.9705 9.00969 92.5896 9.05016 92.2267 9.13846C92.112 9.16606 91.987 9.20377 91.8998 9.27552C90.8111 10.1705 89.7111 11.0535 88.6546 11.9835C88.2178 12.368 87.8786 12.8573 87.4949 13.2997C87.529 13.3384 87.5621 13.3779 87.5962 13.4166C91.4393 12.1812 94.7973 10.073 98.1135 7.88935Z" fill="black"></path>
+</svg>  
+            </a>
+            
+          <div class="text-nice custom-page-title">Nice choice! Enter your details below to get started.</div> 
+            
+            {{ alternative_payment_methods }}
+          </div>
+          <div class="main__content">
+            {{ content_for_layout }}
+            
+          </div>
+          
+          
+          <div class="mobile_checkout-text">
+            {% if settings.text != blank %}
+            <div class="title title-cus">{{settings.text}}</div>
+            {% endif %}
+
+            {% if settings.text != blank %}
+            <div class="customer_service_hours_title">{{settings.customer_service_hours_title}}</div>
+            <div class="customer_service_hours">{{settings.customer_service_hours}}</div>
+            {% endif %}
+          </div>
+
+          
+          <div class="main__footer">
+            {{ content_for_footer }}
+          </div>
+        </div>
+        
+         <div class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            <limespot></limespot>
+{{ content_for_order_summary }}
+            
+            {% section 'checkout' %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+      <!-- Nico: Custom code - DO NOT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING -->
+    <script>
+    if (Shopify && Shopify.Checkout && Shopify.Checkout.step) {
+        // Reorder the IN STORE PICKUP option during the shipping options step
+        if (Shopify.Checkout.step.includes('shipping_method')) {
+            document.querySelectorAll('.section--shipping-method .content-box__row label .radio__label__primary').forEach(
+                element => {
+                    const shippingOptionsContainer = document.querySelector('.section--shipping-method .content-box');
+                    const labelText = element.innerHTML.trim().toLowerCase();
+                    let matchingElement;
+
+                    if (labelText.includes('in store pick up')) {
+                        matchingElement = element.closest('.content-box__row');
+
+                        if (matchingElement && shippingOptionsContainer) {
+                            shippingOptionsContainer.append(matchingElement);
+                        }
+                    }
+                }
+            );
+        }
+    }
+    if(document.querySelector(".page--thank-you")) {
+      DY.API("event", {
+        name: "Purchase", // Human-readable name, not used to identify an event type
+        properties: {
+          uniqueTransactionId: "{{checkout.order_number}}", // Will remove redundant events. Must be a string. Max 64 characters.
+          dyType: "purchase-v1", // Identifies this event as a purchase
+          value: {{checkout.line_items_subtotal_price | money_without_currency}}, // Total cart value in actual payment currency, as float (dollars dot cents)
+          currency: "{{checkout.currency}}", // Optional non-default currency used
+          cart: [
+            {%- for item in checkout.line_items %}
+            {
+              productId: '{{item.sku}}',
+              itemPrice: {{item.final_price | money_without_currency}},
+              quantity: {{item.quantity}},
+              {%- for option in item.options_with_values %}
+              {{option.name}}: '{{option.value}}',
+              {%- endfor %}
+            },
+            {%- endfor %}
+          ]
+        }
+      });
+    }
+    </script>
+  </body>
+</html>

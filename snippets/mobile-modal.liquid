@@ -1,0 +1,248 @@
+<div style="display:none;" id="in-store-merchandise-{{ product.id }}" class="in-store-merchandise-new">
+ <div class="dspl-tbl">   <div class="store-name dspl-tbl-cell half" ><strong>LOCATIONS</strong></div>
+   <div class="store-name dspl-tbl-cell half"  ><strong>AVAILABLE SIZES</strong></div></div>
+  <div class="tbl-row"> 
+    {% assign store = 'livestockchinatown_inventory' %}
+    <div class="store-availability dspl-tbl odd">
+    <div class="dspl-tbl-cell half" >  <div class="store-name">
+      <h4><div style="display:inline-block;" class="product_plus_sign">+ </div> Livestock <span>Chinatown</span></h4>
+      </div>
+      <div class="store-address">
+        <address>
+            141 East Pender St<br />
+            Vancouver BC - V6A 1T6           
+          </address>
+        <span> 
+      Hours: 11am - 7pm<br />
+       Phone: 604.559.0877 </span>
+        
+      </div></div>
+      <div class="store-inventory dspl-tbl-cell half">
+        
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+          {% for variant in product.variants %}
+            {% assign instock = variant.metafields.Channels[store] %}
+            {% if instock == 'Out of Stock' %}
+              {% assign instock = 0 %}
+            {% elsif instock == 'Available' %}
+              {% assign instock = 1 %}
+            {% endif %}
+            {% if instock > 0 %}
+              {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+              {% assign counter = counter | plus:1 %}
+              {% assign available = 'true' %}
+            {% endif %}
+          {% endfor %}
+          {% if available == 'false' %}
+            <span> NA </span>
+          {% endif %}
+        </div>
+  </div>
+    {% comment %}
+    <div class="blank">&nbsp;</div>
+{% assign store = 'lsegastown_inventory' %}
+<div class="store-availability dspl-tbl even">
+<div class="dspl-tbl-cell half" >  <div class="store-name">
+  <h4><div style="display:inline-block;" class="product_plus_sign">+ </div> Livestock <span>Gastown</span></h4>
+  </div>
+   <div class="store-address">
+    <address>
+             239 Abbott St<br />
+              Vancouver BC - V6B 2K7
+            </address>
+            
+  			<span>Hours: 11am - 8pm<br/>  
+				Phone: 604.685.1433
+
+            </span>
+  </div></div>
+  <div class="store-inventory dspl-tbl-cell half">
+         
+            {% assign counter = 0 %}
+            {% assign available = 'false' %}
+            {% for variant in product.variants %}
+              {% assign instock = variant.metafields.Channels[store] %}
+              {% if instock == 'Out of Stock' %}
+                {% assign instock = 0 %}
+              {% elsif instock == 'Available' %}
+                {% assign instock = 1 %}
+              {% endif %}
+              {% if instock > 0 %}
+                {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+                {% assign counter = counter | plus:1 %}
+                {% assign available = 'true' %}
+              {% endif %}
+            {% endfor %}
+            {% if available == 'false' %}
+              <span>NA</span>
+            {% endif %}
+          </div>
+</div>
+	{% endcomment %}
+    
+ <div class="blank">&nbsp;</div>
+  {% assign store = 'livestock_roncesvall_inventory' %}
+  <div class="store-availability dspl-tbl  even">
+ <div class="dspl-tbl-cell half" >  <div class="store-name">
+   <h4><div style="display:inline-block;" class="product_plus_sign">+ </div>Livestock <span>Roncesvalles</span></h4>
+    </div>
+    <div class="store-address">
+      <address>
+				406 Roncesvalles Ave.<br/>
+              Toronto ON - M6R 2M9
+            </address>
+          <span>
+          Hours: 11am - 8pm<br/>
+          Phone: 647.347.8046
+          </span>
+   </div></div>
+    <div class="store-inventory dspl-tbl-cell half">
+        
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+          {% for variant in product.variants %}
+            {% assign instock = variant.metafields.Channels[store] %}
+            {% if instock == 'Out of Stock' %}
+              {% assign instock = 0 %}
+            {% elsif instock == 'Available' %}
+              {% assign instock = 1 %}
+            {% endif %}
+            {% if instock > 0 %}
+              {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+              {% assign counter = counter | plus:1 %}
+              {% assign available = 'true' %}
+            {% endif %}
+          {% endfor %}
+          {% if available == 'false' %}
+            <span> NA </span>
+          {% endif %}
+        </div>
+
+    </div>
+        
+ <div class="blank">&nbsp;</div>
+  {% assign store = 'livestocktoronto_inventory' %}
+  <div class="store-availability dspl-tbl odd">
+ <div class="dspl-tbl-cell half" >  <div class="store-name">
+   <h4><div style="display:inline-block;" class="product_plus_sign">+ </div>Livestock <span> Spadina</span></h4>
+    </div>
+    <div class="store-address">
+      <address>
+				 116 Spadina - Unit G1<br />
+            Toronto ON - M5V 2K6
+            </address>
+          <span>
+          Hours: 11am - 8pm<br/>
+          Phone: 416.360.5483
+          </span>
+   </div></div>
+    <div class="store-inventory dspl-tbl-cell half">
+        
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+          {% for variant in product.variants %}
+            {% assign instock = variant.metafields.Channels[store] %}
+            {% if instock == 'Out of Stock' %}
+              {% assign instock = 0 %}
+            {% elsif instock == 'Available' %}
+              {% assign instock = 1 %}
+            {% endif %}
+            {% if instock > 0 %}
+              {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+              {% assign counter = counter | plus:1 %}
+              {% assign available = 'true' %}
+            {% endif %}
+          {% endfor %}
+          {% if available == 'false' %}
+            <span> NA </span>
+          {% endif %}
+        </div>
+
+    </div>
+    
+    <div class="blank">&nbsp;</div>
+  {% assign store = 'livestockwinnipeg_inventory' %}
+  <div class="store-availability dspl-tbl  even">
+ <div class="dspl-tbl-cell half" >  <div class="store-name">
+   <h4><div style="display:inline-block;" class="product_plus_sign">+ </div>Livestock<span> Winnipeg</span></h4>
+    </div>
+    <div class="store-address">
+   		   <address>
+             224 Main St <br/>
+             Winnipeg MB - R3C 1A8
+           </address>
+            <span style="display:block">Hours: 11am - 7pm<br/>
+             Phone: 204.947.2664</span>
+            
+
+   </div></div>
+    <div class="store-inventory dspl-tbl-cell half">
+        
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+          {% for variant in product.variants %}
+            {% assign instock = variant.metafields.Channels[store] %}
+            {% if instock == 'Out of Stock' %}
+              {% assign instock = 0 %}
+            {% elsif instock == 'Available' %}
+              {% assign instock = 1 %}
+            {% endif %}
+            {% if instock > 0 %}
+              {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+              {% assign counter = counter | plus:1 %}
+              {% assign available = 'true' %}
+            {% endif %}
+          {% endfor %}
+          {% if available == 'false' %}
+            <span> NA </span>
+          {% endif %}
+        </div>
+
+    </div>
+    
+ <div class="blank">&nbsp;</div>
+  {% assign store = 'livestockds_inventory' %}
+  <div class="store-availability dspl-tbl  odd">
+ <div class="dspl-tbl-cell half" >  <div class="store-name">
+   <h4><div style="display:inline-block;" class="product_plus_sign">+ </div>Livestock <span>Warehouse </span></h4>
+    </div>
+    <div class="store-address">
+   		   <address>
+             Vancouver<br/>
+             Shop@deadstock.ca
+             </address>
+            <span>Hours: 9am - 5pm<br/>
+			 Phone: 855.360.5483 (Toll Free)</span>
+            
+
+   </div></div>
+    <div class="store-inventory dspl-tbl-cell half">
+        
+          {% assign counter = 0 %}
+          {% assign available = 'false' %}
+          {% for variant in product.variants %}
+            {% assign instock = variant.metafields.Channels[store] %}
+            {% if instock == 'Out of Stock' %}
+              {% assign instock = 0 %}
+            {% elsif instock == 'Available' %}
+              {% assign instock = 1 %}
+            {% endif %}
+            {% if instock > 0 %}
+              {% unless counter == 0 %}&#xb7;{% endunless %} {{ variant.title}}
+              {% assign counter = counter | plus:1 %}
+              {% assign available = 'true' %}
+            {% endif %}
+          {% endfor %}
+          {% if available == 'false' %}
+            <span> NA </span>
+          {% endif %}
+        </div>
+
+    </div>
+
+ 
+
+    
+</div>
+</div>

@@ -1,0 +1,39 @@
+{% if section.settings.enable_image == true %}
+<div class="banner-image">
+  {% if section.settings.banner_link != blank %}
+  <a href="{{section.settings.banner_link}}">{% endif %}
+  <img src="{{ section.settings.image | img_url:"original" }}" />
+  {% if section.settings.banner_link != blank %}
+  </a>{% endif %}
+
+</div>
+{% endif %}
+
+{% comment %}
+<script>
+{% endcomment %}
+  
+{% schema %}
+  {
+    "name": "Banner Image",
+    "class": "custom-section-12",  
+    "settings": [
+    	{
+          "type": "checkbox",
+          "id": "enable_image",
+          "label": "Enable Banner",
+          "default": true
+      	},
+      	{
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+      	{
+          "type": "url",
+          "id": "banner_link",
+          "label": "Link"
+        }
+    ]
+  }
+{% endschema %}

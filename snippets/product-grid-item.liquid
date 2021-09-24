@@ -1,0 +1,303 @@
+<!-- /snippets/product-grid-item.liquid -->
+{% comment %}
+
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
+{% endcomment %}
+
+{% unless grid_item_width %}
+	{% if template == "404" %}
+		{% if section.settings.mobile_view_grid == 'half' %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-half' %}
+        {% else %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-whole' %}
+        {% endif %}
+    {% else %}
+        {% if section.settings.mobile_view_grid == 'half' %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-half' %}
+        {% else %}
+        {% assign grid_item_width = 'medium--one-half large--one-quarter small--one-whole' %}
+        {% endif %}
+    {% endif %}
+{% endunless %}
+
+{% unless width %}
+  {%- assign width = 310 -%}
+{% endunless %}
+{% unless height %}
+  {%- assign height = 415 -%}
+{% endunless %}
+
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+{% capture img_id_class %}ProductImage-{{ product.featured_image.id }}{% endcapture %}
+{% capture img_wrapper_id %}ProductImageWrapper-{{ product.featured_image.id }}{% endcapture %}
+{%- assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+<div class="grid__item  grid-product {{ grid_item_width }}{% if sold_out %} is-sold-out{% endif %}">
+    <div class="grid-product__wrapper">
+
+	  <div class="grid-product__image-wrapper desktop_hideclass">
+
+      <a class="grid-product__image-link" href="{{ product.url | within: collection }}">
+        {% if product.featured_image.src == blank %}
+          <img class="grid-product__image" src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+        {% else %}
+          {% include 'image-style' with image: product.featured_image, small_style: true, width: width, height: height, wrapper_id: img_wrapper_id, img_id_class: img_id_class %}
+          <div id="{{ img_wrapper_id }}" class="product--wrapper">
+            <div style="padding-top:{{ 1 | divided_by: product.featured_image.aspect_ratio | times: 100 }}%;">
+              <img class="product--image lazyload {{ img_id_class }}"
+                   src="{{ product.featured_image | img_url: '150x150' }}"
+                   data-src="{{ img_url }}"
+                   data-widths="[180, 370, 590, 740, 900, 1080, 1296, 1512, 1728, 2048]"
+                   data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+                   data-sizes="auto"
+                   alt="{{ product.featured_image.alt | escape }}">
+            </div>
+          </div>
+          <noscript>
+            <img class="grid-product__image" src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+          </noscript>
+        {% endif %}
+      </a>
+      {% if sold_out %}
+<!--         <div class="grid-product__sold-out">
+          <p>{{ 'products.product.sold_out_html' | t }}</p>
+        </div> -->
+      {% comment %}{% elsif on_sale %}
+        <div class="grid-product__on-sale">
+          {% capture saved_amount %}{{ product.compare_at_price | minus: product.price | money }}{% endcapture %}
+          <p>{{ 'products.general.save_html' | t: saved_amount: saved_amount }}</p>
+        </div>{% endcomment %}
+      {% endif %}
+    </div>
+      
+      
+      <a href="{{ product.url | within: collection }}" class="grid-product__meta mobile_hideclass desktop_hideclass">
+            <span class="grid-product__title">{{ product.title }}</span>
+            <span class="grid-product__price-wrap">
+              <span class="grid-product__price">
+                {% if on_sale %}
+                  <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+                {% else %}
+                   <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+                {% endif %}
+                {% if product.price_varies %}
+                  {{ product.price_min | money }}
+                  <span class="icon-fallback-text">
+                    <span class="icon icon-plus grid-product__price-min" aria-hidden="true"></span>
+                    <span class="fallback-text">+</span>
+                  </span>
+                {% else %}
+                  {{ product.price | money }}
+                {% endif %}
+              </span>
+            </span>
+            {% if section.settings.product_vendor_enable %}
+              <p class="grid-product__vendor">{{ product.vendor }}</p>
+            {% endif %}
+          </a>
+              <div class="desktop_hideclass">
+            {% for tag in product.tags %}          
+                     {% if tag == 'free_shipping'%} 
+                <div class="free_ship1">
+                           <span class="free_ship">FREE SHIPPING</span>
+                </div>
+                        {% endif %}
+                {% endfor %}
+            </div>
+
+      
+            <form  action="/cart/add" method="post" enctype="multipart/form-data" class="product-single__form" id="AddToCartForm1">
+                  <input type="hidden" name="return_to" value="back" />
+              <div class="product-single__add-to-cart mobile_hideclass">
+
+                 {% assign hidebynow = false %}                
+                      {% for tag in product.tags  %}
+                      {% if tag == 'hide_buy_now' %}
+                          {% assign hidebynow = true %}
+                      {% endif %}
+                      {% endfor %}
+                      {% if hidebynow == true %}
+
+                <a href="{{ product.url | within: collection }}"  class="btn ask_query">Contact</a>
+                      {% else %}
+
+                <button type="button" name="add"  class="add btn ctm_add_to_cart"{% unless product.available %} disabled="disabled"{% endunless %}>
+                        <span id="AddToCartText">
+                          {% if product.available %}
+                          Add to cart
+                          {% else %}
+                          {{ 'products.product.sold_out' | t }}
+                          {% endif %}
+                        </span>
+                      </button>
+               {% endif %}
+
+                {% for tag in product.tags %}
+
+                     {% if tag == 'free_shipping'%} 
+                <div class="mobile_hideclass free_ship1">
+                           <span class="free_ship">FREE SHIPPING</span>
+                </div>
+                        {% endif %}
+                {% endfor %}
+                    </div>
+                  <div class="grid_size">  {% unless product.options.size == 1 and product.variants[0].title == 'Default Title' %}
+                    {% for option in product.options_with_values %}
+                    <div class="radio-wrapper js product-form__item large--one-whole large--text-center option-{{ option.name | handleize}} {% if option.values.size == 1 %} has-one-option {% endif %}">
+					{% assign variant_label_state = true %} 
+                      <fieldset class="single-option-radio"
+                                name="{{ option.name }}"
+                                id="ProductSelect-option-{{ forloop.index0 }}">
+                        {% assign option_index = forloop.index %}
+                        {% for value in option.values %}
+                            {% assign variant_label_state = true %}
+                            {% if product.options.size >= 1 %}
+                              {% unless product.variants[forloop.index0].available  %}
+                                  {% assign variant_label_state = false %}
+                              {% endunless %}
+                            {% endif %}
+
+      {% comment %}
+       for="ProductSelect-option-{{ option.name }}-{{ value | escape }}"
+      {% endcomment %}   
+
+                        <label  class="{% unless variant_label_state %}disabled {% endunless %}{% if product.available %}{% if product.has_only_default_variant == false and product.variants.size == 1%}selected-label {% endif %}{% endif %}">{{ value | escape }}
+                        <input type="radio"
+                               {% if option.selected_value == value %} checked="checked"{% endif %}
+                               {% unless variant_label_state %} disabled="disabled"{% endunless %}
+                               value="{{ value | escape }}"
+                               data-index="option{{ option_index }}"
+                               name="{{ option.name }}"
+                               data-variant="{{ value.variants.id }}"
+                               class="single-option-selector__radio{% unless variant_label_state %} disabled{% endunless %}"
+                               id="ProductSelect-option-{{ option.name }}-{{ value | escape }}">
+                        </label>
+                        {% endfor %}
+                      </fieldset>
+                    </div>
+                    {% endfor %}
+                    {% endunless %}
+
+                    <select name="id" id="ProductSelect" class="product-single__variants no-js">
+                      {% for variant in product.variants %}
+                      {% if variant.available %}
+                      <option {% if variant == product.selected_or_first_available_variant %}
+                              selected="selected" {% endif %}
+                              data-sku="{{ variant.sku }}"
+                              value="{{ variant.id }}">
+                        {{ variant.title }}
+                      </option>
+                      {% else %}
+                      <option disabled="disabled">
+                        {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                      </option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                    <input class="hiddenval" type="hidden" name="id" value="">
+                    </div>
+
+                  </form>
+
+         <!-- display only for deaktop / hide on mobile --->
+            <div class="grid-product__image-wrapper mobile_hideclass">
+
+            <a class="grid-product__image-link" href="{{ product.url | within: collection }}">
+              {% if product.featured_image.src == blank %}
+                <img class="grid-product__image" src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+              {% else %}
+                {% include 'image-style' with image: product.featured_image, small_style: true, width: width, height: height, wrapper_id: img_wrapper_id, img_id_class: img_id_class %}
+                <div id="{{ img_wrapper_id }}" class="product--wrapper">
+                  <div style="padding-top:{{ 1 | divided_by: product.featured_image.aspect_ratio | times: 100 }}%;">
+                    <img class="product--image lazyload {{ img_id_class }}"
+                         src="{{ product.featured_image | img_url: '150x150' }}"
+                         data-src="{{ img_url }}"
+                         data-widths="[180, 370, 590, 740, 900, 1080, 1296, 1512, 1728, 2048]"
+                         data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+                         data-sizes="auto"
+                         alt="{{ product.featured_image.alt | escape }}">
+                  </div>
+                </div>
+                <noscript>
+                  <img class="grid-product__image" src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+                </noscript>
+              {% endif %}
+            </a>
+            {% if sold_out %}
+      <!--         <div class="grid-product__sold-out">
+                <p>{{ 'products.product.sold_out_html' | t }}</p>
+              </div> -->
+            {% comment %}{% elsif on_sale %}
+              <div class="grid-product__on-sale">
+                {% capture saved_amount %}{{ product.compare_at_price | minus: product.price | money }}{% endcapture %}
+                <p>{{ 'products.general.save_html' | t: saved_amount: saved_amount }}</p>
+              </div>{% endcomment %}
+            {% endif %}
+          </div>
+          <!-- display only for deaktop / hide on mobile --->
+          <a href="{{ product.url | within: collection }}" class=" grid-product__meta">
+      <span class="grid-product__title">{{ product.title }}</span>
+      <span class="grid-product__price-wrap">
+        <span class="grid-product__price abc">
+          {% if on_sale %}
+            <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+          	
+              <span id="ComparePrice" class="product-single__price--compare-at">
+                {% if product.compare_at_price > product.price %}
+                {{ product.compare_at_price | money }}
+                {% endif %}
+              </span>
+            
+          
+          {% else %}
+             <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+          {% endif %}
+          {% if product.price_varies %}
+            {{ product.price_min | money }}
+            <span class="icon-fallback-text">
+              <span class="icon icon-plus grid-product__price-min" aria-hidden="true"></span>
+              <span class="fallback-text">+</span>
+            </span>
+          {% else %}
+            {{ product.price | money }}
+          {% endif %}
+        </span>
+      </span>
+      {% if section.settings.product_vendor_enable %}
+        <p class="grid-product__vendor">{{ product.vendor }}</p>
+      {% endif %}
+    </a>
+      
+      {% assign has_last_size_tag = false %}
+
+      {% for prod_tag in product.tags %}
+      	{% if prod_tag == "last-size" %}
+      		{% assign has_last_size_tag = true %}
+      	{% endif %}
+      {% endfor %}
+      {% if has_last_size_tag %}
+      <div class="last-size-image-wrap">
+      	<img src="https://cdn.shopify.com/s/files/1/0616/3517/files/Asset_4.png?v=1585807974">
+      </div>
+      {% endif %}
+  </div>
+</div>

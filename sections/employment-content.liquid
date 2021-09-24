@@ -1,0 +1,68 @@
+
+  <section class="employment-content" data-section-id="{{section.id}}">
+
+    <div class="panel-group">
+      {% assign pageDesc = page.content | split:"<!-- split -->" %}
+      
+      <div class="grid">
+        <div class="grid__item one-whole large--one-whole">
+          {% for contentBlock in pageDesc %}
+		
+          {% assign splittedContentBlock = contentBlock | split: "<!-- title -->" %}
+          {% assign title = splittedContentBlock[0] %}
+          {% assign text = splittedContentBlock[1] %}
+
+
+          <div id="tab-{{forloop.index}}" class="tab-panel">
+            <div class="accordion-view"> 
+              {% if title != blank and text != blank %}
+              <div class="accordion-set">
+                <a href="javascript:void(0);"  data-tag="faq{{forloop.index}}" class="">
+                  <div class="faqs-title">
+                    <span class="f-title">{{title}}</span><span class="icon"></span>
+                  </div>
+                </a>
+                <div class="accordion-panel" id="faq{{forloop.index}}" style="display:none;">
+                  {{text}}
+                </div>
+              </div>
+              {% endif %}
+
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<script>
+  $(document).ready(function(){ 
+    $('.accordion-set').each(function(i,e){
+      var $this = $(this);
+      $(this).find('a').click(function(){
+//         $this.siblings().find('a').removeClass('active');
+        $(this).toggleClass('active');
+        var tagid = $(this).data('tag');
+        $('.accordion-set  > #'+tagid).toggle(250);
+//         $('.accordion-set  > .accordion-panel').not( '#'+tagid ).hide(250);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+    "name": "Employment page",
+    "settings": [
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,171 @@
+<div class="cms-page-container">
+   <h2 class="mobile-title">{{page.title}}</h2>
+  <div class="cms-page-container-inner flex flex-break">
+  <div class="cms-page-container-left">
+    <ul>
+    {% for link in linklists[section.settings.sidebar].links %}
+    <li {% if link.active %}class="site-nav--active"{% endif %}>
+    <a href="{{ link.url }}" class="main-menu-link name_{{ link.title | handleize }}">{{ link.title }}</a>
+  </li>
+  {% endfor %}
+    </ul>
+  </div>
+  
+ <div class="cms-page-container-right"> 
+   <h2 class="desktop-title">{{page.title}}</h2>
+   
+   <ul class="contact-right">
+  {% for block in section.blocks %}
+     <li class="flex flex-break">
+  <div class="contact-icon-left flex flex-justify-center flex-align">
+   {% comment %}
+    {{ block.settings.image | img_url: 'master' | img_tag }}
+    {% endcomment %}
+    <img src="{{ block.settings.imageurl }}">
+    
+    
+  </div>
+   
+   <div class="contact-icon-right">
+  {% if block.settings.heading != blank %}    <h2>{{block.settings.heading}}</h2> {% endif %}
+  {% if block.settings.text != blank %}   <div class="content-description"> {{block.settings.text}} </div> {% endif %}
+     {% if block.settings.btn != blank %}  <a class="btn" href="{{block.settings.btn-link}}">{{block.settings.btn}}</a>{% endif %}
+     {% if block.settings.btn-link1 != blank %}  <a class="btn" href="{{block.settings.btn-link1}}">{{block.settings.btn1}}</a>{% endif %}
+     
+   </div>
+     </li>
+  {% endfor %}
+   </ul>
+</div>
+</div>
+</div>
+
+<style>
+  
+  
+ body .main-content { padding-top: 80px !important; margin-bottom:65px !important}
+  
+  .desktop-title, .mobile-title{ font-size:32px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700; margin:0 0 30px;}
+  
+  .cms-page-container-left ul{margin:0; padding:10px 0 0; list-style:none;}  
+  .cms-page-container-left ul li{margin:0; padding:6px 0; list-style:none;}  
+  .cms-page-container-left ul li a{margin:0; padding:0; list-style:none; font-size:15px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; color:#888888;  }  
+ .cms-page-container-left ul li.site-nav--active a {    color: #000;} 
+  
+  
+  .cms-page-container-left ul li a:hover{color:#000;}  
+.cms-page-container{max-width:900px; padding:0 10px; box-sizing:border-box; margin:0 auto;}
+.cms-page-container-left {    width: 28%;}
+.cms-page-container-right{width:72%;}
+.contact-icon-left {width:53px;    height:53px;    border-radius:50%;}  
+
+.contact-icon-right{ width:calc(100% - 53px); padding-left:19px;}
+.contact-icon-right h2{margin:0; padding:16px 0 24px; font-size:22px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700; line-height:22px;}  
+.contact-icon-right .content-description p{ font-size:16px; line-height:24px;  font-weight:400; font-family: 'Roboto', sans-serif; margin:0 0 13px 0;} 
+ 
+  
+.contact-right li {    border: 1px solid #E6E7E8;    padding: 28px 29px 39px;    margin: 0 0 24px;}  
+  
+.contact-right li .btn  {
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 13.5px 30px;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    border-radius: 1px;
+}  
+  .contact-icon-right .content-description p a{color:#1e998a;}
+  
+@media(min-width:768px){  
+.mobile-title{display:none;}  
+} 
+  
+@media(max-width:767px){
+.main-content .wrapper {    padding: 0;}  
+.desktop-title{display:none;}
+.cms-page-container-left {width:100%;}
+.cms-page-container-right{width:100%; margin-top:49px;}  
+ body .main-content { padding-top: 60px !important; margin-bottom:40px !important}  
+.mobile-title{margin-bottom:5px;}  
+.cms-page-container-left ul li{padding:7px 0;}  
+.contact-right li{padding:29px 19px;}  
+.contact-icon-right {    width: 100%;    padding: 0;}  
+  .contact-icon-right h2{padding:24px 0 14px;}  
+  
+}  
+  
+  
+</style>
+
+
+{% schema %}
+  {
+    "name": "Contact page",
+    "settings": [
+	{
+      "type": "link_list",
+      "id": "sidebar",
+      "label": "Sidebar Menu",
+      "default": "footer"
+    }
+],
+"blocks": [
+     {
+       "name": "Content",
+       "type": "slide",
+       "settings": [
+        
+         {
+          "type": "text",
+          "id": "imageurl",
+          "label": "Image url"
+         },     
+         {
+          "type":"text",
+          "id": "heading",
+          "label":"Heading",
+          "default":"Title"
+         },
+         {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+         },
+         {
+          "type":"text",
+          "id": "btn",
+          "label":"Button",
+          "default":"Button"
+         },
+         {
+          "type":"url",
+          "id": "btn-link",
+          "label":"Button Link"
+         },
+         {
+          "type":"text",
+          "id": "btn1",
+          "label":"Button Chat",
+          "default":"Button"
+         },
+         {
+          "type":"text",
+          "id": "btn-link1",
+          "label":"Button Chat Link"
+         }
+       ]
+     }
+   ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

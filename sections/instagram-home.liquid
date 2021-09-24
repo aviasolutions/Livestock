@@ -1,0 +1,191 @@
+<div class="section-space"  data-section-id="{{ section.id }}">
+  <div class="shop-insta" data-aos="fade-zoom-in"
+     data-aos-easing="ease-in-back"
+     data-aos-delay="300"
+     data-aos-offset="0"> 
+  <div class="header-padding">
+    
+    <div class="flex flex-space-between flex-align flex-break title-space">
+     {%- if section.settings.title != blank -%}
+      <h2> {{ section.settings.title | escape }}</h2>
+  	{%- endif -%}
+    
+    {% if section.settings.btn_link != blank  %}
+    <a href="{{section.settings.btn_link}}" class="btn-hero-border btn-hero-border-hide">{{section.settings.btn-text}}</a>  
+    {% endif  %}
+    </div>
+  
+     <div class="shop-insta-inner">
+    <script src="//foursixty.com/media/scripts/fs.embed.v2.5.js" data-feed-id="livestock-canada" data-theme="sizes_v2_5" data-open-links-in-same-page="true" data-page-size="5"></script>
+<style>.fs-has-links::after {  color:#fff;content:"SHOP IT"; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; letter-spacing:1px; margin:0; padding:0;} 
+  .fs-wrapper div.fs-text-container .fs-entry-title, div.fs-detail-title { font-family: 'Roboto', sans-serif;} font-style:400;font-weight:normal;font-size:14px; } 
+  div.fs-text-container .fs-entry-date, div.fs-detail-container .fs-post-info, div.fs-wrapper div.fs-has-links::after, .fs-text-product, .fs-overlink-text { font-family: 'Roboto', sans-serif; font-style:normal;font-weight:normal;font-size:14px; } .fs-wrapper div.fs-text-container * { color:#ffffff; } 
+  .fs-wrapper div.fs-text-container { background-color:rgba(0, 0, 0, 0.75);margin:0px; } 
+  div.fs-entry-date { display:none; } 
+  div.fs-entry-title { display:none; } 
+  .fs-wrapper div.fs-timeline-entry { margin:1px; } 
+    
+  .fs-next-button{display:none !important;}  
+  .fs-timeline-detail {      background: rgba(0, 0, 0, 0.75); }
+  
+  
+  @media(min-width:768px){
+  .fs-desktop .fs-entry-container:nth-of-type(7n + 1) {    width: 50%;    padding-top: 50%;}
+  .fs-desktop .fs-entry-container {    width: 25%;    padding-top: 25%;}  
+  .fs-wrapper div.fs-timeline-entry {    margin:8px;} 
+  .shop-insta-inner{margin:0 -8px;}  
+  }
+ 
+   @media only screen and (max-width: 768px) and (min-width: 768px)  {
+   .fs-mobile .fs-entry-container:nth-of-type(7n + 1) {    width: 50%;    padding-top: 50%;}     
+  .fs-mobile .fs-entry-container {    width: 25%;    padding-top: 25%;}
+    }
+  
+  @media(max-width:767px){
+    .fs-mobile .fs-entry-container:last-child{display:none;}
+   .fs-wrapper div.fs-timeline-entry {    margin: 5px;} 
+   .fs-timeline {    margin: 0 -5px;} 
+  } 
+  
+    </style>
+    </div>
+    
+    
+     {% if section.settings.btn_link != blank  %}
+    	 <div class="text-center">
+    <a href="{{section.settings.btn_link}}" class="btn-hero btn-hero-fill-desktop">{{section.settings.btn-text}}</a>  
+    </div>
+    {% endif  %}
+    
+    </div>
+</div>
+  </div>
+
+<style>
+  .shop-insta h2{ font-size:32px; color:{{section.settings.heading_color}}; line-height:38px; 
+  letter-spacing:0px; margin:0; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; }
+  
+  .btn-hero-border{font-size:{{section.settings.btn-size}}px; color:{{section.settings.btn_text_color}}; border-bottom:{{section.settings.btn_text_color}} solid 2px;
+  letter-spacing:1px;font-family: 'Roboto Condensed', sans-serif; font-weight: 700; text-transform:uppercase;}
+  .btn-hero-border:hover{color:{{section.settings.btn_text_colorh}};  border-bottom:{{section.settings.btn_text_colorh}} solid 2px;}
+  
+  
+  
+  .shop-insta .btn-hero{display:inline-block; background:{{section.settings.btn_bgm}}; color:{{section.settings.btn_text_colorm}}; 
+ font-family: 'Roboto Condensed', sans-serif; font-weight: 700;
+  text-transform:uppercase; padding:14px 30px; letter-spacing:1px; margin-top:17px; font-size:13px;
+}  
+.shop-insta  .btn-hero:hover{ background:{{section.settings.btn_bghm}}; color:{{section.settings.btn_text_colorhm}}; }  
+  
+  
+ @media(min-width:768px){  
+ .shop-insta .btn-hero-fill-desktop{display:none;}  
+} 
+  
+  @media(max-width:768px){
+.shop-insta h2{font-size:26px;   
+
+  }
+  
+@media(max-width:767px){
+.shop-insta h2{font-size:26px; } 
+.shop-insta .btn-hero-border-hide{display:none;} 
+.shop-insta .btn-hero{margin-top:19px;}  
+}  
+  
+</style>
+
+
+{% schema %}
+  {
+    "name": "Instagram",
+    "settings": [
+   	  {
+       "type": "text",
+       "id": "title",
+       "label": "Heading"
+      },
+      {
+       "type": "color",
+       "id": "heading_color",
+       "label": "Heading Color",
+       "default": "#000"
+      },
+      
+      {
+     "type": "text",
+     "id": "btn-text",
+     "label": "Button Text",
+     "default": "Shop Now"
+    },
+    {
+     "type": "url",
+     "id": "btn_link",
+     "label": "Button link"
+    },
+    {
+     "type": "range",
+     "id": "btn-size",
+     "label": "Button size",
+     "default":13,
+     "min": 8,
+     "max": 20,
+     "unit": "px"
+    }, 
+    {
+     "type": "color",
+     "id": "btn_text_color",
+     "label": "Button Text Color",
+     "default": "#888"
+    },
+    {
+     "type": "color",
+     "id": "btn_text_colorh",
+     "label": "Button Text Color Hover",
+     "default": "#000"
+    },
+    {
+    "type": "header",
+    "content": "Mobile"
+	}, 
+    {
+     "type": "color",
+     "id": "btn_text_colorm",
+     "label": "Mobile Button Text Color",
+     "default": "#000"
+    },
+    {
+     "type": "color",
+     "id": "btn_bgm",
+     "label": "Mobile Button Background",
+     "default": "#fff"
+    },
+    {
+     "type": "color",
+     "id": "btn_text_colorhm",
+     "label": "Mobile Button Text Color Hover",
+     "default": "#000"
+     },
+     {
+      "type": "color",
+      "id": "btn_bghm",
+      "label": "Mobile Button Background Hover",
+      "default": "#F0F0F0"
+     }
+    
+],
+	"presets": [
+      {
+        "name": "Instagram",
+        "category": "Image"
+  
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

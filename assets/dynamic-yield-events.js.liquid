@@ -1,0 +1,190 @@
+(function() {
+  'use strict';
+  
+  const DY = window.DY || {};
+
+  function debounce(func, timeout = 300){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+
+  $('body').on('addToCart.livestock', async function(e, line_item, qty = 1) {
+    const eventData = {
+      name: "Add to Cart",
+      properties: {
+        dyType: "add-to-cart-v1",
+        value: line_item.final_price / 100,
+        currency: "CAD",
+        productId: line_item.sku,
+        quantity: qty,
+      }
+    };
+    
+    for(const option of line_item.options_with_values) {
+      eventData.properties[option.name.toLowerCase()] = option.value;
+    }
+    
+    const response = await fetch('/cart.js');
+    const cart = await response.json();
+    eventData.properties.cart = cart.items.map(item => {
+      const cartData = {
+        quantity: item.quantity,
+        productId: item.sku,
+        itemPrice: item.final_price / 100
+      };
+        
+      for(const option of item.options_with_values) {
+        cartData[option.name.toLowerCase()] = option.value;
+      }
+      
+      return cartData;
+    });
+
+    DY.API("event", eventData);
+  });
+
+  document.body.addEventListener('autocomplete:selected', function(evt, datum, name) {
+    /*DY.API("event", {
+      name: '',
+      properties: {
+        
+      }
+    });*/
+  });
+
+  const optionRadios = document.querySelectorAll('.single-option-selector__radio');
+  optionRadios.forEach(radio => {
+    radio.addEventListener('click', (e) => {
+      DY.API("event", {
+        name: "Change Attribute",
+        properties: {
+          dyType: "change-attr-v1",
+          attributeType: radio.getAttribute('name'),
+          attributeValue: radio.value,
+        }
+      });
+    });
+  });
+
+  document.body.addEventListener('click', (e) => {
+    if(e.target.classList.contains('product__variant-option')) {
+      DY.API("event", {
+        name: "Change Attribute",
+        properties: {
+          dyType: "change-attr-v1",
+          attributeType: 'Size',
+          attributeValue: e.target.innerHTML,
+        }
+      });
+    } else if(e.target.classList.contains('ais-facet__label') || e.target.closest('.ais-facet__label')) {
+      let elm = e.target;
+      if(!elm.classList.contains('ais-facet__label')) {
+        elm = e.target.closest('.ais-facet__label');
+      }
+      
+      const facet = e.target.closest('.ais-facet');
+      const type = facet.querySelector('.ais-facet__header').innerHTML.trim();
+      DY.API("event", {
+        name: "Filter Items",
+        properties: {
+          dyType: "filter-items-v1",
+          filterType: type,
+          filterStringValue: elm.innerText
+        }
+      });
+    } else if(e.target.classList.contains('ajaxcart__qty--remove')) {
+      const elm = e.target;
+      const id = elm.dataset.id.split(':')[0];
+      DY.API("event", {
+        name: "Filter Items",
+        properties: {
+          dyType: "filter-items-v1",
+          filterType: type,
+          filterStringValue: elm.innerText
+        }
+      });
+    }
+  });
+
+  const search = document.querySelector('.header-new-search-inner input');
+  if(search) {
+    search.addEventListener('keyup', debounce((evt) => {
+      const keywords = evt.target.value;
+      DY.API("event", {
+        name: "Keyword Search",
+        properties: {
+          dyType: "keyword-search-v1",
+          keywords,
+        }
+      });
+    }));
+  }
+
+  if(typeof customer !== 'undefined') {
+    const CUSTOMER_REGISTER_SEEN = 'customer_register_seen';
+    const CUSTOMER_LOGIN_SEEN = 'customer_login_seen';
+
+    if(document.getElementById("create_customer")) {
+      window.sessionStorage.removeItem(CUSTOMER_LOGIN_SEEN);
+      window.sessionStorage.setItem(CUSTOMER_REGISTER_SEEN, true);
+    }
+
+    if(window.sessionStorage.getItem(CUSTOMER_REGISTER_SEEN) && customer && customer.email) {
+      DY.API("event", {
+        name: "Login",
+        properties: {
+          dyType: "signup-v1",
+          hashedEmail: DYO.dyhash.sha256(`${customer.email}.toLowerCase()`), // SHA256 encoding of the lowercase email, if known (optional)
+        }
+      });
+      window.sessionStorage.removeItem(CUSTOMER_REGISTER_SEEN);
+    }
+
+    if(document.getElementById("customer_login")) {
+      // remove register here as they will
+      window.sessionStorage.removeItem(CUSTOMER_REGISTER_SEEN);
+      window.sessionStorage.setItem(CUSTOMER_LOGIN_SEEN, true);
+    }
+
+    if(window.sessionStorage.getItem(CUSTOMER_LOGIN_SEEN) && customer && customer.email) {
+      DY.API("event", {
+        name: "Login",
+        properties: {
+          dyType: "login-v1",
+          hashedEmail: DYO.dyhash.sha256(`${customer.email}.toLowerCase()`), // SHA256 encoding of the lowercase email, if known (optional)
+        }
+      });
+      window.sessionStorage.removeItem(CUSTOMER_LOGIN_SEEN);
+    }
+  }
+
+  var newsletter = document.querySelectorAll('.newsletter');
+  newsletter.forEach(block => {
+    block.querySelector('form').addEventListener('submit', function() {
+      DY.API("event", {
+        name: "Newsletter Subscription",
+        properties: {
+          dyType: "newsletter-subscription-v1",
+          hashedEmail: DYO.dyhash.sha256(block.querySelector('.newsletter__input').value.toLowerCase()) // SHA256 encoding of the lowercase email,
+          // in textual hexadecimal representation
+        }
+      });                                      
+    });
+  });
+
+  document.body.addEventListener('change', (e) => {
+    if(e.target.classList.contains('ais-SortBy-select')) {
+      DY.API("event", {
+        name: "Sort Items",
+        properties: {
+          dyType: "sort-items-v1",
+          sortBy: e.target.value,
+          sortOrder: "ASC"
+        }
+      });
+    }
+  });
+})();

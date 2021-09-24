@@ -1,0 +1,44 @@
+<div data-section-id="{{ section.id }}" data-section-type="collection-filters" class="coll-fltrs grid__item large--two-thirds">
+ {% comment %}
+  {% if section.settings.product_tags_enable and collection.all_tags.size > 0 %}
+    <div class="collection-sort">
+      <label for="SortTags" class="collection-sort__label">{{ 'collections.sorting.title_tags' | t }}</label>
+      <select name="SortTags" id="SortTags" class="collection-sort__input">
+        {% if collection.handle %}
+          <option value="/collections/{{ collection.handle }}">{{ 'collections.sorting.all_of_collection' | t }}</option>
+        {% elsif collection.current_type %}
+          <option value="{{ collection.current_type | url_for_type }}">{{ 'collections.sorting.all_of_collection' | t }}</option>
+        {% elsif collection.current_vendor %}
+          <option value="{{ collection.current_vendor | url_for_vendor }}">{{ 'collections.sorting.all_of_collection' | t }}</option>
+        {% endif %}
+        {% for tag in collection.all_tags %}
+          <option value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}"{% if current_tags contains tag %} selected="selected"{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endif %}
+  
+  {% endcomment %}
+  
+  {% include 'filter-by-tag' %}
+
+  
+  <div class="custom_filter_wrap">
+    <div class="collection-sort1 filter_custom">
+      <span for="SortBy" class="collection-sort -{{ current_tags }} ">Sort By</span>
+      <ul name="SortBy" id="SortBy" data-default-sort="{{ collection.default_sort_by }}" class="collection-sort__input">
+        <li value="manual"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=manual"> Featured</a></li>
+        <li value="best-selling"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=best-selling">Best Selling</a></li>
+        <li value="title-ascending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=title-ascending">Alphabetically, A-Z</a></li>
+        <li value="title-descending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=title-descending">Alphabetically, Z-A</a></li>
+        <li value="price-ascending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=price-ascending">Price, low to high</a></li>
+        <li value="price-descending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=price-descending">Price, high to low</a></li>
+        <li value="created-descending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=created-descending">Date, new to old</a></li>
+        <li value="created-ascending"><a href="{{shop.url}}/collections/{{collection.handle}}?sort_by=created-ascending">Date, old to new</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  
+</div>
+

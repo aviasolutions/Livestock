@@ -1,0 +1,308 @@
+<div id="featured-product" data-section-id="{{ section.id }}" class="featured-product-custom featured-product-color_{{ section.id }}">
+<div class="section-space">
+<div class="header-padding">
+  <div class="flex flex-space-between flex-align flex-break title-space">
+     {%- if section.settings.title != blank -%}
+      <h2 class="new-arrival-title"> {{ section.settings.title | escape }}</h2>
+  	{%- endif -%}
+    
+    {% if section.settings.btn_link != blank  %}
+    <a href="{{section.settings.btn_link}}" class="btn-hero-border btn-hero-border-hide">{{section.settings.btn-text}}</a>  
+    {% endif  %}
+    </div>
+  
+
+  {%- assign collection = collections[section.settings.collection] -%}
+
+ 
+
+
+  <div class="grid grid--uniform grid_new_design-cover swiper-container">
+    <div class="swiper-wrapper">
+  {% for block in section.blocks %}
+   {% include 'product--home-slide-cus', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
+   
+   
+    {% else %}
+
+      {% for i in (1..product_limit) %}
+        <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+          <div class="grid-view-item product-card">
+            <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="#">
+              <span class="visually-hidden">{{ 'homepage.onboarding.product_title' | t }}</span>
+            </a>
+            <div class="grid-view-item__image-wrapper">
+              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <div class="h4 grid-view-item__title" aria-hidden="true">{{ 'homepage.onboarding.product_title' | t }}</div>
+            {% include 'product-price' %}
+          </div>
+        </li>
+      {% endfor %}
+    {% endfor %}
+      
+      
+      </div>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next swiper-button-defult"><span class="circle-arrow"> {% include'arrow-cus' %}</span></div>
+    <div class="swiper-button-prev swiper-button-defult"> <span class="circle-arrow">{% include'arrow-cus-prev' %}</span></div>
+    <!-- Add Pagination -->
+    <div class="swiper-scrollbar"></div>
+  
+  </div>
+
+    {% if section.settings.btn_link != blank  %}
+ 	 <div class="text-center">
+    <a href="{{section.settings.btn_link}}" class="btn-hero btn-hero-fill-desktop">{{section.settings.btn-text}}</a>  
+  </div>
+    {% endif  %}
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<style>
+ 
+
+ #featured-product.featured-product-custom  .new-arrival-title{
+font-family: 'Roboto Condensed', sans-serif; letter-spacing:0px; text-transform:capitalize; margin:0; padding:0; font-weight:700;
+  color:{{section.settings.heading_color}};}
+ #featured-product.featured-product-custom .btn-hero-border{font-size:13px; color:{{section.settings.btn_text_color}}; border-bottom:{{section.settings.btn_text_color}} solid 2px;
+  letter-spacing:1px;font-family: 'Roboto Condensed', sans-serif; font-weight: 700; text-transform:uppercase;}
+ #featured-product.featured-product-custom .btn-hero-border:hover{color:{{section.settings.btn_text_colorh}};  border-bottom:{{section.settings.btn_text_colorh}} solid 2px;} 
+  
+#featured-product.featured-product-custom .swiper-button-defult {     top: calc(50% - 62px);}
+  
+  
+#featured-product.featured-product-custom .grid_new_design img {    filter: none !important;}  
+  
+</style>
+
+{% schema %}
+{
+  "name": {
+    "cs": "Propagovaná kolekce",
+    "da": "Udvalgt kollektion",
+    "de": "Vorgestellte Kategorie",
+    "en": "collection Custom",
+    "es": "Colección destacada",
+    "fi": "Esittelyssä oleva kokoelma",
+    "fr": "Collection en vedette",
+    "it": "Collezione in evidenza",
+    "ja": "特集コレクション",
+    "ko": "추천 컬렉션",
+    "nb": "Utvalgt samling",
+    "nl": "Uitgelichte collectie",
+    "pl": "Polecana kolekcja",
+    "pt-BR": "Coleção em destaque",
+    "pt-PT": "Coleção em destaque",
+    "sv": "Utvald kollektion",
+    "th": "คอลเลกชันแนะนำ",
+    "tr": "Öne çıkan koleksiyon",
+    "vi": "Bộ sưu tập nổi bật",
+    "zh-CN": "特色产品系列",
+    "zh-TW": "精選商品系列"
+  },
+  "class": "index-section",
+   "max_blocks": 12,
+  "settings": [
+
+    {
+     "type": "color",
+     "id": "heading_color",
+     "label": "Heading Color",
+     "default": "#000"
+    },
+   
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+      },
+      "default": {
+        "cs": "Propagovaná kolekce",
+        "da": "Udvalgt kollektion",
+        "de": "Vorgestellte Kategorie",
+        "en": "Featured collection",
+        "es": "Colección destacada",
+        "fi": "Esittelyssä oleva kokoelma",
+        "fr": "Collection en vedette",
+        "it": "Collezione in evidenza",
+        "ja": "特集コレクション",
+        "ko": "추천 컬렉션",
+        "nb": "Fremhevet samling",
+        "nl": "Uitgelichte collectie",
+        "pl": "Polecana kolekcja",
+        "pt-BR": "Coleção em destaque",
+        "pt-PT": "Coleção em destaque",
+        "sv": "Utvald kollektion",
+        "th": "คอลเลกชันแนะนำ",
+        "tr": "Öne çıkan koleksiyon",
+        "vi": "Bộ sưu tập nổi bật",
+        "zh-CN": "特色产品系列",
+        "zh-TW": "精選商品系列"
+      }
+    },
+    
+   
+    {
+     "type": "text",
+     "id": "btn-text",
+     "label": "Button Text",
+     "default": "Shop Now"
+    },
+    {
+     "type": "url",
+     "id": "btn_link",
+     "label": "Button link"
+    },
+   
+    {
+     "type": "color",
+     "id": "btn_text_color",
+     "label": "Button Text Color",
+     "default": "#888"
+    },
+    {
+     "type": "color",
+     "id": "btn_text_colorh",
+     "label": "Button Text Color Hover",
+     "default": "#000"
+    },
+    {
+    "type": "header",
+    "content": "Mobile"
+	}, 
+    {
+     "type": "color",
+     "id": "btn_text_colorm",
+     "label": "Mobile Button Text Color",
+     "default": "#000"
+    },
+    {
+     "type": "color",
+     "id": "btn_bgm",
+     "label": "Mobile Button Background",
+     "default": "#fff"
+    },
+    {
+     "type": "color",
+     "id": "btn_text_colorhm",
+     "label": "Mobile Button Text Color Hover",
+     "default": "#000"
+     },
+     {
+      "type": "color",
+      "id": "btn_bghm",
+      "label": "Mobile Button Background Hover",
+      "default": "#F0F0F0"
+     }
+    
+  ],
+	"blocks": [
+        {
+          "type": "image_text_block",
+          "name": "Slider",
+          "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_big",
+          "label": "Image"
+         },
+        {
+          "type": "text",
+          "id": "img-text",
+          "label": "Title"
+         },
+	
+		{
+          "type": "url",
+          "id": "hov_btn_link",
+          "label": "Link"
+         }
+
+        ]
+      }
+       
+],	
+
+
+  "presets": [
+    {
+      "name": {
+        "cs": "Propagovaná kolekce",
+        "da": "Udvalgt kollektion",
+        "de": "Vorgestellte Kategorie",
+        "en": "Collection Custom",
+        "es": "Colección destacada",
+        "fi": "Esittelyssä oleva kokoelma",
+        "fr": "Collection en vedette",
+        "it": "Collezione in evidenza",
+        "ja": "特集コレクション",
+        "ko": "추천 컬렉션",
+        "nb": "Utvalgt samling",
+        "nl": "Uitgelichte collectie",
+        "pl": "Polecana kolekcja",
+        "pt-BR": "Coleção em destaque",
+        "pt-PT": "Coleção em destaque",
+        "sv": "Utvald kollektion",
+        "th": "คอลเลกชันแนะนำ",
+        "tr": "Öne çıkan koleksiyon",
+        "vi": "Bộ sưu tập nổi bật",
+        "zh-CN": "特色产品系列",
+        "zh-TW": "精選商品系列"
+      },
+      "category": {
+        "cs": "Kolekce",
+        "da": "Kollektion",
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fi": "Kokoelma",
+        "fr": "Collection",
+        "it": "Collezione",
+        "ja": "コレクション",
+        "ko": "컬렉션",
+        "nb": "Samling",
+        "nl": "Collectie",
+        "pl": "Kolekcja",
+        "pt-BR": "Coleção",
+        "pt-PT": "Coleção",
+        "sv": "Produktserie",
+        "th": "คอลเลกชัน",
+        "tr": "Koleksiyon",
+        "vi": "Bộ sưu tập",
+        "zh-CN": "收藏",
+        "zh-TW": "商品系列"
+      }
+    }
+  ]
+}
+{% endschema %}

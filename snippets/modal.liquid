@@ -1,0 +1,495 @@
+<div class="modal-back"></div>
+<div id="availability-modal-{{ product.id }}" class="modal-front" style="">
+	<h3><strong>IN-STORE AVAILABILITY</strong></h3>
+	<div id="in-store-merchandise-modal-{{ product.id }}">
+
+      {% assign store = 'livestockchinatown_inventory' %}
+      <div class="store-availability grid__item large--one-fifth medium--one-third">
+        <div class="location-bit">
+            <a target="_blank" href="https://www.google.ca/maps/place/141+E+Pender+St,+Vancouver,+BC+V6A+1T6/data=!4m2!3m1!1s0x548671707ab22177:0x8f2d4bc17e8edce3?sa=X&ei=vfklVf_bNovlsAW7mIDgBw&ved=0CB0Q8gEwAA" class="fa fa-map-marker"></a>
+        </div>
+      <div class="info-bit">
+          <div class="store-inventory">
+            <h4 class="store-main-heading">Livestock Chinatown</h4>
+            <h4>Sizes Available:</h4>
+            <div class="available__size">
+              {% assign available = 'false' %}
+              {% for variant in product.variants %}
+              {% assign instock = variant.metafields.inventory['LS BC Chinatown'] %}
+              {% if instock != blank %}
+              {% if instock != 0 %}
+              {% assign available = 'true' %}
+              <span>{{ variant.option2 }}</span>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </div>
+               {% if available == 'false' %}
+               <span class="out-stock"> out of stock</span>
+               {% endif %}
+         
+          </div>
+          <div class="store-name">
+
+             <address>
+              141 East Pender St<br />
+              Vancouver BC - V6A 1T6
+            </address>
+
+            <span class="topgap">Hours: 11am - 7pm<br />
+              604.559.0877 </span>
+          </div>
+
+      	</div>
+      </div>      
+      
+      
+     {% comment %}
+      {% assign store = 'lsegastown_inventory' %}
+      <div class="store-availability grid__item large--one-fifth medium--one-third">
+        <div class="location-bit">
+          <a target="_blank" href="https://www.google.ca/maps/place/239+Abbott+St,+Vancouver,+BC+V6B/@49.28324,-123.1066422,17z/data=!3m1!4b1!4m2!3m1!1s0x54867179e6a0bbd9:0x54c99da9bbd3342f" class="fa fa-map-marker"></a>
+        </div>
+        <div class="info-bit">
+          <div class="store-name">
+            <h4>Livestock Gastown</h4>
+            <address>
+              239 Abbott St<br />
+              Vancouver BC - V6B 2K7 
+            </address>
+            <span class="topgap">Hours: 11am - 8pm><br/>  
+            604.685.1433</span>
+          </div>
+          <div class="store-inventory">
+            <h4>Sizes Available:</h4>
+              {% assign available = 'false' %}
+            {% for variant in product.variants %}
+            {% assign instock = variant.metafields.inventory['ON Roncesvalles'] %}
+            {{instock}}
+            {% if instock != blank %}
+            
+            	{% if instock != 0 %}
+            		 {% assign available = 'true' %}
+                    {% assign temp = " option1_" | append: variant.option1 | handleize %}
+                    {% if forloop.first %}
+                    {% assign unique_option1 = temp %}
+                    {{ variant.option2 }}
+                    {% elsif unique_option1 contains temp %}, {{ variant.option2 }}
+                    {% else %}
+                	{% endif %}
+            	{% endif %}
+            {% endif %}
+            {% endfor %}
+             {% if available == 'false' %}
+            <span class="out-stock"> out of stock</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endcomment %}
+      
+      
+      {% assign store = 'livestock_roncesvall_inventory' %}
+      <div class="store-availability grid__item large--one-fifth medium--one-third">
+        <div class="location-bit">
+          <a class="fa fa-map-marker"></a>
+        </div>
+        <div class="info-bit">
+           <div class="store-inventory">
+              <h4 class="store-main-heading">Livestock Roncesvalles</h4>
+            <h4>Sizes Available:</h4>
+             <div class="available__size">
+               {% assign available = 'false' %}
+               {% for variant in product.variants %}  
+               {% assign instock = variant.metafields.inventory['LS ON Rnsvalles'] %}
+               {% if instock != blank %}
+               {% if instock != 0 %}
+               {% assign available = 'true' %}
+               <span>{{ variant.option2 }}</span>
+               {% endif %}
+               {% endif %}
+               {% endfor %}
+             </div>
+             {% if available == 'false' %}
+            <span class="out-stock"> out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-name">
+           
+            <address>
+              406 Roncesvalles Ave.<br/>
+              Toronto ON - M6R 2M9
+            </address>
+          <span class="topgap">Hours: 11am - 8pm<br/>
+            647.347.8046</span>
+          </div>
+         
+        </div>
+      </div>
+      
+      {% assign store = 'livestocktoronto_inventory' %}
+      <div class="store-availability grid__item  large--one-fifth medium--one-third">
+        <div class="location-bit">
+            <a target="_blank" href="https://www.google.ca/maps/place/Livestock/@43.647121,-79.395822,17z/data=!3m1!4b1!4m2!3m1!1s0x882b34dbbe1dfe3f:0x4cb88da846521469" class="fa fa-map-marker"></a>
+        </div>
+        <div class="info-bit">
+          <div class="store-inventory">
+            <h4 class="store-main-heading">Livestock Spadina</h4>
+            <h4>Sizes Available:</h4>
+            <div class="available__size">
+              {% assign available = 'false' %}
+              {% for variant in product.variants %}
+              {% assign instock = variant.metafields.inventory['LS ON Spadina'] %}
+              {% if instock != blank %}
+              {% if instock != 0 %}
+              {% assign available = 'true' %}
+              <span>{{ variant.option2 }}</span>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </div>
+            {% if available == 'false' %}
+            <span class="out-stock"> out of stock</span>
+            {% endif %}
+          </div>
+          <div class="store-name">
+
+            <address>
+              116 Spadina - Unit G1<br />
+              Toronto ON - M5V 2K6
+            </address>
+          <span class="topgap">Hours: 11am - 8pm<br/>
+            416.360.5483</span>
+          </div>
+
+      </div>
+      </div>
+
+      
+      {% assign store = 'livestockwinnipeg_inventory' %}
+      <div  class="store-availability grid__item  large--one-fifth medium--one-third">
+        <div class="location-bit">
+        	<a class="fa fa-map-marker"></a>
+        </div>
+        <div class="info-bit">
+           <div class="store-inventory">
+             <h4 class="store-main-heading">Livestock Winnipeg</h4>
+            <h4>Sizes Available:</h4>
+             <div class="available__size">
+               {% assign available = 'false' %}
+               {% for variant in product.variants %}
+               {% assign instock = variant.metafields.inventory['LS MB Winnipeg'] %}
+               {% if instock != blank %}
+               {% if instock != 0 %}
+               {% assign available = 'true' %}
+               <span>{{ variant.option2 }}</span>
+               {% endif %}
+               {% endif %}
+               {% endfor %}
+             </div>
+             {% if available == 'false' %}
+             <span class="out-stock"> out of stock</span>
+             {% endif %}
+          </div>
+          <div class="store-name">
+            
+            <address>
+              224 Main St <br/>
+              Winnipeg MB - R3C 1A8
+            </address>
+            <span class="topgap">
+              Hours: 11am - 7pm<br/>
+              204.947.2664            
+            </span>
+            
+          </div>
+         
+        </div>
+    </div>
+
+      
+      {% assign store = 'livestockds_inventory' %}
+      <div class="store-availability grid__item  large--one-fifth medium--one-third">
+          <div class="location-bit">
+              <a class="fa fa-map-marker"></a>
+          </div>
+          <div class="info-bit">
+              <div class="store-inventory">
+                <h4 class="store-main-heading">Livestock Warehouse</h4>
+                <h4>Sizes Available:</h4>
+                <div class="available__size">
+                  {% assign available = 'false' %}
+                  {% for variant in product.variants %}
+                  {% assign instock = variant.metafields.inventory['LS BC WH'] %}
+                  {% assign instock1 = variant.metafields.inventory['LS ON WH'] %}
+                  {% if instock != blank or instock1 != blank %}
+                  {% if instock != 0 %}
+                    {% assign available = 'true' %}
+                    <span>{{ variant.option2 }}</span>
+                  {% elsif instock1 != 0 %}
+                  	 {% assign available = 'true' %}
+                    <span>{{ variant.option2 }}</span>
+                  {% endif %}
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                {% if available == 'false' %}
+                <span class="out-stock"> out of stock</span>
+                {% endif %}
+            </div>
+            <div class="store-name">
+
+              <address>              
+                      Vancouver<br/>
+                      Shop@deadstock.ca            		
+                </address>
+              <span class="topgap">
+               Hours: 9am - 5pm<br/>
+               855.360.5483 (Toll Free)
+              </span>
+
+            </div>
+
+          </div>
+    	</div>
+
+      
+    </div>
+	<div class="modal-close fa fa-times"></div>
+</div>
+<script>
+$().ready(function() {
+	$("#availability-cat-{{ product.id }}").click(function(e) {	
+		e.preventDefault();
+
+		$(".modal-back").fadeIn();
+		$("#availability-modal-{{ product.id }}.modal-front").fadeIn();
+	});
+	
+	$(".modal-close").click(function() {
+		$(".modal-back").fadeOut();
+		$(this).parent().fadeOut();
+	});
+	
+	$('.modal-back').click(function() 
+	{
+		$(".modal-back").fadeOut();
+		$('.modal-front').each(function(){$(this).fadeOut();});
+	});
+
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27)
+		{
+			if($("#availability-modal-{{ product.id }}:visible").length)
+			{
+				$(".modal-back").fadeOut();
+				$(".modal-front").each(function(){
+					$(this).fadeOut();
+
+				});
+			}
+		}
+	});
+});
+
+</script>
+
+<style>
+
+.modal-back {
+	position:fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #ddd;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	filter: alpha(opacity=90);
+	-moz-opacity: 0.9;
+	-khtml-opacity: 0.9;
+	opacity: 0.7;
+	z-index:9999998;
+	display:none;
+}
+
+.modal-front {
+	position: fixed;
+	margin: auto;
+	background-color: #fff;
+	
+	z-index:9999999;
+	left:0;
+	right:0;
+	top:50%;
+	transform:translateY(-50%);
+	display:none;
+	border-radius:10px;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	-o-border-radius:10px;
+	
+	width:768px;
+
+}
+
+.modal-front h3
+{
+	
+	box-sizing:border-box;
+	text-align: center;
+	width: 100%;
+	
+	color:white;
+	margin-bottom:13px; height:30px; line-height:30px;
+	
+  font-size: 14px; letter-spacing:.5px;
+  
+}
+  .modal-fron h4 { font-size: 14px; letter-spacing:2px;}
+.modal-close, .menu-close {
+	  position: absolute;
+  top: 0px;
+  right: 10px;
+  /* padding: 0px 8px; */
+  cursor: pointer;
+  font-size: 21px;
+  border-radius: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: 200;
+ 
+  vertical-align: middle;
+  line-height: 26px;
+  width: 30px;
+ 
+  border-radius: 100%;
+ 
+  border: none;
+  line-height: normal;
+  padding: 0;
+ 
+  height: 30px; line-height:30px;
+}
+
+
+.content-half
+{
+	width: 300px;
+	height: 400px;
+	float: right;
+}
+
+.location-bit
+{
+	width: 10%;
+	float: left;
+	font-size: 26px; display:none;
+}
+
+.info-bit
+{
+	width: 90%;
+	float: left;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-name {
+  display: inline-block;
+  width: 100%;
+  margin-right: 20px;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-name h4 {
+  border: none;
+  font-size: 14px;
+  margin: 0px;
+  padding: 0px; letter-spacing:.5px;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-name h4:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-name h4 > span { 
+  font-weight: bold;
+  display: inline-block;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-name h4 > i {
+  margin-right: 5px;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-inventory {
+  display: inline-block;
+  width: 100%;
+  color:#000;
+  margin-top: 15px;
+  font-weight: normal;
+  
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-inventory .not-cyan
+{
+    color: rgb(68, 68, 68);
+    font-weight: normal;
+}
+
+#availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-availability {
+  display: inline-block;
+ 
+  padding: 15px 30px 21px 30px;
+ 
+  
+  box-sizing:border-box;
+  clear:none;
+}
+
+ @media (max-width:980px) { #availability-modal-{{ product.id }} #in-store-merchandise-modal-{{ product.id }} .store-availability {
+ 
+ 
+  padding: 10px ;
+ 
+  
+
+} }
+  
+ 
+@media (max-width:767px)
+{
+  
+  .product-single__meta {position:relative}
+	.modal-front {
+		  height: auto;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+	}
+
+	.modal-front {
+		width:100%!important; 
+	}
+
+	#in-store-merchandise-{{ product.id }} .store-availability
+	{
+		width: 100%;
+	}
+}
+address, span {
+    font-size: 14px;
+    font-style: normal; letter-spacing:.5px;
+}
+  address, span.topgap {margin-top:20px; display:inline-block; padding:0; line-height:normal;
+  
+    
+  
+  }
+  @media (max-width:768px) { address, span.topgap{ display:block;}}
+  
+  @media (max-width:590px) { 
+  .modal-front {
+		width:300px!important; max-width:300px!important;
+	}
+    
+  }
+</style>

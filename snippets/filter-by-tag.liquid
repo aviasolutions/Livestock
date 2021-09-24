@@ -1,0 +1,39 @@
+ <div class="custom_filter_wrap">
+    <div class="filter_custom">
+  <span class="category-filter">{{ settings.custom_filter_name3 }} Category </span>
+  <ul class="size size_cat">
+    {% for tag in collection.all_tags %}
+    {% if tag contains 'cf-type' %}
+    <li filter-attr="{{ tag }}"> {{ tag | remove: "cf-type-" }}</li>
+    {% endif %}
+    {% endfor %}
+    <li><a href="{{shop.url}}/collections/{{collection.handle}}">View All</a></li>
+  </ul>
+</div>
+<div class="filter_custom">
+  <span  class="size-filter">{{ settings.custom_filter_name1 }} Size</span>
+  <ul class="size size1">
+    {% for tag in collection.all_tags %}
+    {% if tag contains 'cf-us-size' %}
+    {% assign newtag =  tag | remove: "cf-us-size-"  %}
+    <li data-tag="{{newtag | split : "-" | first }}" filter-attr="{{ tag }}"> {{ tag | remove: "cf-us-size-" }}</li>
+    {% endif %}
+    {% endfor %}
+    
+  </ul>
+</div>
+<!-- <div class="filter_custom brand_filter">
+  <span>{{ settings.custom_filter_name2 }}</span>
+  <ul class="size size_brand">
+    {% for tag in collection.all_tags %}
+     
+    {% if tag contains 'cf-vendor' %}
+    <li filter-attr="{{ tag }}"> {{ tag | remove: "cf-vendor-" }}</li>
+    {% endif %}
+    {% endfor %}
+    <div class="vendor_reset reset">Reset</div>
+  </ul>
+</div> -->
+
+  </div>
+   

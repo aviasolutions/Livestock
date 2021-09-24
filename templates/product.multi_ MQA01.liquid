@@ -1,0 +1,104 @@
+<!-- /templates/product.liquid -->
+{% comment %}
+  The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+{% section 'product-flash-sale-template2' %}
+
+<script>
+  // Override default values of shop.strings for each template.
+  // Alternate product templates can change values of
+  // add to cart button, sold out, and unavailable states here.
+  theme.productStrings = {
+    addToCart: {{ 'products.product.add_to_cart' | t | json }},
+    soldOut: {{ 'products.product.sold_out' | t | json }},
+    unavailable: {{ 'products.product.unavailable' | t | json }}
+  };
+   jQuery(document).ready(function($){         
+       $(document).on('click', '.slick-slide a img', function() {
+        $(".header-wrapper").css("z-index","1");
+       $(this).parent("a").attr("href", "javascript:;");
+       $(".moda-prol").show();
+       $("body").addClass("modal");
+    });
+    $(document).on('click', '.mainimage', function() {
+      	$(".moda-prol").show();
+      	$("body").addClass("modal");
+    });       
+    $('.close').click(function() {
+      $(".header-wrapper").css("z-index","9999");
+       $("#modal").hide();
+       $("body").removeClass("modal");
+    });
+    $('#modal').click(function() {
+      $("body").removeClass("modal");
+      $('#modal').hide();
+            
+	}); 
+         var url = window.location.href;
+         url = url.toString();
+         if(url.includes('=')){
+           var newurl = url.split("=");
+           var success_status =  newurl[1];
+           console.log('---'+success_status);
+           //success_status = success_status.toString();
+           if(success_status.includes('true')){
+              $('.successmessge').show();
+           }
+         }
+         setTimeout(function(){
+         	$('.successmessge').hide();
+         },7000);
+         
+        // for popup ===
+         $('.contact-form-submit').click(function(){
+           var status = true ;var error_mesg = "";
+           var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+           var email = $('#contact-email').val();
+           var phone = $('#contact-phone').val();
+           if (email == ''){
+             alert("Email is empty.");
+             status = false ;
+           }
+           else{            
+             if (testEmail.test(email)){}
+              else{
+                status = false ;
+               alert("Invalid Email");
+             }
+           }        
+           if(phone != ''){
+             if($.isNumeric(phone)){
+             }else{
+               status = false ;
+             	alert("please enter numeric value.");
+             }
+           }	
+           if( status == true){
+           		 $('#contact_form').submit();
+           }
+           //return false;
+             
+         });
+         
+         $("#contact_form").click(function(e){     
+          e.preventDefault();
+          e.stopPropagation();
+            return false;
+        });
+         $('.askpopup').click(function(){         
+         	$(this).fadeOut();
+         });
+       
+        $(".ask_query").on('click', function (e) {              	
+          $(".template-product .askpopup").fadeIn();          
+           $("html, body").animate({ scrollTop: 0 }, "slow");  	
+        });
+         //----------    
+      });  
+</script>
+
+<!-- sezzle -->
+<script src=https://widget.sezzle.com/v1/javascript/price-widget/initial?uuid=853275bb-ff2a-4969-ad90-5d182d389918></script>
+
+<script src="https://widget.sezzle.com/v1/javascript/price-widget?uuid=853275bb-ff2a-4969-ad90-5d182d389918"></script>

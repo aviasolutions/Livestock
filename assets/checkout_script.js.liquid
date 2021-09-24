@@ -1,0 +1,33 @@
+$(document).ready(function(){
+  if(Shopify.Checkout.step != "contact_information"){
+  	$('.addon-wrapper').hide();
+  }
+  
+//   $('.order-summary-toggle').on('click', function(){
+//     if(Shopify.Checkout.step == "contact_information"){
+//       $('.addon-wrapper').toggle();
+//     }
+//   })
+})
+$(window).on('load', function(){
+  $('.custom-add').on('click', function(e){
+    e.preventDefault();
+    var variantId = $(this).attr('data-id');
+
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: 'quantity='+1+'&id='+variantId,
+      dataType: 'json',
+      async:false,
+      success: function(line_item) {
+        $('body').trigger('addToCart.livestock', [line_item]);
+        location.reload(true);
+      },
+      error: function(er) {
+        var err = $.parseJSON(er.responseText);
+        return false;
+      }
+    })
+  });
+});

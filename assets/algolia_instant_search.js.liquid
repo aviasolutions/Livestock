@@ -1,0 +1,1020 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable vars-on-top */
+/* eslint-disable strict */
+/* eslint-disable no-var */
+/* eslint-disable complexity */
+(function(algolia) {
+  'use strict';
+  var instantsearch = algolia.externals.instantsearch;
+  var algoliasearch = algolia.externals.algoliasearch;
+  var searchBox = algolia.externals.widgets.searchBox;
+  var stats = algolia.externals.widgets.stats;
+  var sortBy = algolia.externals.widgets.sortBy;
+  var clearRefinements = algolia.externals.widgets.clearRefinements;
+  var panel = algolia.externals.widgets.panel;
+  var hits = algolia.externals.widgets.hits;
+  var pagination = algolia.externals.widgets.pagination;
+  var configure = algolia.externals.widgets.configure;
+  var connectCurrentRefinements =
+    algolia.externals.connectors.connectCurrentRefinements;
+  var aa = algolia.externals.aa;
+
+  var collectionPageEnabled =
+    algolia.is_collection_results_page &&
+    algolia.config.instant_search_enabled_on_collection;
+
+  if (!algolia.full_results && !algolia.is_collection_results_page) {
+    /**
+     * If we aren't on the search page and neither on a collection page,
+     * then there's no need to proceed
+     */
+    return;
+  } else if (algolia.full_results) {
+    /**
+     * If we are on the search page and instant search isn't enabled,
+     * then there's no need to proceed
+     */
+    if (!algolia.config.instant_search_enabled) {
+      return;
+    }
+  } else if (algolia.is_collection_results_page) {
+    /**
+     * If we are on a collection page and instant search on collection isn't
+     * enabled, then there's no need to proceed
+     */
+    if (!algolia.config.instant_search_enabled_on_collection) {
+      return;
+    }
+  }
+
+  /**
+   * Array which will contain all filters to be applied while initiating the
+   * search API call.
+   */
+  var searchFilters = [];
+
+  var collectionFacetFilter = null;
+  var collectionRulesContextValue = null;
+  var collectionHandle = null;
+
+  if (collectionPageEnabled) {
+    var matches = window.location.pathname.match(/\/collections\/([^/]+)/i);
+    collectionHandle =
+      Boolean(matches) && matches.length === 2 ? matches[1] : null;
+
+    if (algolia.config.collection_id_indexing) {
+      collectionFacetFilter = algolia.current_collection_id
+        ? 'collection_ids:"' + algolia.current_collection_id + '"'
+        : null;
+    } else {
+      collectionFacetFilter = 'collections:"' + collectionHandle + '"';
+    }
+
+    // Add the collection filter to the list of search filters
+    searchFilters.push(collectionFacetFilter);
+
+    collectionRulesContextValue = algolia.config.collection_id_query_rules
+      ? algolia.current_collection_id
+      : collectionHandle;
+  }
+
+  // Filters for stock policy
+  var stockPolicyFilter = null;
+  if (algolia.config.stock_policy) {
+    if (algolia.config.stock_policy === 'allow') {
+      /**
+       * For 'allow', we don't need to add any filter as we want to continue
+       * displaying all out of stock items.
+       */
+    } else if (algolia.config.stock_policy === 'deny') {
+      // For 'deny' we will filter out all items based on inventory quantity
+      stockPolicyFilter = 'inventory_quantity > 0';
+    } else if (algolia.config.stock_policy === 'continue') {
+      /**
+       * For 'continue' we will filter on `inventory_available` attribute whose
+       * value is dependent on:
+       * `inventory_quantity > 0 OR inventory_policy == 'continue'`
+       */
+      stockPolicyFilter = 'inventory_available:true';
+    }
+
+    // Add the stock policy filter to the list of search filters
+    if (stockPolicyFilter) {
+      searchFilters.push(stockPolicyFilter);
+    }
+  }
+
+  var results_selector = collectionPageEnabled
+    ? algolia.config.collection_css_selector
+    : algolia.config.results_selector;
+
+  var activeSortOrders =
+    collectionPageEnabled && algolia.collectionSortOrders
+      ? algolia.collectionSortOrders
+      : algolia.sortOrders;
+
+  results_selector += ', .algolia-shopify-instantsearch';
+
+  function getTrackedUiState(uiState) {
+    var trackedUiState = {};
+    Object.keys(uiState).forEach(function(k) {
+      if (k === 'configure' || k === 'query' || k === 'q') {
+        return;
+      }
+      trackedUiState[k] = uiState[k];
+    });
+    return trackedUiState;
+  }
+
+  /**
+   * List of URL params which are "allowed" by InstantSearch.
+   * These parameters won't be overwritten when the search state is written
+   * to the URL.
+   */
+  var ALLOWED_FOREIGN_PARAMS = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_term',
+    'utm_content',
+  ];
+  var foreignRouteState;
+
+  function singleIndex(indexName) {
+    return {
+      /**
+       * `stateToRoute` method transforms the `uiState` object from InstantSearch
+       * into an object that will then be serialized to construct the URL.
+       */
+      stateToRoute: function(uiState) {
+        var route = getTrackedUiState(uiState[indexName] || {});
+        route.q = uiState[indexName].query;
+        return Object.assign({}, foreignRouteState, route);
+      },
+
+      /**
+       * `routeToState` method transforms the route object into a `uiState` object
+       * so that InstantSearch is initialized with the correct state from the
+       * URL.
+       */
+      routeToState: function(routeState) {
+        /**
+         * Backup parameters from `routeState` into a different object
+         * `foreignRouteState` so that we can re-inject them into the object
+         * returned within `stateToRoute`.
+         * This allows us to preserve the parameters specified in `ALLOWED_FOREIGN_PARAMS`
+         * array.
+         */
+        if (!foreignRouteState) {
+          foreignRouteState = ALLOWED_FOREIGN_PARAMS.reduce(function(acc, key) {
+            acc[key] = routeState[key];
+            return acc;
+          }, {});
+        }
+
+        var state = {};
+        state[indexName] = getTrackedUiState(routeState || {});
+        state[indexName].query = routeState.q;
+        return state;
+      },
+    };
+  }
+
+  var instant = {
+    colors: algolia.config.colors,
+    distinct: Boolean(algolia.config.show_products),
+    facets: {
+      hidden:
+        collectionPageEnabled && algolia.collectionHiddenFacets
+          ? algolia.collectionHiddenFacets
+          : algolia.hiddenFacets,
+      shown:
+        collectionPageEnabled && algolia.collectionShownFacets
+          ? algolia.collectionShownFacets
+          : algolia.shownFacets,
+      list:
+        collectionPageEnabled && algolia.collectionFacets
+          ? algolia.collectionFacets
+          : algolia.facets,
+      widgets:
+        collectionPageEnabled && algolia.collectionFacetsWidgets
+          ? algolia.collectionFacetsWidgets
+          : algolia.facetsWidgets,
+    },
+    hitsPerPage:
+      collectionPageEnabled &&
+      algolia.config.collections_full_results_hits_per_page
+        ? algolia.config.collections_full_results_hits_per_page
+        : algolia.config.products_full_results_hits_per_page,
+    poweredBy: algolia.config.powered_by,
+    search: instantsearch({
+      searchClient: algoliasearch(
+        algolia.config.app_id,
+        algolia.config.search_api_key
+      ),
+      indexName: algolia.config.index_prefix + 'products',
+      routing: {
+        stateMapping: singleIndex(algolia.config.index_prefix + 'products'),
+      },
+      searchFunction: function(searchFunctionHelper) {
+        // Set query parameters here because they're not kept when someone
+        // presses the Back button if set in the `init` function of a custom widget
+        var page = searchFunctionHelper.getPage();
+        searchFunctionHelper.setQueryParameter(
+          'highlightPreTag',
+          '<span class="ais-highlight">'
+        );
+        searchFunctionHelper.setQueryParameter('highlightPostTag', '</span>');
+        if (instant.distinct) {
+          searchFunctionHelper.setQueryParameter('distinct', true);
+        }
+
+        // Assign any required filters
+        if (searchFilters.length) {
+          searchFunctionHelper.setQueryParameter(
+            'filters',
+            searchFilters.join(' AND ')
+          );
+        }
+
+        // Assign any required `ruleContexts` which are required for query rules
+        // targeting collection pages
+        if (collectionPageEnabled) {
+          // Collection page merchandising:
+          // If we are on a collection page, `collectionRulesContextValue` is defined
+          if (collectionRulesContextValue) {
+            searchFunctionHelper.setQueryParameter('ruleContexts', [
+              collectionRulesContextValue.toString(),
+            ]);
+          } else {
+            searchFunctionHelper.setQueryParameter('ruleContexts', []);
+          }
+        }
+
+        searchFunctionHelper.setPage(page);
+        searchFunctionHelper.search();
+      },
+    }),
+    selector: results_selector + ', .algolia-shopify-instantsearch',
+    sortOrders: activeSortOrders,
+    storeName: algolia.storeName,
+    templates: {
+      currentItem: algolia.getTemplate(
+        'instant_search_current_refined_values_item'
+      ),
+      empty: algolia.getTemplate('instant_search_no_result'),
+      page: algolia.compileTemplate('instant_search'),
+      product: algolia.getTemplate('instant_search_product'),
+      stats: algolia.getTemplate('instant_search_stats'),
+      style: algolia.compileTemplate('instant_search.css'),
+    },
+  };
+
+  algolia.instantsearch = instant;
+
+  if (instant.poweredBy) {
+    // eslint-disable-next-line no-console
+    console.log('Algolia: Instant-Search');
+  }
+
+  function readjust() {
+    var width = instant.$results.offsetWidth;
+
+    var suffix = 'lg';
+    if (width < 400) suffix = 'xs';
+    else if (width < 800) suffix = 'sm';
+    else if (width < 1200) suffix = 'md';
+
+    instant.$results.classList.remove('ais-results-size-xs');
+    instant.$results.classList.remove('ais-results-size-sm');
+    instant.$results.classList.remove('ais-results-size-md');
+    instant.$results.classList.remove('ais-results-size-lg');
+    instant.$results.classList.add('ais-results-size-' + suffix);
+  }
+
+  // Bind helpers
+  var helpers = algolia.assign(
+    {},
+    algolia.helpers,
+    algolia.translation_helpers
+  );
+  Object.keys(helpers).forEach(function(name) {
+    var helper = helpers[name];
+    instant.search.templatesConfig.helpers[name] = helper;
+  });
+  instant.search.templatesConfig.compileOptions = algolia.hoganOptions;
+
+  algolia.appendStyle(
+    algolia.render(instant.templates.style, {
+      distinct: instant.distinct,
+      colors: instant.colors,
+    })
+  );
+
+  if (collectionPageEnabled) {
+    if (
+      document.querySelectorAll(algolia.config.collection_css_selector)
+        .length === 0
+    ) {
+      throw new Error(
+        'Instant search CSS selector for collection page is incorrect\nFor more info see: https://www.algolia.com/doc/integration/shopify/advanced-customization/collection-search-page/#css-selector'
+      );
+    }
+  } else if (
+    document.querySelectorAll(algolia.config.results_selector).length === 0
+  ) {
+    throw new Error(
+      'Instant search CSS selector is incorrect\nFor more info see: https://www.algolia.com/doc/integration/shopify/building-search-ui/instant-search/#css-selector'
+    );
+  }
+
+  instant.$results = document.querySelector(instant.selector);
+
+  instant.$results.innerHTML = algolia.render(instant.templates.page, {
+    facets: instant.facets.list,
+    storeName: instant.storeName,
+    translations: algolia.translations,
+    multipleSortOrders: activeSortOrders.length > 1,
+  });
+
+  readjust();
+
+  window.addEventListener('resize', function() {
+    readjust();
+  });
+
+  instant.search.addWidgets([
+    configure({
+      hitsPerPage: instant.hitsPerPage,
+      clickAnalytics: true,
+      facetingAfterDistinct: false,
+      analyticsTags: collectionRulesContextValue ? [collectionRulesContextValue] : [],
+    }),
+  ]);
+
+  // Search input
+  instant.search.addWidgets([
+    searchBox({
+      container: '.ais-search-box-container',
+      placeholder: algolia.translations.searchForProduct,
+      showReset: false,
+      showSubmit: false,
+    }),
+  ]);
+
+  // Logo & clear
+  instant.search.addWidgets([
+    {
+      init: function(opts) {
+        if (!instant.poweredBy) {
+          document.querySelector('.ais-algolia-icon').style.display = 'none';
+        }
+        document
+          .querySelector('.ais-clear-input-icon')
+          .addEventListener('click', function() {
+            opts.helper.setQuery('').search();
+            var input = document.querySelector('.ais-search-box--input');
+            input.value = '';
+            input.focus();
+          });
+      },
+      render: function(opts) {
+        if (!opts.state.query) {
+          if (instant.poweredBy) {
+            document.querySelector('.ais-algolia-icon').style.display = '';
+          }
+          document.querySelector('.ais-clear-input-icon').style.display =
+            'none';
+        } else {
+          document.querySelector('.ais-clear-input-icon').style.display = '';
+          document.querySelector('.ais-algolia-icon').style.display = 'none';
+        }
+      },
+    },
+  ]);
+
+  // Stats
+  instant.search.addWidgets([
+    stats({
+      container: '.ais-stats-container',
+      templates: {
+        text: instant.templates.stats,
+      },
+    }),
+  ]);
+
+  // Sort orders
+  if (activeSortOrders.length > 1) {
+    instant.search.addWidgets([
+      sortBy({
+        container: '.ais-sort-orders-container',
+        items: instant.sortOrders,
+      }),
+    ]);
+    instant.search.addWidgets([
+      sortBy({
+        container: '.ais-sort-orders-container-mobile',
+        items: instant.sortOrders,
+      }),
+    ]);
+  }
+
+  // Change display
+  instant.search.addWidgets([
+    {
+      init: function() {
+        document
+          .querySelector('.ais-search-header .ais-change-display-block')
+          .addEventListener('click', function() {
+            document
+              .querySelector(
+                '.ais-change-display-block:not(.ais-change-display-selected)'
+              )
+              .classList.add('ais-change-display-selected');
+            document
+              .querySelector(
+                '.ais-change-display-list.ais-change-display-selected'
+              )
+              .classList.remove('ais-change-display-selected');
+            document
+              .querySelector('.ais-results-as-list')
+              .classList.replace('ais-results-as-list', 'ais-results-as-block');
+          });
+        document
+          .querySelector('.ais-search-header .ais-change-display-list')
+          .addEventListener('click', function() {
+            document
+              .querySelector(
+                '.ais-change-display-list:not(.ais-change-display-selected)'
+              )
+              .classList.add('ais-change-display-selected');
+            document
+              .querySelector(
+                '.ais-change-display-block.ais-change-display-selected'
+              )
+              .classList.remove('ais-change-display-selected');
+            document
+              .querySelector('.ais-results-as-block')
+              .classList.replace('ais-results-as-block', 'ais-results-as-list');
+          });
+      },
+    },
+  ]);
+
+  // Hidden facets
+  var list = instant.facets.hidden.map(function(facet) {
+    return facet.name;
+  });
+  instant.search.addWidgets([
+    {
+      getConfiguration: function() {
+        return {
+          facets: list,
+          disjunctiveFacets: list,
+        };
+      },
+      init: function() {},
+    },
+  ]);
+
+  // Create the render function
+  var createDataAttribtues = function(refinement) {
+    return Object.keys(refinement)
+      .map(function(key) {
+        return 'data-' + key + '="' + refinement[key] + '"';
+      })
+      .join(' ');
+  };
+
+  var renderListItem = function(item) {
+    var facet = instant.facets.list.find(function(f) {
+      return f.name === item.label;
+    });
+    return item.refinements
+      .map(function(refinement) {
+        return (
+          '<li class="ais-current-refined-values--item">' +
+          '  <a ' +
+          createDataAttribtues(refinement) +
+          '    class="ais-current-refined-values--link">' +
+          '    <div>' +
+          '      <div class="ais-current-refined-values--label">' +
+          facet.title +
+          '      </div>: ' +
+          refinement.label +
+          '    </div>' +
+          '  </a>' +
+          '</li>'
+        );
+      })
+      .join('');
+  };
+
+  var renderCurrentRefinements = function(renderOptions) {
+    var items = renderOptions.items;
+    var refine = renderOptions.refine;
+    var widgetParams = renderOptions.widgetParams;
+
+    widgetParams.container.innerHTML =
+      '<div class="ais-current-refined-values--header ais-facet--header ais-header">Selected filters</div>' +
+      '<div class="ais-root ais-current-refined-values ais-facet">' +
+      '  <ul class="ais-current-refined-values--list">' +
+      items.map(renderListItem).join('') +
+      '  </ul>' +
+      '</div>';
+
+    Array.prototype.slice
+      .call(
+        widgetParams.container.querySelectorAll(
+          '.ais-current-refined-values--link'
+        )
+      )
+      .forEach(function(element) {
+        element.addEventListener('click', function(event) {
+          var item = Object.keys(event.currentTarget.dataset).reduce(function(
+            acc,
+            key
+          ) {
+            var itemData = {};
+            itemData[key] = event.currentTarget.dataset[key];
+            return algolia.assign({}, acc, itemData);
+          },
+          {});
+
+          refine(item);
+        });
+      });
+  };
+
+  // Create the custom widget
+  var customCurrentRefinements = connectCurrentRefinements(
+    renderCurrentRefinements
+  );
+
+  var hasRefinements = function(helper, facetsList) {
+    return facetsList.some(function(f) {
+      var isConjunctiveFacetRefined =
+        helper.state.isConjunctiveFacet(f.name) &&
+        helper.state.isFacetRefined(f.name);
+      var isDisjunctiveFacetRefined =
+        helper.state.isDisjunctiveFacet(f.name) &&
+        helper.state.isDisjunctiveFacetRefined(f.name);
+      var isHierarchicalFacetRefined =
+        helper.state.isHierarchicalFacet(f.name) &&
+        helper.state.isHierarchicalFacetRefined(f.name);
+
+      var numericRefinements = helper.state.getNumericRefinements(f.name);
+      var isNumericFacetRefined = Object.keys(numericRefinements).some(function(
+        operator
+      ) {
+        return numericRefinements[operator].length > 0;
+      });
+
+      return (
+        isNumericFacetRefined ||
+        isConjunctiveFacetRefined ||
+        isDisjunctiveFacetRefined ||
+        isHierarchicalFacetRefined
+      );
+    });
+  };
+
+  /**
+   * Decides whether the given `facetName` has any facet values available in
+   * the current result set by checking the available `facets`,
+   * `disjunctiveFacets` and `hierarchicalFacets`.
+   */
+  var hasFacetValues = function(resultState, facetName) {
+    var isFacetValueAvailable = resultState.facets.some(function(facet) {
+      return facet.name === facetName;
+    });
+    var isDisjunctiveFacetValueAvailable = resultState.disjunctiveFacets.some(
+      function(facet) {
+        return facet.name === facetName;
+      }
+    );
+    var isHierarchicalFacetValueAvailable = resultState.hierarchicalFacets.some(
+      function(facet) {
+        return facet.name === facetName;
+      }
+    );
+
+    return (
+      isFacetValueAvailable ||
+      isDisjunctiveFacetValueAvailable ||
+      isHierarchicalFacetValueAvailable
+    );
+  };
+
+  var customCurrentRefinementsWithPanel = panel({
+    hidden: function(options) {
+      return !hasRefinements(options.helper, instant.facets.list);
+    },
+  })(customCurrentRefinements);
+
+  var clearRefinementsWithPanel = panel({
+    hidden: function(options) {
+      return !hasRefinements(options.helper, instant.facets.list);
+    },
+  })(clearRefinements);
+
+  instant.search.addWidgets([
+    clearRefinementsWithPanel({
+      container: document.querySelector('.ais-clear-refinements-container'),
+      templates: {
+        resetLabel: algolia.translations.clearAll,
+      },
+    }),
+    customCurrentRefinementsWithPanel({
+      container: document.querySelector(
+        '.ais-current-refined-values-container'
+      ),
+    }),
+  ]);
+
+  /**
+   * Setup the facets for search.
+   * We are using a `panel` with a custom `hidden` function which will allow
+   * us to hide the parent container of the facet if there are no facet values
+   * available for that particular facet.
+   */
+  instant.facets.widgets.forEach(function(widget) {
+    var facetWithPanel = panel({
+      hidden: function(options) {
+        var hide = !hasFacetValues(options.results, widget.params.attribute);
+        var displayStyle = hide ? 'none' : '';
+
+        /**
+         * Replacing any "." and "%" in the class name with "\." and "\%" so that querySelector
+         * can work as expected. "." is supposed to be present for named tags
+         * and metafield based facet names and "%" is present when the facet name has a space
+         * in it because of the encoding.
+         */
+        var parentContainerClassName = '.ais-facet-' + encodeURIComponent(
+          widget.params.attribute
+        ).replace(/\./g, '\\.').replace(/\%/g, '\\%');
+        var parentContainer = document.querySelector(parentContainerClassName);
+
+        if (parentContainer) {
+          parentContainer.style.display = displayStyle;
+        }
+
+        return hide;
+      },
+    })(widget.widget);
+
+    instant.search.addWidgets([facetWithPanel(widget.params)]);
+  });
+
+  // Hits
+  instant.search.addWidgets([
+    hits({
+      container: '.ais-hits-container',
+      templates: {
+        empty: instant.templates.empty,
+        item: instant.templates.product,
+      },
+      transformItems: function(products) {
+        return products.map(function(product) {
+          return algolia.assign({}, product, {
+            _distinct: instant.distinct,
+            can_order:
+              product.inventory_management !== 'shopify' ||
+              product.inventory_policy === 'continue' ||
+              product.inventory_quantity > 0,
+            translations: algolia.translations,
+            queryID: product.__queryID,
+            productPosition: product.__position,
+            index: instant.search.mainIndex.getIndexName(),
+          });
+        });
+      },
+    }),
+  ]);
+
+  // Redirect to product on click
+  instant.search.addWidgets([
+    {
+      init: function() {
+        var container = document.querySelector('.ais-hits-container');
+        container.addEventListener('click', function(e) {
+          var el = e.target;
+          var hit;
+          do {
+            if(el.matches('.product__add-to-cart')) {
+              hit = null;
+              break;
+            }
+            if (el.matches('.product')) {
+              hit = el;
+              break;
+            }
+            el = el.parentNode;
+          } while (el && el !== container);
+          if (!hit) {
+            return;
+          }
+          var $this = hit;
+          var productHandle = $this.dataset.handle;
+          var variant_id = $this.dataset.variantId;
+          var distinct = $this.dataset.distinct;
+
+          // Construct the link we should redirect to
+          var link = '';
+
+          // If we're on a collection page and the handle is available
+          // then prefix the product link with the collection handle
+          if (collectionPageEnabled && collectionHandle) {
+            link = '/collections/' + collectionHandle;
+          }
+
+          // Add the product handle to the link
+          link = link + '/products/' + productHandle;
+
+          // Add the variant ID details to redirect to a specific
+          // variant ID if we are showing variants and not products
+          if (distinct !== 'true') {
+            link += '?variant=' + variant_id;
+          }
+
+          if (algolia.config.analytics_enabled) {
+            var clickData = {
+              index: hit.dataset.algoliaIndex,
+              eventName: 'Product Clicked',
+              queryID: hit.dataset.algoliaQueryid,
+              objectIDs: [hit.dataset.algoliaObjectid],
+              positions: [Number(hit.dataset.algoliaPosition)],
+            };
+      
+            if (typeof ShopifyAnalytics.lib.user().id === 'function') {
+              clickData.userToken = ShopifyAnalytics.lib.user().id();
+            }
+
+            // Send the click event
+            aa.clickedObjectIDsAfterSearch(clickData);
+            /**
+             * Uncomment the following function call to start storing data in
+             * local storage for conversion tracking
+             */
+            clickData.productId = hit.dataset.productId;
+            algolia.saveForConversionTracking(clickData);
+          }
+          window.location.href = link;
+        });
+      },
+    },
+  ]);
+
+  // Add to cart
+  instant.search.addWidgets([
+    {
+      init: function() {
+        var container = document.querySelector('.ais-hits-container');
+        container.addEventListener('click', function(e) {
+          var el = e.target;
+          var cartButton;
+          do {
+            if (el.matches('.ais-hit--cart-button')) {
+              cartButton = el;
+              break;
+            }
+            el = el.parentNode;
+          } while (el && el !== container);
+          if (!cartButton) {
+            return;
+          }
+
+          e.stopPropagation();
+          var $this = cartButton;
+          var formId = $this.dataset.formId;
+
+          if (formId) {
+            document.getElementById(formId).submit();
+          }
+        });
+
+        if(document.body.classList.contains("collection")) {
+          document.addEventListener('DOMContentLoaded', function() {
+            var retries = 10;
+            var addFilter = function() {
+              if(ShopifyAnalytics && ShopifyAnalytics.lib && ShopifyAnalytics.lib.user) {
+                const viewData = {
+                  index: algolia.config.index_prefix + 'products',
+                  eventName: 'Landing Page Viewed',
+                  filters: ['category:' + encodeURIComponent(document.querySelector(".ais-page-title h1").innerText)],
+                  userToken: ShopifyAnalytics.lib.user().traits().uniqToken,
+                };
+      
+                if (typeof ShopifyAnalytics.lib.user().id === 'function') {
+                  viewData.userToken = ShopifyAnalytics.lib.user().id();
+                }
+                
+                aa.viewedFilters(viewData);
+              } else if(retries-- > 0) {
+                setTimeout(addFilter, 1000);
+              }
+            }
+            
+            addFilter();
+          });
+        }
+      },
+    },
+  ]);
+
+  // No result actions
+  instant.search.addWidgets([
+    {
+      init: function(opts) {
+        var container = document.querySelector('.ais-hits-container');
+        container.addEventListener('click', function(e) {
+          var el = e.target;
+          var clearFilters;
+          do {
+            if (el.matches('.ais-hit-empty--clear-filters')) {
+              clearFilters = el;
+              break;
+            }
+            el = el.parentNode;
+          } while (el && el !== container);
+          if (!clearFilters) {
+            return;
+          }
+
+          var helper = opts.helper;
+          helper.clearTags();
+          instant.facets.list.forEach(function(facet) {
+            helper.clearRefinements(facet.name);
+          });
+          helper.search();
+        });
+
+        container.addEventListener('click', function(e) {
+          var el = e.target;
+          var clearInput;
+          do {
+            if (el.matches('.ais-hit-empty--clear-input')) {
+              clearInput = el;
+              break;
+            }
+            el = el.parentNode;
+          } while (el && el !== container);
+          if (!clearInput) {
+            return;
+          }
+
+          opts.helper.setQuery('').search();
+          var input = document.querySelector('.ais-search-box--input');
+          input.value = '';
+          input.focus();
+        });
+      },
+    },
+  ]);
+
+  // Pagination
+  instant.search.addWidgets([
+    pagination({
+      container: '.ais-pagination-container',
+      padding: 2,
+      maxPages: 20,
+      showFirst: false,
+      showLast: false,
+      templates: {
+        previous: '<svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.29295 0.292967L0.585451 8.99997L9.29295 17.707L10.707 16.293L3.41445 8.99997L10.7069 1.70697L9.29295 0.292967Z" fill="black"/></svg> Previous',
+        next: 'Next <svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.70705 17.707L10.4146 9.00003L1.70705 0.293029L0.293052 1.70703L7.58555 9.00003L0.293051 16.293L1.70705 17.707Z" fill="black"/></svg>'
+
+      }
+    }),
+  ]);
+
+  // Main
+  instant.search.start();
+
+  algolia.contentHide.parentNode.removeChild(algolia.contentHide);
+
+function closeFilters() {
+  $("body,html").removeClass("filtering");
+  $(".ais-facets-button").text('Sort & Filter');
+}
+
+  $("body").on('click', function(e) {
+    if(!$(e.target).closest(".ais-facets,.ais-facets-button").length) {
+      closeFilters();
+    }
+  });
+
+  $(".main-content").on('click', '.ais-facets__close', function(e) {
+    e.preventDefault();
+    closeFilters();
+  });
+
+  $('.main-content').on('click', '.ais-facets__mobile-buttons .ais-ClearRefinements-button', function(e) {
+    e.preventDefault();
+    $('.ais-RefinementList-checkbox:checked').attr('checked', false);
+    closeFilters();
+  });
+
+  $(".ais-facets-button").on('click', function(e) {
+    e.preventDefault();
+    $('body').toggleClass('filtering');
+    $(this).text('Hide Filters');
+  });
+
+	$('body').on('click', '.ais-facet__header', function(e) {
+        var facet = $(this).closest('.ais-facet');
+        $(this).off('.toggleHidden');
+      	facet.toggleClass('ais-facet--hidden');
+      	facet.find('.ais-facet__header').addClass('no-bounce');
+        $(this).on('mouseout.toggleHidden', function() {
+        	facet.find('.ais-facet__header').removeClass('no-bounce');
+          	$(this).off('.toggleHidden');
+        });
+        facet.find('.ais-facet__container').slideToggle();
+        facet.find('ais-facet__options').toggleClass('ais-facet__options--closed');
+      });
+
+  var facetsClosed = false;
+  $(window).on('resize', function() {
+    if(facetsClosed && $(window).width() >= 1111) {
+      $(".ais-facet__container").slideDown();
+      facetsClosed = false;
+      $(".ais-facet").removeClass("ais-facet--hidden");
+    } else if(!facetsClosed && $(window).width() < 1111) {
+      $(".ais-facet__container").slideUp();
+      $(".ais-facet").addClass("ais-facet--hidden");
+      facetsClosed = true;
+    }
+  });
+  $(window).trigger('resize');
+
+  $(".main-content").on('click', '.product__variant-option', function(e) {
+    var form = $(e.target).closest('form');
+    var btn = form.find('.btn');
+    btn.attr('disabled', false).text('Add To Cart');
+  });
+
+  $(".main-content").on('click', '.product__add-to-cart .btn:not([disabled])', function(e) {
+    e.preventDefault();
+    var form = $(e.target).closest('form');
+    var btn = form.find('.btn');
+    var product = $(e.target).closest('.product');
+    btn.text('Adding...');
+    
+    // save the click info for later use    
+    algolia.saveForConversionTracking({
+      index: algolia.config.index_prefix + 'products',
+      eventName: 'Product Add to Cart Clicked',
+      objectIDs: [String(product.data('algolia-objectid'))],
+      queryID: product.data('algolia-queryid'),
+      productId: product.data('product-id'),
+    });
+    
+  	$.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: JSON.stringify({ id: form.find('input:checked').val(), quantity: 1 }),
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function(line_item) {
+        ajaxCart.load();
+        
+        $('body').trigger('addToCart.livestock', [line_item, 1]);
+        
+        btn.text('Added');
+        
+        setTimeout(function() {
+          btn.text('Add to cart');
+        }, 3000);
+      },
+      error: function(err) {
+        btn.text('Error Adding');
+        ajaxCart.load();
+      }
+    });
+  });
+
+  $('.main-content').on('change', '.ais-RefinementList-checkbox', function(e) {  
+    var selectedFilters = $(".ais-RefinementList-checkbox:checked");
+    if(selectedFilters.length) {
+      var filters = [];
+      selectedFilters.each(function() {
+        var facet = $(this).closest('.ais-facet');
+        filters.push(facet.find('.ais-facet__header').text().trim() + ':' + $(this).parent().text().trim().replace(/\([0-9]+\)$/, '').trim());
+      });
+      
+      var data = {
+        index: algolia.config.index_prefix + 'products',
+        eventName: 'Product Filter Clicked',
+        filters: filters,
+      };
+      
+      if (typeof ShopifyAnalytics.lib.user().id === 'function') {
+        data.userToken = ShopifyAnalytics.lib.user().id();
+      }
+
+      aa.clickedFilters(data);
+    }
+  });
+})(window.algoliaShopify);

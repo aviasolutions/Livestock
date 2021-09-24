@@ -1,0 +1,73 @@
+ <div id="contact-popup" class="askpopup">
+   
+    {% form 'contact' %}
+   <h2>Contact to Order</h2>
+      {% if form.posted_successfully? %}
+        <p class="success-message">
+          Thank you for submitting your message. We will get back to you as soon as we can.
+        </p>
+      {% else %}
+
+        {% if form.errors %}
+          {{ form.errors | default_errors }}
+        {% endif %}
+
+        <div class="input-wrapper">
+          <p>
+          <input placeholder="Name"
+            id="contact-name"
+            type="text"
+            value="{{ form.name }}"
+            name="contact[name]"
+                 class="input-field "></p>
+        </div>
+
+        <div class="input-wrapper">
+          
+         <p> <input placeholder="Email address"
+            id="contact-email"
+            type="text"
+            value="{{ form.email }}"
+            name="contact[email]"
+            class="input-field"></p>
+        </div>
+
+        <div class="input-wrapper">
+          <p>
+          <input placeholder="Phone Number"
+            id="contact-phone"
+            type="tel"
+            value="{{ form.phone }}"
+            name="contact[phone]"
+                 class="input-field "></p>
+        </div>
+
+   <div class="input-wrapper">
+          <p>
+          <input placeholder="Ptoduct Title"
+            id="contact-product"
+            type="text" value="{{ product.title }}" 
+                 name="contact[product]" class="input-field"></p>
+        </div>
+   <div class="input-wrapper">
+          <p>
+          <input   placeholder="Enter size"
+            id="contact-size"
+            type="text" value="" 
+                 name="contact[productSize]" class="input-field"></p>
+        </div>
+   
+        <div class="input-wrapper">
+         <p>
+          <textarea placeholder="Message"
+            id="contact-message"
+            name="contact[comments]"
+            class="input-field">{{ form.comments }}</textarea></p>
+        </div>
+
+        <input class="contact-form-submit" type="submit" value="Submit">
+   
+      {% endif %}
+    {% endform %}
+    
+  </div>

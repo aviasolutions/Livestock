@@ -1,0 +1,214 @@
+<div class="cms-page-container">
+   <h2 class="mobile-title">{{page.title}}</h2>
+  <div class="cms-page-container-inner flex flex-break">
+  <div class="cms-page-container-left">
+    <ul>
+    {% for link in linklists[section.settings.sidebar].links %}
+    <li {% if link.active %}class="site-nav--active"{% endif %}>
+    <a href="{{ link.url }}" class="main-menu-link name_{{ link.title | handleize }}">{{ link.title }}</a>
+  </li>
+  {% endfor %}
+    </ul>
+  </div>
+  
+ <div class="cms-page-container-right"> 
+   <h2 class="desktop-title">{{page.title}}</h2>
+   
+   <ul class="contact-right">
+  {% for block in section.blocks %}
+     <li class="">
+  <div class="contact-icon-left">
+    <div class="contact-slider">
+   
+      
+      {% if block.settings.image1 != blank %}
+      <div class="item"> {{ block.settings.image1 | img_url: 'master' | img_tag }}</div>
+    {% endif %}
+    
+    {% if block.settings.image2 != blank %}
+    <div class="item">   {{ block.settings.image2 | img_url: 'master' | img_tag }} </div>
+    {% endif %}
+    
+     {% if block.settings.image3 != blank %}
+    <div class="item">   {{ block.settings.image3 | img_url: 'master' | img_tag }} </div>
+    {% endif %}
+    
+     {% if block.settings.image4 != blank %}
+   <div class="item">    {{ block.settings.image4 | img_url: 'master' | img_tag }} </div>
+    {% endif %}
+    
+     {% if block.settings.image5 != blank %}
+    <div class="item">   {{ block.settings.image5 | img_url: 'master' | img_tag }} </div>
+    {% endif %}
+    </div>
+  </div>
+   
+   <div class="contact-icon-right">
+  {% if block.settings.heading != blank %}    <h2>{{block.settings.heading}}</h2> {% endif %}
+  {% if block.settings.text != blank %}   <div class="content-description"> {{block.settings.text}} </div> {% endif %}
+     {% if block.settings.btn-link != blank %}  <a class="btn" href="{{block.settings.btn-link}}">{{block.settings.btn}}</a>  {% endif %}
+   </div>
+     </li>
+  {% endfor %}
+   </ul>
+</div>
+</div>
+</div>
+
+<style>
+  
+  
+ body .main-content { padding-top: 80px !important; margin-bottom:65px !important}
+  
+  .desktop-title, .mobile-title{ font-size:32px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700; margin:0 0 30px;}
+  
+  .cms-page-container-left ul{margin:0; padding:10px 0 0; list-style:none;}  
+  .cms-page-container-left ul li{margin:0; padding:6px 0; list-style:none;}  
+  .cms-page-container-left ul li a{margin:0; padding:0; list-style:none; font-size:15px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; color:#888888;  }  
+ .cms-page-container-left ul li.site-nav--active a {    color: #000;} 
+  
+  
+  .cms-page-container-left ul li a:hover{color:#000;}  
+.cms-page-container{max-width:900px; padding:0 10px; box-sizing:border-box; margin:0 auto;}
+.cms-page-container-left {    width: 28%;}
+.cms-page-container-right{width:72%;}
+.contact-icon-left {}  
+
+.contact-icon-right{ width:100%; padding:30px 30px 20px;}
+.contact-icon-right h2{margin:0; padding:6px 0 14px; font-size:22px;  font-family: 'Roboto Condensed', sans-serif; font-weight:700; line-height:22px;}  
+.contact-icon-right .content-description p{ font-size:16px; line-height:24px;  font-weight:400; font-family: 'Roboto', sans-serif; margin:0 0 6px 0;} 
+  .contact-icon-right .content-description  strong{font-family: 'Roboto', sans-serif; font-weight:700;} 
+  
+.contact-right li {    border: 1px solid #E6E7E8;    padding:0;    margin: 0 0 24px; list-style:none;}  
+  
+.contact-right li .btn  {
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 13.5px 30px;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    border-radius: 1px;
+}  
+  .contact-icon-right .content-description p a{color:#1e998a;}
+  
+  .contact-right .slick-next:before, .contact-right .slick-prev:before{display:none;}  
+  
+ .contact-right .slick-arrow {
+    width: 42px;
+    height: 42px;
+    background: #fff !important;
+    border-radius: 50%; z-index:1;
+}
+ .contact-right .slick-prev{left:20px;}
+ .contact-right  .slick-next{right:20px;}
+  
+.contact-right .slick-slider {    margin-bottom: 0;}  
+  
+  
+@media(min-width:768px){  
+.mobile-title{display:none;}  
+} 
+  
+@media(max-width:767px){
+.main-content .wrapper {    padding: 0;}  
+.desktop-title{display:none;}
+.cms-page-container-left {width:100%;}
+.cms-page-container-right{width:100%; margin-top:49px;}  
+ body .main-content { padding-top: 60px !important; margin-bottom:40px !important}  
+.mobile-title{margin-bottom:5px;}  
+.cms-page-container-left ul li{padding:7px 0;}  
+  
+.contact-icon-right {    width: 100%;    padding: 20px 20px 20px;}  
+  
+.contact-right .slick-arrow {width:30px;    height:30px; }  
+.contact-right .slick-prev{left:10px;}
+.contact-right .slick-next{right:10px;}  
+ .contact-right .slick-arrow svg {    width: 7px;}
+
+  
+}  
+  
+  
+</style>
+
+
+{% schema %}
+  {
+    "name": "Store Location page",
+    "settings": [
+	{
+      "type": "link_list",
+      "id": "sidebar",
+      "label": "Sidebar Menu",
+      "default": "footer"
+    }
+],
+"blocks": [
+     {
+       "name": "Content",
+       "type": "slide",
+       "settings": [
+          
+         {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Image 1"
+         },
+         {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Image 2"
+         },
+         {
+          "type": "image_picker",
+          "id": "image3",
+          "label": "Image 3"
+         }, 
+         {
+          "type": "image_picker",
+          "id": "image4",
+          "label": "Image 4"
+         },
+         {
+          "type": "image_picker",
+          "id": "image5",
+          "label": "Image5"
+         },
+         {
+          "type":"text",
+          "id": "heading",
+          "label":"Heading",
+          "default":"Title"
+         },
+         {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+         },
+         {
+          "type":"text",
+          "id": "btn",
+          "label":"Button",
+          "default":"Button"
+         },
+         {
+          "type":"url",
+          "id": "btn-link",
+          "label":"Button Link"
+         }
+       ]
+     }
+   ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

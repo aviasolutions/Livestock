@@ -1,0 +1,45 @@
+<!-- /templates/blog.liquid -->
+{% paginate blog.articles by 5 %}
+<!-- <style>
+main.main-content{margin-top:0 !important;}
+</style> -->
+<div class="grid feature-blog">
+  
+  {% for article in blog.articles %}
+  {% assign article_content = article.excerpt_or_content %}
+  {% assign i = forloop.index | modulo:5 %}
+  <article class="article small--text-center grid__item {% if i == 0 %} large--one-whole{% else %}large--one-half{% endif %} ">
+
+    {% unless article.image == blank %}
+    <div class="cover-box">
+      <a class="article__featured-link" href="{{ article.url }}">
+        <noscript>
+          {{ article.image | img_url: '2048x2048' | img_tag: article.title | escape }}
+        </noscript>
+        <div class="feature-image-title text-uppercase">{{ article.title }}</div>
+        <div class="article__featured-image-wrapper" style="padding-top:{% comment %}{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}{% endcomment %}66.666666%;">
+          {% assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="article__featured-image lazyload"
+               src="{{ article.image | img_url: '300x300' }}"
+               data-src="{{ img_url }}"
+               data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+               data-aspectratio="{{ article.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ article.title | escape }}">
+        </div>
+      </a>
+    </div>
+    {% endunless %}
+  </article>
+  {% endfor %}
+    
+
+
+  {% if paginate.pages > 1 %}
+  {% include 'pagination' %}
+  {% endif %}
+</div>
+
+{% endpaginate %}
+
+

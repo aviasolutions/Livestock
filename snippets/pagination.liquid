@@ -1,0 +1,53 @@
+{%- if paginate.pages > 1 -%}
+
+    <nav role="navigation">
+      <ol class="pagination">
+        <span class="active-title">PAGE</span>
+        {%- if paginate.previous-%}
+          <li>
+            <a href="{{ paginate.previous.url }}">
+               <span class="hide">page</span>
+            </a>
+          </li>
+        {%- else -%}
+          <li class="disabled">
+             <span class="hide">page</span>
+          </li>
+        {%- endif -%}
+
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}
+            <li>
+              <a href="{{ part.url }}">
+                <span class="hide">page</span> {{ part.title }}
+              </a>
+            </li>
+          {%- else -%}
+            {%- if part.title == paginate.current_page -%}
+              <li class="active" aria-current="page">
+                <span class="hide">page</span> {{ part.title }}
+              </li>
+            {%- else -%}
+              <li>
+                <span class="hide">page</span> {{ part.title }}
+              </li>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if paginate.next -%}
+          <li>
+            <a href="{{ paginate.next.url }}">
+             <span class="hide">page</span>
+             
+            </a>
+          </li>
+        {%- else -%}
+          <li class="disabled">
+           <span class="hide">page</span>
+           
+          </li>
+        {%- endif -%}
+      </ol>
+    </nav>
+  {%- endif -%}

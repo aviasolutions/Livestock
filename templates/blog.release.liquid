@@ -1,0 +1,413 @@
+<!-- /templates/blog.liquid -->
+{% paginate blog.articles by 40 %}
+<div>
+<br>
+  <div class="blog_release_grid_wrap">
+
+    {% assign grid_item = 'medium--one-quarter large--one-quarter' %}
+    {% if settings.select_grid == 'four' %}
+    {% assign grid_item = 'medium--one-quarter large--one-quarter' %}
+    {% else %}
+    {% assign grid_item = 'medium--one-quarter large--one-fifth' %}
+    {% endif %}
+
+    {% assign countloop = 0 %}
+
+    {% for article in blog.articles reversed  %}
+      {% assign has_rollout_tag = false %}
+      {% for tag in article.tags %}	
+    	{% if tag == 'hide-rollout' %}
+    		{% assign has_rollout_tag = true %}
+    	{% endif %}
+      {% endfor %}
+    
+    {% assign article_content = article.excerpt_or_content %}
+
+    <article class="grid__item grid-product {{grid_item}} {% unless has_rollout_tag %}blog_release_loop{% endunless %}">
+      <div class="article-wrapper">
+      {% if article.tags.size > 0 %}
+      	
+      {% if has_rollout_tag %}
+      <a class="h4 text-center" href="{{article.metafields.c_f.buynow_btn_link}}" >
+        {% for tag in article.tags %}
+          {% if tag contains 'Dropdate' %}
+          	{{tag | split :"-" | last }}
+          {% endif %}
+        {% endfor %}
+      </a>
+      {% else %}
+      	<h2 class="blog_release_tag">
+          {% for tag in article.tags %}
+
+          {% if tag contains 'Dropdate' %}
+          {{tag | split :"-" | last }}
+          {% endif %}
+          {% endfor %}
+        </h2>
+      {% endif %}
+      {% endif %}
+          {% assign tags = settings.tags | split: "," %}
+         
+      		{% assign hide_notify_me = false %}
+          {% for article_tag in article.tags %}
+                {% if tags.size > 0 %}
+                  {% for tag in tags %}
+                    {% if tag == article_tag %}
+                      {% assign hide_notify_me = true %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+          {% endfor %}
+        
+      
+      {% if settings.enable_hide %}
+      
+        {% if hide_notify_me %}
+          <p class="notifyme-header" style="opacity:0;">{{settings.notify_btn}}</p>
+      	{% else %}
+      <p class="notifyme-header">{{settings.notify_btn}}</p>
+        {% endif %}
+      {% else %}
+      	<p class="notifyme-header">{{settings.notify_btn}}</p>
+      {% endif %}
+
+      {% unless article.image == blank %}
+      <div class="img_wrap">
+        <a class=" article__featured-link"  {% if has_rollout_tag %} href="{{article.metafields.c_f.buynow_btn_link}}" {% endif %}>
+          <noscript>
+            {{ article.image | img_url: '2048x2048' | img_tag: article.title | escape }}
+          </noscript>
+          <div class="article__featured-image-wrapper" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;">
+            {% assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img class="article__featured-image lazyload"
+                 src="{{ article.image | img_url: '300x300' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                 data-aspectratio="{{ article.image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ article.title | escape }}">
+          </div>
+        </a>
+      </div>
+      {% endunless %}
+      <h2 class="blog_release_title" >
+        <a  {% if has_rollout_tag %} href="{{article.metafields.c_f.buynow_btn_link}}" {% endif %}>{{ article.title }}</a>
+      </h2>
+      <div class="traingle_wrap">
+        <div class="traingle_arrow"> 
+          <span class="icon icon-arrow-down" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="blog_release_onhover">
+                 <div class="blogReleaseClose" style="position:absolute; right:20px; top:10px; font-size:20px">X</div>
+                 <div class="traingle_arrow"> </div>
+        <div class="blog_release_onhover_inner">
+          <div class="blog_release_onhover_left">
+            {% comment %} <h2 class="blog_release_tag">
+            {% for tag in article.tags %}
+
+            {% if tag contains 'Dropdate' %}
+            <span style="float:left;">{{tag | split :"-" | last }}</span>
+            {% endif %}
+            {% endfor %}            
+
+            <br clear="both">
+            </h2>{% endcomment %}
+            <img src="{{ article.image | img_url: 'master' }}"data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"/>
+          </div>
+          <div class="blog_release_onhover_right">  
+
+            <div class="blog_btns_wrap">
+
+              {% for tag in article.tags %}
+              {% if tag contains 'Price' %}
+              <span class="price_wrap">
+                {{tag | split :":" | last }}
+              </span>
+              {% endif %}
+
+              {% if tag contains 'Time' %}
+              <div class="coundown_wrap">
+                <div id="countdown{{countloop}}"></div>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+              {% if article.content contains "<!--split-->" and article.metafields.c_f.notify_btn != blank %}
+              <span class="btn notify_btn" data-action="{{article.content | split :"<!--split-->" | first}} " data-title="{{ article.title }}">{{article.metafields.c_f.notify_btn}}</span>
+              {% endif %}
+
+              {% if article.metafields.c_f.raffle_btn != blank %}
+              <span class="btn btn_raffle"><a rel="noopener" target="_blank" href="{{article.metafields.c_f.raffle_btn_link}}" >{{article.metafields.c_f.raffle_btn}}</a></span>
+              {% endif %}
+              {% if article.metafields.c_f.buynow_btn == blank %}{% else %}
+              <span class="btn btn_buy"><a href="{{article.metafields.c_f.buynow_btn_link}}" >{{article.metafields.c_f.buynow_btn}}</a></span>
+              {% endif %}
+
+            </div>
+            <div class="description-blog">{{article.content | split :"<!--split-->" | last}}</div>
+
+            <ul class="no-bullets blogul social-icons">
+              <!--  
+{% if settings.social_instagram_link != blank %}
+<li>
+<a href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+<span class="icon icon-instagram" aria-hidden="true"></span>
+
+</a>
+</li>
+{% endif %}
+{% if settings.social_twitter_link != blank %}
+<li>
+<a href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+<span class="icon icon-twitter" aria-hidden="true"></span>
+
+</a>
+</li>
+{% endif %}
+{% if settings.social_pinterest_link != blank %}
+<li>
+<a href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+<span class="icon icon-pinterest" aria-hidden="true"></span>
+Pinterest
+</a>
+</li>
+{% endif %}
+{% if settings.social_facebook_link != blank %}
+<li>
+<a href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+<span class="icon icon-facebook" aria-hidden="true"></span>
+
+</a>
+</li>
+{% endif %}
+
+{% if settings.social_snapchat_link != blank %}
+<li>
+<a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+<span class="icon icon-snapchat" aria-hidden="true"></span>
+Snapchat
+</a>
+</li>
+{% endif %}
+{% if settings.social_google_plus_link != blank %}
+<li>
+<a href="{{ settings.social_google_plus_link | escape }}" rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+<span class="icon icon-google_plus" aria-hidden="true"></span>
+Google Plus
+</a>
+</li>
+{% endif %}
+{% if settings.social_tumblr_link != blank %}
+<li>
+<a href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+<span class="icon icon-tumblr" aria-hidden="true"></span>
+Tumblr
+</a>
+</li>
+{% endif %}
+{% if settings.social_youtube_link != blank %}
+<li>
+<a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+<span class="icon icon-youtube" aria-hidden="true"></span>
+YouTube
+</a>
+</li>
+{% endif %}
+{% if settings.social_vimeo_link != blank %}
+<li>
+<a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+<span class="icon icon-vimeo" aria-hidden="true"></span>
+Vimeo
+</a>
+</li>
+{% endif %}
+{% if settings.social_fancy_link != blank %}
+<li>
+<a href="{{ settings.social_fancy_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+<span class="icon icon-fancy" aria-hidden="true"></span>
+Fancy
+</a>
+</li>
+{% endif %}
+-->
+              <li>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ article.url }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+                  <span class="icon icon-facebook" aria-hidden="true"></span></a>
+
+              </li>
+
+              <li>
+                <a href="https://twitter.com/share?url={{ shop.url }}{{ article.url }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+                  <span class="icon icon-twitter" aria-hidden="true"></span></a>
+
+              </li>
+              {% if settings.social_instagram_link != blank %}
+              <li>
+                <a href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+                  <span class="icon icon-instagram" aria-hidden="true"></span>
+
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_snapchat_link != blank %}
+              <li>
+                <a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+                  <span class="icon icon-snapchat" aria-hidden="true"></span>
+                  Snapchat
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_google_plus_link != blank %}
+              <li>
+                <a href="{{ settings.social_google_plus_link | escape }}" rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+                  <span class="icon icon-google_plus" aria-hidden="true"></span>
+                  Google Plus
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_tumblr_link != blank %}
+              <li>
+                <a href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+                  <span class="icon icon-tumblr" aria-hidden="true"></span>
+                  Tumblr
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_youtube_link != blank %}
+              <li>
+                <a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+                  <span class="icon icon-youtube" aria-hidden="true"></span>
+                  YouTube
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_vimeo_link != blank %}
+              <li>
+                <a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+                  <span class="icon icon-vimeo" aria-hidden="true"></span>
+                  Vimeo
+                </a>
+              </li>
+              {% endif %}
+              {% if settings.social_fancy_link != blank %}
+              <li>
+                <a href="{{ settings.social_fancy_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+                  <span class="icon icon-fancy" aria-hidden="true"></span>
+                  Fancy
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+
+          </div>
+          <br clear="all">
+        </div> 
+      </div> 
+
+    {% for tag in article.tags %}            
+    {% if tag contains 'Time' %}
+    {% assign tagFilter = tag | split: '-' %}
+    <script>
+      function CountDownTimer(dt, id) {
+        var end = new Date(dt);
+
+        var _second = 1000;
+        var _minute = _second * 60;
+        var _hour = _minute * 60;
+        var _day = _hour * 24;
+        var timer;
+
+        function showRemaining() {
+          var now = new Date();
+          var distance = end - now;
+          if (distance < 0) {
+
+            clearInterval(timer);
+            document.getElementById(id).innerHTML = 'EXPIRED!';
+
+            return;
+          }
+          var days = Math.floor(distance / _day);
+          var hours = Math.floor((distance % _day) / _hour);
+          var minutes = Math.floor((distance % _hour) / _minute);
+          var seconds = Math.floor((distance % _minute) / _second);
+
+
+          if (String(hours).length < 2){
+            hours = 0 + String(hours);
+          }
+          if (String(minutes).length < 2){
+            minutes = 0 + String(minutes);
+          }
+          if (String(seconds).length < 2){
+            seconds = 0 + String(seconds);
+          }
+
+
+
+          if(days.toString().length == 1)
+          {
+            days ='0'+days;
+          } 
+          if(minutes.toString().length == 1)
+          {
+            minutes ='0'+minutes;
+          } 
+          if(hours.toString().length == 1)
+          {
+            hours ='0'+hours;
+          }
+
+          var datestr ='<div class="day-time"><span class="day-val">'+days+ '</span><span class="days">Days</span></div><div class="hour-time"><span class="hour-val">'+hours+'</span><span class="time">Hrs</span></div><div class="minute-time"><span class="minute-val">'+minutes+'</span><span class="minute">Min</span></div>';
+
+          //: ' + 
+          //minutes + ' : ' + 
+          // seconds + ' ';
+
+          document.getElementById(id).innerHTML = datestr;
+        }
+
+        timer = setInterval(showRemaining, 1000);
+      }
+      CountDownTimer('{{tagFilter[1]}}', 'countdown{{countloop}}');
+    </script>   
+    {% endif %}
+    {% endfor %}
+      </div>
+    </article>
+
+   
+
+
+    {% if settings.select_grid == 'four' %}
+    {% if countloop ==3 or countloop ==7 or countloop ==11 or countloop ==15 or countloop == 19 or countloop == 23 or countloop == 27 or countloop == 31 or countloop == 35 or countloop == 39 or countloop == 43 or countloop == 47 %}
+    <div class="animate_element"></div>   
+    {% endif %} 
+    {% else %}
+    {% if countloop ==4 or countloop == 9 or countloop ==14 or countloop == 19 or countloop == 24 or countloop == 29 or countloop == 34 or countloop == 39 or countloop == 44 or countloop == 49 %}
+    <div class="animate_element"></div>   
+    {% endif %} 
+    {% endif %}
+
+    {% assign countloop = countloop | plus: 1 %} 
+    {% endfor %}
+
+    {% if paginate.pages > 1 %}
+    <div class="footer-page">
+      {% include 'pagination' %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endpaginate %}
+
+<div id="blog_release_popup" class="blog_popup_close">
+  <div id="blog_release_popup_iner">
+    <span class="blog_release_popup_close fa fa-times"></span>
+    <div class="">
+      {% include 'klaviyo' %}
+    </div>
+  </div>
+</div>

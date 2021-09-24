@@ -1,0 +1,10 @@
+{% if page.metafields.global.drawing.size > 0 %}
+  {{ 'drawing-styles.scss' | asset_url | stylesheet_tag }}
+  <div id="drawinglogin">
+      {% render 'drawing-login' %}  
+  </div>
+  {% render 'drawing-app-form' %}
+{% else %}
+  {% section '404' %}
+{% endif %}
+  

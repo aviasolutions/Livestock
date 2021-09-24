@@ -1,0 +1,56 @@
+
+<!-- section/article.template/article-template-featured -->
+
+<div class="article-template-featured1">
+  <div class="grid"> 
+    <div class="grid__item large--one-whole grid_btm_pdng">
+      <div class="page-title">{{ article.title }}</div>
+    </div>
+    
+    {{ article.content }}
+    
+  </div> 
+   <div class="blog-full-feature">
+   {% assign findTag = false %}
+    {% assign collectionName = '' %}
+    {% assign findTitleTag = false %}
+    {% assign collectionTitle = '' %}
+    
+    {% for tag in article.tags %}
+    {% if tag contains 'collection-'%}
+    	{% assign findTag = true %}
+    	{% assign collectionName = tag | remove :'collection-' %}
+    {% endif %}
+    
+    {% if tag contains "collectionTitle" %}
+      {% assign findTitleTag = true %}
+      {% assign collectionTitle = tag | remove :'collectionTitle-' %}
+    {% endif %}
+    
+    {% endfor %}
+    
+  
+   
+     {% if findTag == true %}
+        <div class="content-block">
+          <h6 class="content-block__title feature-title">{% if findTitleTag %} {{collectionTitle}} {% else %}Shop All Full Features{% endif %}</h6>
+          <div class="content-block__no-padding content-block__no-padding--border-top grid">
+            {% for product in collections[collectionName].products limit:28 %}  
+            {% include 'blog-product-grid-item' %}
+            {% endfor %}
+          </div>
+        </div>
+     
+    {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Section name",
+    "class": "article-template-featured1",
+    "settings": []
+  } 
+{% endschema %}
+

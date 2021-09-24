@@ -1,0 +1,647 @@
+{% include 'contact' %}
+
+{% if settings.enable_pro_gifbox_collection %}
+  {% assign item_col = settings.pro_gifbox_collection %}
+  {% assign has_gif_collection = false %}
+  {% for col in product.collections %}
+    {% if col.handle == collections[item_col].handle %}
+        {% assign has_gif_collection = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<!-- /templates/product.liquid -->
+<div class="b2p-wrapper" ><a href="javascript:history.go(-1)" class="back-to-page">Back to previous page</a></div>
+    {% if collection %}    
+    <div class="text-center back-to-collection">
+      <a href="{{ collection.url }}" class="return-link">{{ 'products.general.collection_return' | t: collection: collection.title }}</a>
+    </div>
+    {% endif %}
+<div itemscope itemtype="http://schema.org/Product" id="ProductSection" data-section-id="{{ section.id }}" data-section-type="product-template" data-enable-history-state="true">
+  <div itemscope itemtype="http://schema.org/Product">
+
+    <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+    <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+
+    {% assign current_variant = product.selected_or_first_available_variant %}
+        
+    <div class="grid product-single">
+      <div class="grid__item large--seven-twelfths medium--seven-twelfths text-center">
+        <div class="product-single__photos" id="mobile-gallery">
+          {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+
+          {% comment %}
+          Display current variant image, or default first
+         
+          <div class="product-single__photo-wrapper" id="main-product-image">
+            
+            <img class="mainimage" src="{{ featured_image | img_url: '1000x1000' }}" alt="{{ featured_image.alt | escape }}" data-image-id="{{ featured_image.id }}">
+          
+          </div>
+ 			{% endcomment %}
+          
+          
+          {% comment %}
+          Display rest of product images, not repeating the featured one
+          {% endcomment %}
+          {% for image in product.images %}
+          
+          <div class="product-single__photo-wrapper">
+             <a  href="{{  image.src  | img_url: '1000x1000' }}" title="{{ product.title }}">
+               <img src="{{ image.src | img_url: 'grande' }}" alt="{{ image.alt | escape }}" data-image-id="{{ image.id }}">
+            </a>
+          </div>
+          
+          {% endfor %}
+        </div>
+
+        <div class="product-single__photos grid" id="gallery">
+          {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+		<div class="grid__item large--one-quarter">
+          <div class="product-thumbnails regular ">
+          {% for image in product.images %}
+          <div class="product-single__photo-wrapper " id="thumbnails">
+            <a  data-id="{{image.id}}" data-src="{{ image.src | img_url: '1000x1000' }} " href="{{ image | product_img_url: '1000x1000' }}" title="{{ product.title }}">
+              <img src="{{ image.src | img_url: 'small' }}" alt="{{ image.alt | escape }}" data-image-id="{{ image.id }}">
+            </a>
+          </div>
+          {% endfor %}
+  </div></div>
+          
+          <div class="product-single__photo-wrapper grid__item large--three-quarters" id="main-product-image">
+            
+            {% for image in product.images %}
+            {% if image.id == featured_image.id %}
+            
+            	<img class="mainimage" src="{{ featured_image | img_url: '1000x1000' }}" alt="{{ featured_image.alt | escape }}" data-image-id="{{ featured_image.id }}">
+            
+            {% else %}
+            
+            
+            <img class="product-single__photo mainimage" style="display:none;" src="{{ image.src | img_url: '1000x1000' }}" alt="{{ image.alt | escape }}" data-image-id="{{ image.id }}">
+           
+            {% endif %}
+            {% endfor %}
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="grid__item product-single__meta--wrapper medium--five-twelfths large--five-twelfths">
+        <div class="product-single__meta">
+          {% if section.settings.product_vendor_enable %}
+          <h2 class="product-single__vendor" itemprop="brand">{{ product.vendor }}</h2>
+          {% endif %}
+
+          <h1 class="product-single__title" itemprop="name">{{ product.title }}</h1>
+
+          <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            {% comment %}
+            Optionally show the 'compare at' or original price of the product.
+            {% endcomment %}
+            <div class="currency-price">
+              {% if product.compare_at_price_max > product.price %}
+              <span id="PriceA11y" class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+              <span class="product-single__price--wrapper">
+                <span id="ComparePrice" class="product-single__price--compare-at">
+                  {% if current_variant.compare_at_price > current_variant.price %}
+                  {{ current_variant.compare_at_price | money }}
+                  {% endif %}
+                </span>
+              </span>
+              <span id="ComparePriceA11y" class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+              {% else %}
+              <span id="PriceA11y" class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+              {% endif %}
+
+              <span data-price="{{current_variant.price | money}}" id="ProductPrice"
+                    class="product-single__price{% if product.compare_at_price > product.price %} on-sale{% endif %}"
+                    itemprop="price"
+                    content="{{ current_variant.price | divided_by: 100.00 }}">
+                {{ current_variant.price | money }}
+              </span>
+              <span class="mobile_currency desktop_hideclass">
+                {% include 'currency-picker' %}
+              </span>
+            </div>
+
+            <div id="currencies_list" class="mobile_hideclass"></div>
+
+            <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+            <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+
+            <div class="product-single__description rte accordion_example3" itemprop="description">
+
+              <!-- Section 1 -->
+              <div class="accordion_in acc_active">
+                <div class="acc_head">Details</div>
+                {% if product.description != blank %}
+                <div class="acc_content">{{ product.description }}</div>
+                {% else %}
+                <div class="acc_content">Woah! You got here before we did. 
+                  This item is brand new and our team hasn’t written a description for it yet. 
+                  If you have any questions, please <a href="/pages/contact">contact us</a>. Product details will be added as soon as possible. Thanks for your patience!</div>
+                {% endif %}
+              </div>
+
+
+
+            </div>
+
+
+            <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-single__form" id="AddToCartForm">
+              
+              
+
+              <div class="grid">  {% unless product.options.size == 1 and product.variants[0].title == 'Default Title' %}
+                
+                <div class="grid__item product-custom-fields">
+                  <label for="custom-field">answer01</label>
+                  <input type="text" id="custom-field" name="properties[answer01]" required/>
+                </div>
+                <div class="grid__item product-custom-fields">
+                  <label for="custom-field2">answer02</label>
+                  <input type="text" id="custom-field2" name="properties[answer02]" required/>
+                </div>
+
+                {% for option in product.options_with_values %}
+                <div class="radio-wrapper js product-form__item grid__item large--whole large--text-left">
+                  <!--large--four-fifths-->
+                  {% for tag in product.tags %}          
+                  {% if tag == 'free_shipping'%} 
+                  <div class="free_ship1 mobile-block center">
+                    <span class="free_ship">FREE SHIPPING</span>
+                  </div>
+                  {% endif %}
+                  {% endfor %} 
+
+                  <label class="single-option-radio__label{% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}"
+                         for="ProductSelect-option-{{ forloop.index0 }}">
+                    {{ option.name }}
+                    {% for tag in product.tags %}          
+                    {% if tag == 'free_shipping'%} 
+                    <span class="free_ship1 large-block">
+                      <span class="free_ship">FREE SHIPPING</span>
+                    </span>
+                    {% endif %}
+                    {% endfor %} 
+
+                    <fieldset class="single-option-radio"
+                              name="{{ option.name }}"
+                              id="ProductSelect-option-{{ forloop.index0 }}">
+                      {% assign option_index = forloop.index %}
+                      {% for value in option.values %}
+                      {% assign variant_label_state = true %}
+                      {% if product.options.size == 1 %}
+                      {% unless product.variants[forloop.index0].available  %}
+                      {% assign variant_label_state = false %}
+                      {% endunless %}
+                      {% endif %}
+                      <label for="ProductSelect-option-{{ option.name }}-{{ value | escape }}" class="{% if product.available %}{% if product.has_only_default_variant == false and product.variants.size == 1%}selected-label {% endif %}{% endif %}{% unless variant_label_state %}disabled {% endunless %}">{{ value | escape }}
+                        <input type="radio"
+                               {% unless variant_label_state %} disabled="disabled"{% endunless %}
+                               value="{{ value | escape }}"
+                               data-index="option{{ option_index }}"
+                               name="{{ option.name }}"
+                               class="single-option-selector__radio{% unless variant_label_state %} disabled{% endunless %}"
+                               id="ProductSelect-option-{{ option.name }}-{{ value | escape }}">
+                      </label>
+                      {% endfor %}
+                    </fieldset>
+                    </div>
+                  {% endfor %}
+                  {% endunless %}
+
+
+
+                  <select name="id" id="ProductSelect" class="product-single__variants no-js">
+                    {% for variant in product.variants %}
+                    {% if variant.available %}
+                    <option {% if variant == product.selected_or_first_available_variant %}
+                            selected="selected" {% endif %}
+                            data-sku="{{ variant.sku }}"
+                            value="{{ variant.id }}">
+                      {{ variant.title }} - {{ variant.price | money_with_currency }}
+                    </option>
+                    {% else %}
+                    <option disabled="disabled">
+                      {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+
+                </div>
+                {% if product.metafields.size_cm.size > 0 and product.metafields.size_inch.size %}
+                <a href="#sizechart" id="open-size-chart" class="product-size-chart">{{ 'products.product.size_chart' | t }}  <img src="{{'interface.svg' | asset_url }}"></a>
+                {% endif %}
+                <div class="product-single__add-to-cart">
+                  {% assign hidebynow = false %}                
+                  {% for tag in product.tags  %}
+                  {% if tag == 'hide_buy_now' %}
+                  {% assign hidebynow = true %}
+                  {% endif %}
+                  {% endfor %}
+                  {% if hidebynow == true %}
+                  <button type="button" class="btn ask_query">Contact to order</button>
+                  {% else %}
+                  <button type="submit" name="add" id="AddToCart" {% if product.available %}{% if product.has_only_default_variant == false and product.variants.size == 1 %} {% else %} disabled="disabled" {% endif %}{% endif %} class="btn"{% unless product.available %} disabled="disabled"{% endunless %}>
+                    <span id="AddToCartText">
+                      {% if product.available %}
+
+                      {% if product.has_only_default_variant == false and product.variants.size == 1 %} Add to cart {% else %} {{ 'products.product.add_to_cart' | t }} {% endif %}
+
+                      {% else %}
+                      {{ 'products.product.sold_out' | t }}
+                      {% endif %}
+                    </span>
+                  </button>
+                  {% endif %}
+
+                  <div class="successmessge">Thank you for submitting your message. We will get back to you as soon as we can.</div>
+                </div>
+                </form>
+
+              </div>
+          <!-- Trigger/Open The Modal -->
+<!--           <button id="" class="view-store-inventory-btn-mobile">View in store availability</button> -->
+			{% assign var_status = false %}
+            {% for variant in product.variants %}
+                {% if variant.available %}{% else %}
+            {% assign var_status = true %}
+            {% endif %}
+            {% endfor %}
+            
+            <div class="btn-container " >
+         
+             <div class="notify1" {% if var_status == false %}style="display:none;"{% endif %}>
+            	<a href="#" id="BIS_trigger">Notify me</a>
+  			 </div> 
+       		 {% assign hide_instore_btn = false %}
+              {% for tag in product.tags %}
+                {% if tag == "hide-instore" %}
+                  {% assign hide_instore_btn = true %}
+                {% endif %}
+              {% endfor %}
+              {% unless hide_instore_btn %}
+                <div class="view-store-inventory-msg view-store-inventory-msg-desk mobile_hidden">
+                     <a id="availability-cat-{{ product.id }}" class="view-store-inventory-btn font-m">View In-Store Availability</a>
+                </div>
+
+                <div class="view-store-inventory-msg view-store-inventory-msg-mob mobile_only">
+                     <a href="javascript:void(0);" class="view-store-inventory-btn-mobile" style=""><span class=""> View In-Store Availability</span></a>
+                 </div>
+              {% endunless %}
+            </div>
+            <div id="modal" class="moda-prol" style="display:none;">
+              <a class="close" href="javascript:;"></a>
+              <div class="gallery-wrapper">
+                <ul class="gallery">
+                  {% for image in product.images %}
+                  <li><img src="{{ image.src | img_url: '880x1130' }}" data-image-id="{{ image.id }}" id="{{ image.id }}"></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="overlay"></div>
+            </div> 
+            {% include 'product-notify-me' %}
+          
+          <!-- The Modal -->
+          {% include 'modal' %}
+
+          <!--------------for mobile ------>
+      {% include 'mobile-modal' %}
+      
+      <!---------- end for mobile ------------------>
+            <input value="{{product.has_only_default_variant}}" type="hidden" id="has_default_value" />
+            <input value="{{product.variants.size}}" type="hidden" id="variant_size" />
+            <script>
+              $(window).on('load',function(){
+                if($('#has_default_value').val() == "false" && $('#variant_size').val() == '1'){
+                  $('.single-option-radio input').trigger('click');              	
+                }
+              });
+            </script>
+<script>
+//               $('#BIS_trigger').click(function(){
+//               	$('.notify_form').toggle();
+//               });
+  
+              
+  $(function() {
+    $('.view-store-inventory-btn-mobile').click(function(e){
+      e.preventDefault();
+      console.log('test');
+      $('#in-store-merchandise-{{ product.id }}').toggle();
+        });
+
+      $('.store-name').click( function(){
+        $(this).siblings('.store-address').first().toggle();
+      });
+    });
+  </script>
+
+          
+            <div id="sizechart" class="sizechart-modal" style="display: none;">
+              <input type="button" onclick="$.fancybox.close()" value="X" />
+              {% if product.metafields.size_cm.size > 0 and product.metafields.size_inch.size %}
+              <ul class="size-tabs">
+                <li class="tab-link current" data-tab="tab-1">CM</li>
+                <li class="tab-link" data-tab="tab-2">Inches</li>
+              </ul>
+              {% endif %}
+              {% if product.metafields.size_cm.size > 0 or product.metafields.size_inch.size %}
+             	<div class="title">Product Measurements</div>
+                  {% if product.metafields.size_cm.size > 0 %}
+                    <div class="cm_table tab-content" id="tab-1">
+                        <table style="width: 100%;">
+                          <tbody>
+                            {% if product.metafields.size_cm.pm_line1 %}
+                            {% assign pm_line1_items = product.metafields.size_cm.pm_line1 | split: "," %}
+                            {% assign item = "" %}
+                              <tr>
+                                {% for pm_item in pm_line1_items %}
+                                {% assign item = pm_item | strip %}
+                                    <td>{{item}}</td>
+                                {% endfor %}
+                              </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line2 %}
+                            {% assign pm_line2_items = product.metafields.size_cm.pm_line2 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line2_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line3 %}
+                            {% assign pm_line3_items = product.metafields.size_cm.pm_line3 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line3_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line4 %}
+                            {% assign pm_line4_items = product.metafields.size_cm.pm_line4 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line4_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line5 %}
+                            {% assign pm_line5_items = product.metafields.size_cm.pm_line5 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line5_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line6 %}
+                            {% assign pm_line6_items = product.metafields.size_cm.pm_line6 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line6_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line7 %}
+                            {% assign pm_line7_items = product.metafields.size_cm.pm_line7 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line7_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line8 %}
+                            {% assign pm_line8_items = product.metafields.size_cm.pm_line8 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line8_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line9 %}
+                            {% assign pm_line9_items = product.metafields.size_cm.pm_line9 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line9_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_cm.pm_line10 %}
+                            {% assign pm_line10_items = product.metafields.size_cm.pm_line10 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line10_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                          </tbody>
+                        </table> 
+                    </div>
+                  {% endif %}
+                  {% if product.metafields.size_inch.size > 0 %}
+                    <div class="inch_table tab-content" id="tab-2">
+                        <table style="width: 100%;">
+                          <tbody>
+                            {% if product.metafields.size_inch.pm_line1 %}
+                            {% assign pm_line1_items = product.metafields.size_inch.pm_line1 | split: "," %}
+                            {% assign item = "" %}
+                              <tr>
+                                {% for pm_item in pm_line1_items %}
+                                {% assign item = pm_item | strip %}
+                                    <td>{{item}}</td>
+                                {% endfor %}
+                              </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line2 %}
+                            {% assign pm_line2_items = product.metafields.size_inch.pm_line2 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line2_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line3 %}
+                            {% assign pm_line3_items = product.metafields.size_inch.pm_line3 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line3_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line4 %}
+                            {% assign pm_line4_items = product.metafields.size_inch.pm_line4 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line4_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line5 %}
+                            {% assign pm_line5_items = product.metafields.size_inch.pm_line5 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line5_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line6 %}
+                            {% assign pm_line6_items = product.metafields.size_inch.pm_line6 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line6_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line7 %}
+                            {% assign pm_line7_items = product.metafields.size_inch.pm_line7 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line7_items %}
+                              {% assign item = pm_item | strip %}
+                                  <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line8 %}
+                            {% assign pm_line8_items = product.metafields.size_inch.pm_line8 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line8_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line9 %}
+                            {% assign pm_line9_items = product.metafields.size_inch.pm_line9 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line9_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                            {% if product.metafields.size_inch.pm_line10 %}
+                            {% assign pm_line10_items = product.metafields.size_inch.pm_line10 | split: "," %}
+                            {% assign item = "" %}
+                            <tr>
+                              {% for pm_item in pm_line10_items %}
+                              {% assign item = pm_item | strip %}
+                              <td>{{item}}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endif %}
+
+                          </tbody>
+                        </table> 
+                    </div>
+                  {% endif %}
+              	{% endif %}
+              </div>
+
+          {% if section.settings.social_sharing_products %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+     
+      
+  </div>
+</div>
+{% unless product.empty == empty %}
+<script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+</script>
+{% endunless %}
+
+  
+  {% if has_gif_collection %}
+  <style>
+    .template-product #candybox-root{
+      display: block !important;
+    }
+  </style>
+  {% else %}
+  <style>
+    .template-product #candybox-root{
+      display: none !important;
+    }
+  </style>
+  {% endif %}
+
+  {% schema %}
+{
+"name": "Product pages",
+"settings": [
+{
+"type": "checkbox",
+"id": "social_sharing_products",
+"label": "Enable product sharing",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "product_vendor_enable",
+"label": "Show product vendor"
+}  
+]
+}
+{% endschema %}
+<!--   <style>
+  
+    .slick-initialized .slick-slide.slick-cloned{display:none !important;}
+  </style> -->

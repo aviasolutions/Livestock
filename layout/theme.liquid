@@ -1,0 +1,508 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta name="google-site-verification" content="JQebmADrro5Y1O488S2ND0RrP3wAHCAflxHedk9KxBs" />
+  {% include 'booster-seo' %}
+  {% if template != '404' %}{% include 'limespot' %}{% endif %}
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  {% if settings.favicon %}
+  <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
+  {% endif %}
+
+  <!-- Title and description ================================================== -->
+  {% comment %}<title>
+    {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>{% endcomment %}
+
+  {% if page_description %} 
+  {% comment %}<meta name="description" content="{{ page_description | escape }}">{% endcomment %}
+  {% endif %}
+
+  <!-- Helpers ================================================== -->
+  {% include 'social-meta-tags' %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+  <meta name="facebook-domain-verification" content="adsnq9kbbi0rags4tybr1v6tbc8189" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link media="print" onload="this.onload=null;this.removeAttribute('media');" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Dynamic Yield ================================================== -->
+  <link rel="preconnect" href="//cdn.dynamicyield.com">
+  <link rel="preconnect" href="//st.dynamicyield.com">
+  <link rel="preconnect" href="//rcom.dynamicyield.com">
+  <link rel="dns-prefetch" href="//cdn.dynamicyield.com">
+  <link rel="dns-prefetch" href="//st.dynamicyield.com">
+  <link rel="dns-prefetch" href="//rcom.dynamicyield.com">
+  <script>
+    window.DY = window.DY || {};
+    {%case template.name %}
+      {% when "index" %}
+    	DY.recommendationContext = {type:'HOMEPAGE'};
+      {%when "collection" %}
+    DY.recommendationContext = {type:'CATEGORY', data: ['{{collection.title}}']};
+      {%when "product"%}
+    	DY.recommendationContext = {type:'PRODUCT', data: ['{{product.variants[0].sku}}']};
+      {%when "cart"%}
+    	DY.recommendationContext = {type:'CART', data: ['{{ cart.items | map: "sku" | join: "', '"}}']};
+      {% else %}
+        DY.recommendationContext = {type: 'OTHER'};
+    {%endcase%}
+    {% if customer %}
+        var customer = {
+           id: '{{customer.id}}',
+           email: '{{customer.email}}',
+        }
+    {% endif %}
+  </script>
+
+  <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_dynamic.js"></script>
+  <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_static.js"></script>
+  
+  <!-- CSS ================================================== -->
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+
+  <!-- Sections ================================================== -->
+
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+  
+  {%- if request.page_type == 'blog' or request.page_type 'article'  -%}
+  	{%- render 'ics-js' -%}
+  {%- endif -%}
+
+  {% include 'bold-common' %}
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/core.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" defer></script>
+  <script src="{{ 'modernizr.min.js' | asset_url }}" defer></script>
+
+  <script src="{{ 'lazysizes.min.js' | asset_url }}" async="async"></script>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+  {% comment %}
+  If you store has customer accounts disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if template.directory == 'customers' %}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  
+  {% if template.name == "index" %}  
+  {{ 'swiper.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+  
+  <!--Start of Custom Scrollbar Script -->
+  {{ 'jquery.custom-scrollbar.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'jquery.custom-scrollbar.js' | asset_url }}" defer="defer"></script>
+  <!--End of Custom Scrollbar Script-->
+  
+  <meta name="google-site-verification" content="_Tsjq7Q62Iu7jqdijnvmI81S2qJeliaCnLcvet8BBaI" />
+  
+  
+  <!-- Global site tag (gtag.js) - Google Ads: 1017259506 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1017259506"></script>
+  
+  <script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"17537421"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+
+  {% render 'gsf-conversion-pixels' %}
+  
+  <!-- Algolia head -->
+  {{ 'algolia_config.js' | asset_url | script_tag }}
+
+  <link rel="preconnect" href="//cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hogan.js@3.0.2/dist/hogan-3.0.2.min.js" integrity="sha256-jIAAmB65ff5CEFvV6DRfRWjHFwqq+AHeV4le8f8PYp4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js" integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/search-insights@1.6.3/dist/search-insights.min.js" integrity="sha256-8r3eU2ketKjC+f59eAY6ejwSsgPjNY5Ca1yt67nz2TM=" crossorigin="anonymous"></script>
+
+  <script type="text/template" id="template_algolia_money_format">{% include 'algolia_money_format' %}</script>
+  <script type="text/template" id="template_algolia_current_collection_id">{% include 'algolia_current_collection_id' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete">{% include 'algolia_autocomplete.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete.css">{% include 'algolia_autocomplete.css.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_pages_empty">{% include 'algolia_autocomplete_pages_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_page">{% include 'algolia_autocomplete_page.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_collection">{% include 'algolia_autocomplete_collection.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_collections_empty">{% include 'algolia_autocomplete_collections_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_article">{% include 'algolia_autocomplete_article.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_articles_empty">{% include 'algolia_autocomplete_articles_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_product">{% include 'algolia_autocomplete_product.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_products_empty">{% include 'algolia_autocomplete_products_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_footer">{% include 'algolia_autocomplete_footer.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search">{% include 'algolia_instant_search.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search.css">{% include 'algolia_instant_search.css.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_stats">{% include 'algolia_instant_search_stats.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_facet_show_more">{% include 'algolia_instant_search_facet_show_more.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_facet_item">{% include 'algolia_instant_search_facet_item.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_facet_colour">{% include 'algolia_instant_search_facet_colour.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_current_refined_values_item">{% include 'algolia_instant_search_current_refined_values_item.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_product">{% include 'algolia_instant_search_product.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_no_result">{% include 'algolia_instant_search_no_result.hogan' %}</script>
+  <script src="{{ 'algolia_externals.js' | asset_url }}" defer></script>
+  {{ 'algolia_init.js' | asset_url | script_tag }}
+  <script src="{{ 'algolia_analytics.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_translations.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_helpers.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_autocomplete.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_facets.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_sort_orders.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_instant_search.js' | asset_url }}" defer></script>
+  <!-- /Algolia head -->
+
+  <script type="text/javascript">
+    window.theme = window.theme || {};
+    theme.strings = {
+      zoomClose: {{ "products.zoom.close" | t | json }},
+      zoomPrev: {{ "products.zoom.prev" | t | json }},
+      zoomNext: {{ "products.zoom.next" | t | json }},
+      moneyFormat: {{ shop.money_format | json }}
+    };
+    theme.settings = {
+      cartType: {{ settings.cart_type | json }},
+      gridType: {{ settings.collection_products_grid | json }}
+    };    
+    
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-1017259506');
+  </script>
+</head>
+
+{% comment %}
+Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class="index {% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} {{template | handle }}">
+ <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KG6GXLJ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <div id="CartDrawer" class="drawer drawer--right drawer--has-fixed-footer" aria-hidden="true">
+    <div class="drawer__fixed-header">
+      <div class="drawer__header">
+        <!--         <div class="drawer__title">{{ 'cart.general.title' | t }}</div> -->
+        <div class="drawer__close">
+          <button type="button" class="icon-fallback-text drawer__close-button js-drawer-close">
+
+            <span class="">Back To [Previous Page]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="drawer__inner">
+      <div id="CartContainer" class="drawer__cart"></div>
+    </div>
+  </div>
+  <div id="PageContainer" class="page-container">
+    {% section 'header-new' %}
+    <main class="main-content home" role="main">
+      {% unless template.name == "index" or template == "collection.image" %}
+      <div class="{% if template == "blog.featured" or template == "article.featured" or template == "article.featured1" %}fix-wrapper {%endif%} wrapper">
+        {% endunless %}
+        {{ content_for_layout }}
+        {% unless template.name == "index" or template == "collection.image" %}
+      </div>
+      {% endunless %}
+      <limespot></limespot>
+    </main>
+    {% if template == 'collection' %}
+    {% if collection.description != blank %}
+    <div class="brand-seo">
+      <div class="brand-seo__spacer"></div>
+      <div class="brand-seo__content">
+        {{ collection.description }}
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% if template == 'article' %}
+    <div class="packery-full">
+      {% include 'masonry-infinite' %}
+    </div>
+    {% endif %}
+    {% section 'footer' %}
+
+
+
+
+
+  </div>
+
+  {% comment %}
+  Template-specific js
+  {% endcomment %}
+
+  {% comment %}
+  Ajaxify your cart with this plugin.
+  Documentation:
+  - http://shopify.com/timber#ajax-cart
+  {% endcomment %}
+
+
+  {% if settings.cart_type == 'drawer' %}
+  {% include 'ajax-cart-template' %}
+
+  {% endif %}
+
+  {% include 'currencies' %}
+  
+  <!-- Start of deadstock Zendesk Widget script -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=dff4e009-8acd-437f-8deb-c6a67a2b194e" defer> </script>
+  <!-- End of deadstock Zendesk Widget script -->
+  {{ 'font-awesome.css' | asset_url | stylesheet_tag }}
+  
+  {{ 'smk-accordion.scss' | asset_url | stylesheet_tag }}
+  {{ 'smk-accordion.js' | asset_url | script_tag }}
+  {% if template.name == 'product' or template.name == 'cart' %}
+  <script src="https://js.afterpay.com/afterpay-1.x.js"> </script>
+  {% endif %}
+
+  <script>
+    {% if resetPassword %}
+    $(function() {
+      timber.resetPasswordSuccess();
+    });
+    {% endif %}
+  {% if template contains 'collection' %}  
+    jQuery(document).ready(function($){
+      // filter , sorting & hide-block
+      //== to hide the filter on hover on menu
+      $('#AccessibleNav li').hover(function(){
+        $('.custom_filter_wrap').each(function(){
+          $('.custom_filter_wrap .filter_custom').each(function(){
+            $(this).removeClass('cat-filt-wrap');
+
+          });
+        });    
+      });
+      //=========================
+      $('.description-class div').show();
+      $('.heading-class').click(function(){
+        $(this).parent().find('div').slideToggle(); 
+        $(this).toggleClass('close-heading');
+        $(this).toggleClass('open-heading');
+
+      });
+      // block n hide filter 
+      $('.category-filter').click(function(){
+        $('.collection-sort').closest('.filter_custom').removeClass('cat-filt-wrap');
+        $('.size-filter').closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        if($(this).closest('.filter_custom').hasClass('cat-filt-wrap'))
+        {
+          $(this).closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        }else{
+          $(this).closest('.filter_custom').addClass('cat-filt-wrap'); 
+        }
+      });
+      // block n hide sort
+      $('.collection-sort').click(function(){
+        $('.category-filter').closest('.filter_custom').removeClass('cat-filt-wrap');          	  
+        $('.size-filter').closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        if($(this).closest('.filter_custom').hasClass('cat-filt-wrap')) {
+          $(this).closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        }else{
+          $(this).closest('.filter_custom').addClass('cat-filt-wrap'); 
+        }
+      });
+      // block n hide filter
+      $('.size-filter').click(function(){
+        $('.collection-sort').closest('.filter_custom').removeClass('cat-filt-wrap');
+        $('.category-filter').closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        if($(this).closest('.filter_custom').hasClass('cat-filt-wrap'))
+        {
+          $(this).closest('.filter_custom').removeClass('cat-filt-wrap'); 
+        }else{
+          $(this).closest('.filter_custom').addClass('cat-filt-wrap'); 
+        }
+      });
+      // to find the numerice value of size filter
+      $('.size1 li').each(function(){
+        var x = $(this).data('tag');
+        if($.isNumeric(x)){}else{
+          $(this).addClass('second-col');
+        }
+      });
+    });
+  {% endif %}
+    jQuery(document).ready(function($){
+      {% if template contains 'collection' or  template == 'index' or template == 'article.featured' or template contains '404'  %}
+      if(window.outerWidth > 768 ) {
+
+        $(".radio-wrapper label").on('click touchstart', function(){  
+          var x = document.getElementById("ProductSelect").selectedIndex;
+          //alert(document.getElementsByTagName("option")[x].value);
+        });
+
+        var count = 0;
+        $(".radio-wrapper label").on('click touchstart', function(){      
+          var val = $(this).find(':radio').val();
+          // alert("ok");
+          $(this).siblings().removeClass('selected-label');
+          if(!$(this).hasClass("disabled"))
+          {
+            $(this).addClass('selected-label');
+            $(this).find('input[type=radio]').attr('checked', 'checked');
+          }
+
+          $(this).closest('form').find('.product-single__variants').addClass("current-sel");
+          var x = '';
+          $(this).closest('form').find('.product-single__variants option').removeAttr('selected');
+          $(this).closest('form').find('.product-single__variants option').removeClass('selected');    
+          $(this).closest('form').find('.current-sel option').each(function(){
+            //$(this).removeAttr('selected');
+            var splt_sel_val = $(this).text().trim();
+            var sel_val = splt_sel_val.split(' / ')[1];
+            if(sel_val == val)
+            {
+              var new_val = $(this).attr('value');
+              $(this).closest('form').find('.hiddenval').attr('value',new_val);
+              //$('.current-sel option:selected').removeAttr('selected');
+              $(this).attr('selected','selected');
+              $(this).addClass('selected');          
+            }
+          }); 
+          // ===============
+          count =  count + 1;        
+          if(count == 1){        	
+            var strx = $(this).parent().parent().next('.product-single__variants').val(); 
+            var strxx = $(this).parents(".radio-wrapper").siblings('.hiddenval').attr('value',strx);
+          }else{
+            count =  0;
+          }
+          
+          $(this).closest('form').find('.size_text_enabled #AddToCartText').text('Add to cart');
+          $(this).closest('form').find('.size_text_enabled').removeClass('size_text');
+        }); 
+      }
+      {% endif %}
+
+      {% if template == 'product' or template == 'product.custom' or template == 'product.custom2' %}
+      $('.product-single__form .radio-wrapper').each(function(){
+        if($(this).find('.single-option-selector__radio').length == 1){
+          $(this).find('.single-option-selector__radio').parent().addClass('selected-label');
+        }
+      })
+      $(document).on('click touchstart', 'label .single-option-selector__radio', function (){
+        $(this).parent().addClass('selected-label');
+        $(this).parent().siblings().removeClass('selected-label');
+      });
+        var ht = $('#main-product-image').height();
+      {% endif %}
+    });
+    
+    window.cffPCLiquidPlaced = true
+    window.zESettings = {
+      webWidget: {
+        chat: {
+          connectOnPageLoad: false        
+        }
+      }
+    };
+    {% if customer %}
+    window.cffCustomer = {
+      name: '{{customer.name}}',
+      email: '{{customer.email}}',
+      hasAccount: '{{customer.has_account}}',
+      id: '{{customer.id}}'
+    };
+    {% endif %}
+    
+    let amount = 0.0, priceSelector = ""
+    let currency = "CAD", locale = "en_CA" 
+    
+   {%case template.name%} 
+      {%when "product"%}
+          amount = {{product.selected_or_first_available_variant.price | money_without_currency }}
+          priceSelector= ".currency-price-list-wrapper"
+    
+      {%when "cart"%}     
+          amount = {{cart.total_price | money_without_currency }}
+          priceSelector = ".cart > div:last-child > div > div:last-child > div"
+    
+      {%when "product" or "cart"%} 
+        Afterpay.createPlacements({
+          targetSelector: priceSelector, 
+          attributes: {
+            currency: currency,
+            locale: locale,
+            amount: amount,
+            size: "sm",
+            logoType: "lockup",
+            modalTheme: "white"
+          } 
+        });
+    {%endcase%}
+  </script>
+  
+  <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
+
+  {% include 'ajaxify-cart' %}
+  {% include 'adwords-dynamic-remarketing' %}
+  
+  {{ 'ajaxinate.js' | asset_url | script_tag }}
+
+  {% include 'theme-scientist' %}
+  {{ 'overwrite.scss.css' | asset_url | stylesheet_tag }}  
+  
+  <script src="{{ 'dynamic-yield-events.js' | asset_url }}" defer></script>
+  <script src="{{ 'menu-aim.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'menu-main.js' | asset_url }}" defer="defer"></script> 
+  <div class="menu-overlay-div"></div>
+  
+  {% if template.name == "index" %}  
+  
+ <script src="{{ 'swiper.js' | asset_url }}" ></script>  
+
+ <script>
+   var swiper = new Swiper('.swiper-container', {
+   	slidesPerView: 'auto',
+    spaceBetween:0,
+    loop: false,
+    grabCursor: true,
+    observer: true,
+    freeMode: true,  
+    observeParents: true,
+    navigation: {
+      nextEl:'.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+      scrollbar: {
+        el: '.swiper-scrollbar',
+        hide: true,
+        draggable: true,
+      }, 
+    
+    keyboard: {
+      enabled: true,
+    },
+  
+   
+     
+  });  
+    
+  </script>
+  
+{% endif %} 
+  
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" ></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+</html>

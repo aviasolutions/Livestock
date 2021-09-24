@@ -1,0 +1,121 @@
+{% if settings.product_body_content contains 'Google' %}
+  {% assign type_accent_parts1 = settings.product_body_content | split: '_' %}
+  {% assign type_accent_name1 = type_accent_parts1[1] %}
+  {% capture accent_family1 %}"{{ type_accent_name1 | split: ':' | first | replace: '+', ' ' }}"{% if type_accent_parts1.last == 'serif' %}, serif {% else %}, "HelveticaNeue", "Helvetica Neue", sans-serif{% endif %}{% endcapture %}
+  {% assign accent_weight1 = type_accent_parts1[2] | split: ',' %}
+{% else %}
+  {% assign accent_family1 = settings.product_body_content %}
+  {% assign accent_weight1 = 700 %}
+{% endif %}
+
+.smk_accordion {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  margin-bottom: 20px;
+}
+/**
+ * --------------------------------------------------------------
+ * Section
+ * --------------------------------------------------------------
+ */
+.smk_accordion .accordion_in {
+/*   border: 1px solid #ccc; */
+  position: relative;
+  z-index: 10;
+  margin-top: -1px;
+  overflow: hidden;
+}
+/**
+ * --------------------------------------------------------------
+ * Head
+ * --------------------------------------------------------------
+ */
+.smk_accordion .accordion_in .acc_head {
+  position: relative;
+  background: #FDFDFD;
+  padding: 10px;
+  font-size: 14px;
+  display: block;
+  cursor: pointer;
+}
+.smk_accordion .accordion_in .acc_head .acc_icon_expand {
+  display: block;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -9px;
+  background: url(../images/plusminus.png) center 0;
+}
+/**
+ * --------------------------------------------------------------
+ * Content
+ * --------------------------------------------------------------
+ */
+.smk_accordion .accordion_in .acc_content {
+  font-family:{{accent_family1}};
+  color:{{ settings.color_label }};
+  font-size:{{ settings.label_size }};
+  p{
+   font-family:{{accent_family1}};
+    color:{{ settings.color_label }};
+  }
+}
+.smk_accordion .accordion_in .acc_content h1:first-of-type,
+.smk_accordion .accordion_in .acc_content h2:first-of-type,
+.smk_accordion .accordion_in .acc_content h3:first-of-type,
+.smk_accordion .accordion_in .acc_content h4:first-of-type,
+.smk_accordion .accordion_in .acc_content h5:first-of-type,
+.smk_accordion .accordion_in .acc_content h6:first-of-type {
+  margin-top: 5px;
+}
+/**
+ * --------------------------------------------------------------
+ * General
+ * --------------------------------------------------------------
+ */
+.smk_accordion .accordion_in:first-of-type,
+.smk_accordion .accordion_in:first-of-type .acc_head {
+  border-radius: 3px 3px 0 0;
+}
+.smk_accordion .accordion_in:last-of-type,
+.smk_accordion .accordion_in:last-of-type .acc_content {
+  border-radius: 0 0 3px 3px;
+}
+.smk_accordion .accordion_in.acc_active > .acc_content {
+  display: block;
+}
+
+
+.smk_accordion.acc_with_icon .accordion_in.acc_active .acc_head
+{
+     background: transparent url(arrow2.jpg) no-repeat left 9px;
+    color: #000;
+}
+
+.smk_accordion.acc_with_icon .accordion_in .acc_head {
+      background: transparent url(arrow1.jpg) no-repeat left 9px;
+ color: {{ settings.color_label }};
+    cursor: pointer;
+    padding: 0px 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    text-transform: uppercase;
+    text-transform: uppercase;
+   font-family: 'Roboto Condensed', sans-serif;
+    letter-spacing:1px; font-weight:700;
+}
+.smk_accordion.acc_with_icon .accordion_in .acc_head:hover { background: transparent url(arrow3.jpg) no-repeat left 9px;
+ color: #000;}
+.smk_accordion.acc_with_icon .accordion_in .acc_content {padding: 0px 18px;}
+.acc_content p {
+    line-height: 26px;
+}
+.smk_accordion{margin-top:27px;}

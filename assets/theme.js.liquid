@@ -1,0 +1,2785 @@
+window.theme = window.theme || {};
+window.slate = window.slate || {};
+
+/* ================ VENDORS ================ */
+/* Simple jQuery Equal Heights @version 1.5.1. Copyright (c) 2013 Matt Banks. Dual licensed under the MIT and GPL licenses. */
+!function(a){a.fn.equalHeights=function(){var b=0,c=a(this);return c.each(function(){var c=a(this).innerHeight();c>b&&(b=c)}),c.css("height",b)},a("[data-equal]").each(function(){var b=a(this),c=b.data("equal");b.find(c).equalHeights()})}(jQuery);
+
+/*!
+ * enquire.js v2.1.2 - Awesome Media Queries in JavaScript
+ * Copyright (c) 2014 Nick Williams - http://wicky.nillia.ms/enquire.js
+ * License: MIT (http://www.opensource.org/licenses/mit-license.php)
+ */
+!function(a,b,c){var d=window.matchMedia;"undefined"!=typeof module&&module.exports?module.exports=c(d):"function"==typeof define&&define.amd?define(function(){return b[a]=c(d)}):b[a]=c(d)}("enquire",this,function(a){"use strict";function b(a,b){var c,d=0,e=a.length;for(d;e>d&&(c=b(a[d],d),c!==!1);d++);}function c(a){return"[object Array]"===Object.prototype.toString.apply(a)}function d(a){return"function"==typeof a}function e(a){this.options=a,!a.deferSetup&&this.setup()}function f(b,c){this.query=b,this.isUnconditional=c,this.handlers=[],this.mql=a(b);var d=this;this.listener=function(a){d.mql=a,d.assess()},this.mql.addListener(this.listener)}function g(){if(!a)throw new Error("matchMedia not present, legacy browsers require a polyfill");this.queries={},this.browserIsIncapable=!a("only all").matches}return e.prototype={setup:function(){this.options.setup&&this.options.setup(),this.initialised=!0},on:function(){!this.initialised&&this.setup(),this.options.match&&this.options.match()},off:function(){this.options.unmatch&&this.options.unmatch()},destroy:function(){this.options.destroy?this.options.destroy():this.off()},equals:function(a){return this.options===a||this.options.match===a}},f.prototype={addHandler:function(a){var b=new e(a);this.handlers.push(b),this.matches()&&b.on()},removeHandler:function(a){var c=this.handlers;b(c,function(b,d){return b.equals(a)?(b.destroy(),!c.splice(d,1)):void 0})},matches:function(){return this.mql.matches||this.isUnconditional},clear:function(){b(this.handlers,function(a){a.destroy()}),this.mql.removeListener(this.listener),this.handlers.length=0},assess:function(){var a=this.matches()?"on":"off";b(this.handlers,function(b){b[a]()})}},g.prototype={register:function(a,e,g){var h=this.queries,i=g&&this.browserIsIncapable;return h[a]||(h[a]=new f(a,i)),d(e)&&(e={match:e}),c(e)||(e=[e]),b(e,function(b){d(b)&&(b={match:b}),h[a].addHandler(b)}),this},unregister:function(a,b){var c=this.queries[a];return c&&(b?c.removeHandler(b):(c.clear(),delete this.queries[a])),this}},new g});
+
+/*! Magnific Popup - v1.0.0 - 2015-03-30
+* http://dimsemenov.com/plugins/magnific-popup/
+* Copyright (c) 2015 Dmitry Semenov; */
+!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):a("object"==typeof exports?require("jquery"):window.jQuery||window.Zepto)}(function(a){var b,c,d,e,f,g,h="Close",i="BeforeClose",j="AfterClose",k="BeforeAppend",l="MarkupParse",m="Open",n="Change",o="mfp",p="."+o,q="mfp-ready",r="mfp-removing",s="mfp-prevent-close",t=function(){},u=!!window.jQuery,v=a(window),w=function(a,c){b.ev.on(o+a+p,c)},x=function(b,c,d,e){var f=document.createElement("div");return f.className="mfp-"+b,d&&(f.innerHTML=d),e?c&&c.appendChild(f):(f=a(f),c&&f.appendTo(c)),f},y=function(c,d){b.ev.triggerHandler(o+c,d),b.st.callbacks&&(c=c.charAt(0).toLowerCase()+c.slice(1),b.st.callbacks[c]&&b.st.callbacks[c].apply(b,a.isArray(d)?d:[d]))},z=function(c){return c===g&&b.currTemplate.closeBtn||(b.currTemplate.closeBtn=a(b.st.closeMarkup.replace("%title%",b.st.tClose)),g=c),b.currTemplate.closeBtn},A=function(){a.magnificPopup.instance||(b=new t,b.init(),a.magnificPopup.instance=b)},B=function(){var a=document.createElement("p").style,b=["ms","O","Moz","Webkit"];if(void 0!==a.transition)return!0;for(;b.length;)if(b.pop()+"Transition"in a)return!0;return!1};t.prototype={constructor:t,init:function(){var c=navigator.appVersion;b.isIE7=-1!==c.indexOf("MSIE 7."),b.isIE8=-1!==c.indexOf("MSIE 8."),b.isLowIE=b.isIE7||b.isIE8,b.isAndroid=/android/gi.test(c),b.isIOS=/iphone|ipad|ipod/gi.test(c),b.supportsTransition=B(),b.probablyMobile=b.isAndroid||b.isIOS||/(Opera Mini)|Kindle|webOS|BlackBerry|(Opera Mobi)|(Windows Phone)|IEMobile/i.test(navigator.userAgent),d=a(document),b.popupsCache={}},open:function(c){var e;if(c.isObj===!1){b.items=c.items.toArray(),b.index=0;var g,h=c.items;for(e=0;e<h.length;e++)if(g=h[e],g.parsed&&(g=g.el[0]),g===c.el[0]){b.index=e;break}}else b.items=a.isArray(c.items)?c.items:[c.items],b.index=c.index||0;if(b.isOpen)return void b.updateItemHTML();b.types=[],f="",b.ev=c.mainEl&&c.mainEl.length?c.mainEl.eq(0):d,c.key?(b.popupsCache[c.key]||(b.popupsCache[c.key]={}),b.currTemplate=b.popupsCache[c.key]):b.currTemplate={},b.st=a.extend(!0,{},a.magnificPopup.defaults,c),b.fixedContentPos="auto"===b.st.fixedContentPos?!b.probablyMobile:b.st.fixedContentPos,b.st.modal&&(b.st.closeOnContentClick=!1,b.st.closeOnBgClick=!1,b.st.showCloseBtn=!1,b.st.enableEscapeKey=!1),b.bgOverlay||(b.bgOverlay=x("bg").on("click"+p,function(){b.close()}),b.wrap=x("wrap").attr("tabindex",-1).on("click"+p,function(a){b._checkIfClose(a.target)&&b.close()}),b.container=x("container",b.wrap)),b.contentContainer=x("content"),b.st.preloader&&(b.preloader=x("preloader",b.container,b.st.tLoading));var i=a.magnificPopup.modules;for(e=0;e<i.length;e++){var j=i[e];j=j.charAt(0).toUpperCase()+j.slice(1),b["init"+j].call(b)}y("BeforeOpen"),b.st.showCloseBtn&&(b.st.closeBtnInside?(w(l,function(a,b,c,d){c.close_replaceWith=z(d.type)}),f+=" mfp-close-btn-in"):b.wrap.append(z())),b.st.alignTop&&(f+=" mfp-align-top"),b.wrap.css(b.fixedContentPos?{overflow:b.st.overflowY,overflowX:"hidden",overflowY:b.st.overflowY}:{top:v.scrollTop(),position:"absolute"}),(b.st.fixedBgPos===!1||"auto"===b.st.fixedBgPos&&!b.fixedContentPos)&&b.bgOverlay.css({height:d.height(),position:"absolute"}),b.st.enableEscapeKey&&d.on("keyup"+p,function(a){27===a.keyCode&&b.close()}),v.on("resize"+p,function(){b.updateSize()}),b.st.closeOnContentClick||(f+=" mfp-auto-cursor"),f&&b.wrap.addClass(f);var k=b.wH=v.height(),n={};if(b.fixedContentPos&&b._hasScrollBar(k)){var o=b._getScrollbarSize();o&&(n.marginRight=o)}b.fixedContentPos&&(b.isIE7?a("body, html").css("overflow","hidden"):n.overflow="hidden");var r=b.st.mainClass;return b.isIE7&&(r+=" mfp-ie7"),r&&b._addClassToMFP(r),b.updateItemHTML(),y("BuildControls"),a("html").css(n),b.bgOverlay.add(b.wrap).prependTo(b.st.prependTo||a(document.body)),b._lastFocusedEl=document.activeElement,setTimeout(function(){b.content?(b._addClassToMFP(q),b._setFocus()):b.bgOverlay.addClass(q),d.on("focusin"+p,b._onFocusIn)},16),b.isOpen=!0,b.updateSize(k),y(m),c},close:function(){b.isOpen&&(y(i),b.isOpen=!1,b.st.removalDelay&&!b.isLowIE&&b.supportsTransition?(b._addClassToMFP(r),setTimeout(function(){b._close()},b.st.removalDelay)):b._close())},_close:function(){y(h);var c=r+" "+q+" ";if(b.bgOverlay.detach(),b.wrap.detach(),b.container.empty(),b.st.mainClass&&(c+=b.st.mainClass+" "),b._removeClassFromMFP(c),b.fixedContentPos){var e={marginRight:""};b.isIE7?a("body, html").css("overflow",""):e.overflow="",a("html").css(e)}d.off("keyup"+p+" focusin"+p),b.ev.off(p),b.wrap.attr("class","mfp-wrap").removeAttr("style"),b.bgOverlay.attr("class","mfp-bg"),b.container.attr("class","mfp-container"),!b.st.showCloseBtn||b.st.closeBtnInside&&b.currTemplate[b.currItem.type]!==!0||b.currTemplate.closeBtn&&b.currTemplate.closeBtn.detach(),b._lastFocusedEl&&a(b._lastFocusedEl).focus(),b.currItem=null,b.content=null,b.currTemplate=null,b.prevHeight=0,y(j)},updateSize:function(a){if(b.isIOS){var c=document.documentElement.clientWidth/window.innerWidth,d=window.innerHeight*c;b.wrap.css("height",d),b.wH=d}else b.wH=a||v.height();b.fixedContentPos||b.wrap.css("height",b.wH),y("Resize")},updateItemHTML:function(){var c=b.items[b.index];b.contentContainer.detach(),b.content&&b.content.detach(),c.parsed||(c=b.parseEl(b.index));var d=c.type;if(y("BeforeChange",[b.currItem?b.currItem.type:"",d]),b.currItem=c,!b.currTemplate[d]){var f=b.st[d]?b.st[d].markup:!1;y("FirstMarkupParse",f),b.currTemplate[d]=f?a(f):!0}e&&e!==c.type&&b.container.removeClass("mfp-"+e+"-holder");var g=b["get"+d.charAt(0).toUpperCase()+d.slice(1)](c,b.currTemplate[d]);b.appendContent(g,d),c.preloaded=!0,y(n,c),e=c.type,b.container.prepend(b.contentContainer),y("AfterChange")},appendContent:function(a,c){b.content=a,a?b.st.showCloseBtn&&b.st.closeBtnInside&&b.currTemplate[c]===!0?b.content.find(".mfp-close").length||b.content.append(z()):b.content=a:b.content="",y(k),b.container.addClass("mfp-"+c+"-holder"),b.contentContainer.append(b.content)},parseEl:function(c){var d,e=b.items[c];if(e.tagName?e={el:a(e)}:(d=e.type,e={data:e,src:e.src}),e.el){for(var f=b.types,g=0;g<f.length;g++)if(e.el.hasClass("mfp-"+f[g])){d=f[g];break}e.src=e.el.attr("data-mfp-src"),e.src||(e.src=e.el.attr("href"))}return e.type=d||b.st.type||"inline",e.index=c,e.parsed=!0,b.items[c]=e,y("ElementParse",e),b.items[c]},addGroup:function(a,c){var d=function(d){d.mfpEl=this,b._openClick(d,a,c)};c||(c={});var e="click.magnificPopup";c.mainEl=a,c.items?(c.isObj=!0,a.off(e).on(e,d)):(c.isObj=!1,c.delegate?a.off(e).on(e,c.delegate,d):(c.items=a,a.off(e).on(e,d)))},_openClick:function(c,d,e){var f=void 0!==e.midClick?e.midClick:a.magnificPopup.defaults.midClick;if(f||2!==c.which&&!c.ctrlKey&&!c.metaKey){var g=void 0!==e.disableOn?e.disableOn:a.magnificPopup.defaults.disableOn;if(g)if(a.isFunction(g)){if(!g.call(b))return!0}else if(v.width()<g)return!0;c.type&&(c.preventDefault(),b.isOpen&&c.stopPropagation()),e.el=a(c.mfpEl),e.delegate&&(e.items=d.find(e.delegate)),b.open(e)}},updateStatus:function(a,d){if(b.preloader){c!==a&&b.container.removeClass("mfp-s-"+c),d||"loading"!==a||(d=b.st.tLoading);var e={status:a,text:d};y("UpdateStatus",e),a=e.status,d=e.text,b.preloader.html(d),b.preloader.find("a").on("click",function(a){a.stopImmediatePropagation()}),b.container.addClass("mfp-s-"+a),c=a}},_checkIfClose:function(c){if(!a(c).hasClass(s)){var d=b.st.closeOnContentClick,e=b.st.closeOnBgClick;if(d&&e)return!0;if(!b.content||a(c).hasClass("mfp-close")||b.preloader&&c===b.preloader[0])return!0;if(c===b.content[0]||a.contains(b.content[0],c)){if(d)return!0}else if(e&&a.contains(document,c))return!0;return!1}},_addClassToMFP:function(a){b.bgOverlay.addClass(a),b.wrap.addClass(a)},_removeClassFromMFP:function(a){this.bgOverlay.removeClass(a),b.wrap.removeClass(a)},_hasScrollBar:function(a){return(b.isIE7?d.height():document.body.scrollHeight)>(a||v.height())},_setFocus:function(){(b.st.focus?b.content.find(b.st.focus).eq(0):b.wrap).focus()},_onFocusIn:function(c){return c.target===b.wrap[0]||a.contains(b.wrap[0],c.target)?void 0:(b._setFocus(),!1)},_parseMarkup:function(b,c,d){var e;d.data&&(c=a.extend(d.data,c)),y(l,[b,c,d]),a.each(c,function(a,c){if(void 0===c||c===!1)return!0;if(e=a.split("_"),e.length>1){var d=b.find(p+"-"+e[0]);if(d.length>0){var f=e[1];"replaceWith"===f?d[0]!==c[0]&&d.replaceWith(c):"img"===f?d.is("img")?d.attr("src",c):d.replaceWith('<img src="'+c+'" class="'+d.attr("class")+'" />'):d.attr(e[1],c)}}else b.find(p+"-"+a).html(c)})},_getScrollbarSize:function(){if(void 0===b.scrollbarSize){var a=document.createElement("div");a.style.cssText="width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;",document.body.appendChild(a),b.scrollbarSize=a.offsetWidth-a.clientWidth,document.body.removeChild(a)}return b.scrollbarSize}},a.magnificPopup={instance:null,proto:t.prototype,modules:[],open:function(b,c){return A(),b=b?a.extend(!0,{},b):{},b.isObj=!0,b.index=c||0,this.instance.open(b)},close:function(){return a.magnificPopup.instance&&a.magnificPopup.instance.close()},registerModule:function(b,c){c.options&&(a.magnificPopup.defaults[b]=c.options),a.extend(this.proto,c.proto),this.modules.push(b)},defaults:{disableOn:0,key:null,midClick:!1,mainClass:"",preloader:!0,focus:"",closeOnContentClick:!1,closeOnBgClick:!0,closeBtnInside:!0,showCloseBtn:!0,enableEscapeKey:!0,modal:!1,alignTop:!1,removalDelay:0,prependTo:null,fixedContentPos:"auto",fixedBgPos:"auto",overflowY:"auto",closeMarkup:'<button title="%title%" type="button" class="mfp-close">&times;</button>',tClose:"Close (Esc)",tLoading:"Loading..."}},a.fn.magnificPopup=function(c){A();var d=a(this);if("string"==typeof c)if("open"===c){var e,f=u?d.data("magnificPopup"):d[0].magnificPopup,g=parseInt(arguments[1],10)||0;f.items?e=f.items[g]:(e=d,f.delegate&&(e=e.find(f.delegate)),e=e.eq(g)),b._openClick({mfpEl:e},d,f)}else b.isOpen&&b[c].apply(b,Array.prototype.slice.call(arguments,1));else c=a.extend(!0,{},c),u?d.data("magnificPopup",c):d[0].magnificPopup=c,b.addGroup(d,c);return d};var C,D,E,F="inline",G=function(){E&&(D.after(E.addClass(C)).detach(),E=null)};a.magnificPopup.registerModule(F,{options:{hiddenClass:"hide",markup:"",tNotFound:"Content not found"},proto:{initInline:function(){b.types.push(F),w(h+"."+F,function(){G()})},getInline:function(c,d){if(G(),c.src){var e=b.st.inline,f=a(c.src);if(f.length){var g=f[0].parentNode;g&&g.tagName&&(D||(C=e.hiddenClass,D=x(C),C="mfp-"+C),E=f.after(D).detach().removeClass(C)),b.updateStatus("ready")}else b.updateStatus("error",e.tNotFound),f=a("<div>");return c.inlineElement=f,f}return b.updateStatus("ready"),b._parseMarkup(d,{},c),d}}});var H,I="ajax",J=function(){H&&a(document.body).removeClass(H)},K=function(){J(),b.req&&b.req.abort()};a.magnificPopup.registerModule(I,{options:{settings:null,cursor:"mfp-ajax-cur",tError:'<a href="%url%">The content</a> could not be loaded.'},proto:{initAjax:function(){b.types.push(I),H=b.st.ajax.cursor,w(h+"."+I,K),w("BeforeChange."+I,K)},getAjax:function(c){H&&a(document.body).addClass(H),b.updateStatus("loading");var d=a.extend({url:c.src,success:function(d,e,f){var g={data:d,xhr:f};y("ParseAjax",g),b.appendContent(a(g.data),I),c.finished=!0,J(),b._setFocus(),setTimeout(function(){b.wrap.addClass(q)},16),b.updateStatus("ready"),y("AjaxContentAdded")},error:function(){J(),c.finished=c.loadError=!0,b.updateStatus("error",b.st.ajax.tError.replace("%url%",c.src))}},b.st.ajax.settings);return b.req=a.ajax(d),""}}});var L,M=function(c){if(c.data&&void 0!==c.data.title)return c.data.title;var d=b.st.image.titleSrc;if(d){if(a.isFunction(d))return d.call(b,c);if(c.el)return c.el.attr(d)||""}return""};a.magnificPopup.registerModule("image",{options:{markup:'<div class="mfp-figure"><div class="mfp-close"></div><figure><div class="mfp-img"></div><figcaption><div class="mfp-bottom-bar"><div class="mfp-title"></div><div class="mfp-counter"></div></div></figcaption></figure></div>',cursor:"mfp-zoom-out-cur",titleSrc:"title",verticalFit:!0,tError:'<a href="%url%">The image</a> could not be loaded.'},proto:{initImage:function(){var c=b.st.image,d=".image";b.types.push("image"),w(m+d,function(){"image"===b.currItem.type&&c.cursor&&a(document.body).addClass(c.cursor)}),w(h+d,function(){c.cursor&&a(document.body).removeClass(c.cursor),v.off("resize"+p)}),w("Resize"+d,b.resizeImage),b.isLowIE&&w("AfterChange",b.resizeImage)},resizeImage:function(){var a=b.currItem;if(a&&a.img&&b.st.image.verticalFit){var c=0;b.isLowIE&&(c=parseInt(a.img.css("padding-top"),10)+parseInt(a.img.css("padding-bottom"),10)),a.img.css("max-height",b.wH-c)}},_onImageHasSize:function(a){a.img&&(a.hasSize=!0,L&&clearInterval(L),a.isCheckingImgSize=!1,y("ImageHasSize",a),a.imgHidden&&(b.content&&b.content.removeClass("mfp-loading"),a.imgHidden=!1))},findImageSize:function(a){var c=0,d=a.img[0],e=function(f){L&&clearInterval(L),L=setInterval(function(){return d.naturalWidth>0?void b._onImageHasSize(a):(c>200&&clearInterval(L),c++,void(3===c?e(10):40===c?e(50):100===c&&e(500)))},f)};e(1)},getImage:function(c,d){var e=0,f=function(){c&&(c.img[0].complete?(c.img.off(".mfploader"),c===b.currItem&&(b._onImageHasSize(c),b.updateStatus("ready")),c.hasSize=!0,c.loaded=!0,y("ImageLoadComplete")):(e++,200>e?setTimeout(f,100):g()))},g=function(){c&&(c.img.off(".mfploader"),c===b.currItem&&(b._onImageHasSize(c),b.updateStatus("error",h.tError.replace("%url%",c.src))),c.hasSize=!0,c.loaded=!0,c.loadError=!0)},h=b.st.image,i=d.find(".mfp-img");if(i.length){var j=document.createElement("img");j.className="mfp-img",c.el&&c.el.find("img").length&&(j.alt=c.el.find("img").attr("alt")),c.img=a(j).on("load.mfploader",f).on("error.mfploader",g),j.src=c.src,i.is("img")&&(c.img=c.img.clone()),j=c.img[0],j.naturalWidth>0?c.hasSize=!0:j.width||(c.hasSize=!1)}return b._parseMarkup(d,{title:M(c),img_replaceWith:c.img},c),b.resizeImage(),c.hasSize?(L&&clearInterval(L),c.loadError?(d.addClass("mfp-loading"),b.updateStatus("error",h.tError.replace("%url%",c.src))):(d.removeClass("mfp-loading"),b.updateStatus("ready")),d):(b.updateStatus("loading"),c.loading=!0,c.hasSize||(c.imgHidden=!0,d.addClass("mfp-loading"),b.findImageSize(c)),d)}}});var N,O=function(){return void 0===N&&(N=void 0!==document.createElement("p").style.MozTransform),N};a.magnificPopup.registerModule("zoom",{options:{enabled:!1,easing:"ease-in-out",duration:300,opener:function(a){return a.is("img")?a:a.find("img")}},proto:{initZoom:function(){var a,c=b.st.zoom,d=".zoom";if(c.enabled&&b.supportsTransition){var e,f,g=c.duration,j=function(a){var b=a.clone().removeAttr("style").removeAttr("class").addClass("mfp-animated-image"),d="all "+c.duration/1e3+"s "+c.easing,e={position:"fixed",zIndex:9999,left:0,top:0,"-webkit-backface-visibility":"hidden"},f="transition";return e["-webkit-"+f]=e["-moz-"+f]=e["-o-"+f]=e[f]=d,b.css(e),b},k=function(){b.content.css("visibility","visible")};w("BuildControls"+d,function(){if(b._allowZoom()){if(clearTimeout(e),b.content.css("visibility","hidden"),a=b._getItemToZoom(),!a)return void k();f=j(a),f.css(b._getOffset()),b.wrap.append(f),e=setTimeout(function(){f.css(b._getOffset(!0)),e=setTimeout(function(){k(),setTimeout(function(){f.remove(),a=f=null,y("ZoomAnimationEnded")},16)},g)},16)}}),w(i+d,function(){if(b._allowZoom()){if(clearTimeout(e),b.st.removalDelay=g,!a){if(a=b._getItemToZoom(),!a)return;f=j(a)}f.css(b._getOffset(!0)),b.wrap.append(f),b.content.css("visibility","hidden"),setTimeout(function(){f.css(b._getOffset())},16)}}),w(h+d,function(){b._allowZoom()&&(k(),f&&f.remove(),a=null)})}},_allowZoom:function(){return"image"===b.currItem.type},_getItemToZoom:function(){return b.currItem.hasSize?b.currItem.img:!1},_getOffset:function(c){var d;d=c?b.currItem.img:b.st.zoom.opener(b.currItem.el||b.currItem);var e=d.offset(),f=parseInt(d.css("padding-top"),10),g=parseInt(d.css("padding-bottom"),10);e.top-=a(window).scrollTop()-f;var h={width:d.width(),height:(u?d.innerHeight():d[0].offsetHeight)-g-f};return O()?h["-moz-transform"]=h.transform="translate("+e.left+"px,"+e.top+"px)":(h.left=e.left,h.top=e.top),h}}});var P="iframe",Q="//about:blank",R=function(a){if(b.currTemplate[P]){var c=b.currTemplate[P].find("iframe");c.length&&(a||(c[0].src=Q),b.isIE8&&c.css("display",a?"block":"none"))}};a.magnificPopup.registerModule(P,{options:{markup:'<div class="mfp-iframe-scaler"><div class="mfp-close"></div><iframe class="mfp-iframe" src="//about:blank" frameborder="0" allowfullscreen></iframe></div>',srcAction:"iframe_src",patterns:{youtube:{index:"youtube.com",id:"v=",src:"//www.youtube.com/embed/%id%?autoplay=1"},vimeo:{index:"vimeo.com/",id:"/",src:"//player.vimeo.com/video/%id%?autoplay=1"},gmaps:{index:"//maps.google.",src:"%id%&output=embed"}}},proto:{initIframe:function(){b.types.push(P),w("BeforeChange",function(a,b,c){b!==c&&(b===P?R():c===P&&R(!0))}),w(h+"."+P,function(){R()})},getIframe:function(c,d){var e=c.src,f=b.st.iframe;a.each(f.patterns,function(){return e.indexOf(this.index)>-1?(this.id&&(e="string"==typeof this.id?e.substr(e.lastIndexOf(this.id)+this.id.length,e.length):this.id.call(this,e)),e=this.src.replace("%id%",e),!1):void 0});var g={};return f.srcAction&&(g[f.srcAction]=e),b._parseMarkup(d,g,c),b.updateStatus("ready"),d}}});var S=function(a){var c=b.items.length;return a>c-1?a-c:0>a?c+a:a},T=function(a,b,c){return a.replace(/%curr%/gi,b+1).replace(/%total%/gi,c)};a.magnificPopup.registerModule("gallery",{options:{enabled:!1,arrowMarkup:'<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>',preload:[0,2],navigateByImgClick:!0,arrows:!0,tPrev:"Previous (Left arrow key)",tNext:"Next (Right arrow key)",tCounter:"%curr% of %total%"},proto:{initGallery:function(){var c=b.st.gallery,e=".mfp-gallery",g=Boolean(a.fn.mfpFastClick);return b.direction=!0,c&&c.enabled?(f+=" mfp-gallery",w(m+e,function(){c.navigateByImgClick&&b.wrap.on("click"+e,".mfp-img",function(){return b.items.length>1?(b.next(),!1):void 0}),d.on("keydown"+e,function(a){37===a.keyCode?b.prev():39===a.keyCode&&b.next()})}),w("UpdateStatus"+e,function(a,c){c.text&&(c.text=T(c.text,b.currItem.index,b.items.length))}),w(l+e,function(a,d,e,f){var g=b.items.length;e.counter=g>1?T(c.tCounter,f.index,g):""}),w("BuildControls"+e,function(){if(b.items.length>1&&c.arrows&&!b.arrowLeft){var d=c.arrowMarkup,e=b.arrowLeft=a(d.replace(/%title%/gi,c.tPrev).replace(/%dir%/gi,"left")).addClass(s),f=b.arrowRight=a(d.replace(/%title%/gi,c.tNext).replace(/%dir%/gi,"right")).addClass(s),h=g?"mfpFastClick":"click";e[h](function(){b.prev()}),f[h](function(){b.next()}),b.isIE7&&(x("b",e[0],!1,!0),x("a",e[0],!1,!0),x("b",f[0],!1,!0),x("a",f[0],!1,!0)),b.container.append(e.add(f))}}),w(n+e,function(){b._preloadTimeout&&clearTimeout(b._preloadTimeout),b._preloadTimeout=setTimeout(function(){b.preloadNearbyImages(),b._preloadTimeout=null},16)}),void w(h+e,function(){d.off(e),b.wrap.off("click"+e),b.arrowLeft&&g&&b.arrowLeft.add(b.arrowRight).destroyMfpFastClick(),b.arrowRight=b.arrowLeft=null})):!1},next:function(){b.direction=!0,b.index=S(b.index+1),b.updateItemHTML()},prev:function(){b.direction=!1,b.index=S(b.index-1),b.updateItemHTML()},goTo:function(a){b.direction=a>=b.index,b.index=a,b.updateItemHTML()},preloadNearbyImages:function(){var a,c=b.st.gallery.preload,d=Math.min(c[0],b.items.length),e=Math.min(c[1],b.items.length);for(a=1;a<=(b.direction?e:d);a++)b._preloadItem(b.index+a);for(a=1;a<=(b.direction?d:e);a++)b._preloadItem(b.index-a)},_preloadItem:function(c){if(c=S(c),!b.items[c].preloaded){var d=b.items[c];d.parsed||(d=b.parseEl(c)),y("LazyLoad",d),"image"===d.type&&(d.img=a('<img class="mfp-img" />').on("load.mfploader",function(){d.hasSize=!0}).on("error.mfploader",function(){d.hasSize=!0,d.loadError=!0,y("LazyLoadError",d)}).attr("src",d.src)),d.preloaded=!0}}}});var U="retina";a.magnificPopup.registerModule(U,{options:{replaceSrc:function(a){return a.src.replace(/\.\w+$/,function(a){return"@2x"+a})},ratio:1},proto:{initRetina:function(){if(window.devicePixelRatio>1){var a=b.st.retina,c=a.ratio;c=isNaN(c)?c():c,c>1&&(w("ImageHasSize."+U,function(a,b){b.img.css({"max-width":b.img[0].naturalWidth/c,width:"100%"})}),w("ElementParse."+U,function(b,d){d.src=a.replaceSrc(d,c)}))}}}}),function(){var b=1e3,c="ontouchstart"in window,d=function(){v.off("touchmove"+f+" touchend"+f)},e="mfpFastClick",f="."+e;a.fn.mfpFastClick=function(e){return a(this).each(function(){var g,h=a(this);if(c){var i,j,k,l,m,n;h.on("touchstart"+f,function(a){l=!1,n=1,m=a.originalEvent?a.originalEvent.touches[0]:a.touches[0],j=m.clientX,k=m.clientY,v.on("touchmove"+f,function(a){m=a.originalEvent?a.originalEvent.touches:a.touches,n=m.length,m=m[0],(Math.abs(m.clientX-j)>10||Math.abs(m.clientY-k)>10)&&(l=!0,d())}).on("touchend"+f,function(a){d(),l||n>1||(g=!0,a.preventDefault(),clearTimeout(i),i=setTimeout(function(){g=!1},b),e())})})}h.on("click"+f,function(){g||e()})})},a.fn.destroyMfpFastClick=function(){a(this).off("touchstart"+f+" click"+f),c&&v.off("touchmove"+f+" touchend"+f)}}(),A()});
+/*
+ * ScrollToFixed
+ * https://github.com/bigspotteddog/ScrollToFixed
+ *
+ * Copyright (c) 2011 Joseph Cava-Lynch
+ * MIT license
+ */
+(function(a){a.isScrollToFixed=function(b){return !!a(b).data("ScrollToFixed")};a.ScrollToFixed=function(d,i){var l=this;l.$el=a(d);l.el=d;l.$el.data("ScrollToFixed",l);var c=false;var G=l.$el;var H;var E;var e;var y;var D=0;var q=0;var j=-1;var f=-1;var t=null;var z;var g;function u(){G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed");f=-1;D=G.offset().top;q=G.offset().left;if(l.options.offsets){q+=(G.offset().left-G.position().left)}if(j==-1){j=q}H=G.css("position");c=true;if(l.options.bottom!=-1){G.trigger("preFixed.ScrollToFixed");w();G.trigger("fixed.ScrollToFixed")}}function n(){var I=l.options.limit;if(!I){return 0}if(typeof(I)==="function"){return I.apply(G)}return I}function p(){return H==="fixed"}function x(){return H==="absolute"}function h(){return !(p()||x())}function w(){if(!p()){t.css({display:G.css("display"),width:G.outerWidth(true),height:G.outerHeight(true),"float":G.css("float")});cssOptions={"z-index":l.options.zIndex,position:"fixed",top:l.options.bottom==-1?s():"",bottom:l.options.bottom==-1?"":l.options.bottom,"margin-left":"0px"};if(!l.options.dontSetWidth){cssOptions.width=G.width()}G.css(cssOptions);G.addClass(l.options.baseClassName);if(l.options.className){G.addClass(l.options.className)}H="fixed"}}function b(){var J=n();var I=q;if(l.options.removeOffsets){I="";J=J-D}cssOptions={position:"absolute",top:J,left:I,"margin-left":"0px",bottom:""};if(!l.options.dontSetWidth){cssOptions.width=G.width()}G.css(cssOptions);H="absolute"}function k(){if(!h()){f=-1;t.css("display","none");G.css({"z-index":y,width:"",position:E,left:"",top:e,"margin-left":""});G.removeClass("scroll-to-fixed-fixed");if(l.options.className){G.removeClass(l.options.className)}H=null}}function v(I){if(I!=f){G.css("left",q-I);f=I}}function s(){var I=l.options.marginTop;if(!I){return 0}if(typeof(I)==="function"){return I.apply(G)}return I}function A(){if(!a.isScrollToFixed(G)){return}var K=c;if(!c){u()}else{if(h()){D=G.offset().top;q=G.offset().left}}var I=a(window).scrollLeft();var L=a(window).scrollTop();var J=n();if(l.options.minWidth&&a(window).width()<l.options.minWidth){if(!h()||!K){o();G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed")}}else{if(l.options.maxWidth&&a(window).width()>l.options.maxWidth){if(!h()||!K){o();G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed")}}else{if(l.options.bottom==-1){if(J>0&&L>=J-s()){if(!x()||!K){o();G.trigger("preAbsolute.ScrollToFixed");b();G.trigger("unfixed.ScrollToFixed")}}else{if(L>=D-s()){if(!p()||!K){o();G.trigger("preFixed.ScrollToFixed");w();f=-1;G.trigger("fixed.ScrollToFixed")}v(I)}else{if(!h()||!K){o();G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed")}}}}else{if(J>0){if(L+a(window).height()-G.outerHeight(true)>=J-(s()||-m())){if(p()){o();G.trigger("preUnfixed.ScrollToFixed");if(E==="absolute"){b()}else{k()}G.trigger("unfixed.ScrollToFixed")}}else{if(!p()){o();G.trigger("preFixed.ScrollToFixed");w()}v(I);G.trigger("fixed.ScrollToFixed")}}else{v(I)}}}}}function m(){if(!l.options.bottom){return 0}return l.options.bottom}function o(){var I=G.css("position");if(I=="absolute"){G.trigger("postAbsolute.ScrollToFixed")}else{if(I=="fixed"){G.trigger("postFixed.ScrollToFixed")}else{G.trigger("postUnfixed.ScrollToFixed")}}}var C=function(I){if(G.is(":visible")){c=false;A()}};var F=function(I){(!!window.requestAnimationFrame)?requestAnimationFrame(A):A()};var B=function(){var J=document.body;if(document.createElement&&J&&J.appendChild&&J.removeChild){var L=document.createElement("div");if(!L.getBoundingClientRect){return null}L.innerHTML="x";L.style.cssText="position:fixed;top:100px;";J.appendChild(L);var M=J.style.height,N=J.scrollTop;J.style.height="3000px";J.scrollTop=500;var I=L.getBoundingClientRect().top;J.style.height=M;var K=(I===100);J.removeChild(L);J.scrollTop=N;return K}return null};var r=function(I){I=I||window.event;if(I.preventDefault){I.preventDefault()}I.returnValue=false};l.init=function(){l.options=a.extend({},a.ScrollToFixed.defaultOptions,i);y=G.css("z-index");l.$el.css("z-index",l.options.zIndex);t=a("<div />");H=G.css("position");E=G.css("position");e=G.css("top");if(h()){l.$el.after(t)}a(window).bind("resize.ScrollToFixed",C);a(window).bind("scroll.ScrollToFixed",F);if("ontouchmove" in window){a(window).bind("touchmove.ScrollToFixed",A)}if(l.options.preFixed){G.bind("preFixed.ScrollToFixed",l.options.preFixed)}if(l.options.postFixed){G.bind("postFixed.ScrollToFixed",l.options.postFixed)}if(l.options.preUnfixed){G.bind("preUnfixed.ScrollToFixed",l.options.preUnfixed)}if(l.options.postUnfixed){G.bind("postUnfixed.ScrollToFixed",l.options.postUnfixed)}if(l.options.preAbsolute){G.bind("preAbsolute.ScrollToFixed",l.options.preAbsolute)}if(l.options.postAbsolute){G.bind("postAbsolute.ScrollToFixed",l.options.postAbsolute)}if(l.options.fixed){G.bind("fixed.ScrollToFixed",l.options.fixed)}if(l.options.unfixed){G.bind("unfixed.ScrollToFixed",l.options.unfixed)}if(l.options.spacerClass){t.addClass(l.options.spacerClass)}G.bind("resize.ScrollToFixed",function(){t.height(G.height())});G.bind("scroll.ScrollToFixed",function(){G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed");A()});G.bind("detach.ScrollToFixed",function(I){r(I);G.trigger("preUnfixed.ScrollToFixed");k();G.trigger("unfixed.ScrollToFixed");a(window).unbind("resize.ScrollToFixed",C);a(window).unbind("scroll.ScrollToFixed",F);G.unbind(".ScrollToFixed");t.remove();l.$el.removeData("ScrollToFixed")});C()};l.init()};a.ScrollToFixed.defaultOptions={marginTop:0,limit:0,bottom:-1,zIndex:1000,baseClassName:"scroll-to-fixed-fixed"};a.fn.scrollToFixed=function(b){return this.each(function(){(new a.ScrollToFixed(this,b))})}})(jQuery);
+
+/*
+ FastClick: polyfill to remove click delays on browsers with touch UIs.
+
+ @version 1.0.3
+ @codingstandard ftlabs-jsv2
+ @copyright The Financial Times Limited [All Rights Reserved]
+ @license MIT License (see LICENSE.txt)
+*/
+/*
+// this is original
+ (function(){"use strict";function e(t,r){function s(e,t){return function(){return e.apply(t,arguments)}}var i;r=r||{};this.trackingClick=false;this.trackingClickStart=0;this.targetElement=null;this.touchStartX=0;this.touchStartY=0;this.lastTouchIdentifier=0;this.touchBoundary=r.touchBoundary||10;this.layer=t;this.tapDelay=r.tapDelay||200;this.tapTimeout=r.tapTimeout||700;if(e.notNeeded(t)){return}var o=["onMouse","onClick","onTouchStart","onTouchMove","onTouchEnd","onTouchCancel"];var u=this;for(var a=0,f=o.length;a<f;a++){u[o[a]]=s(u[o[a]],u)}if(n){t.addEventListener("mouseover",this.onMouse,true);t.addEventListener("mousedown",this.onMouse,true);t.addEventListener("mouseup",this.onMouse,true)}t.addEventListener("click",this.onClick,true);t.addEventListener("touchstart",this.onTouchStart,false);t.addEventListener("touchmove",this.onTouchMove,false);t.addEventListener("touchend",this.onTouchEnd,false);t.addEventListener("touchcancel",this.onTouchCancel,false);if(!Event.prototype.stopImmediatePropagation){t.removeEventListener=function(e,n,r){var i=Node.prototype.removeEventListener;if(e==="click"){i.call(t,e,n.hijacked||n,r)}else{i.call(t,e,n,r)}};t.addEventListener=function(e,n,r){var i=Node.prototype.addEventListener;if(e==="click"){i.call(t,e,n.hijacked||(n.hijacked=function(e){if(!e.propagationStopped){n(e)}}),r)}else{i.call(t,e,n,r)}}}if(typeof t.onclick==="function"){i=t.onclick;t.addEventListener("click",function(e){i(e)},false);t.onclick=null}}var t=navigator.userAgent.indexOf("Windows Phone")>=0;var n=navigator.userAgent.indexOf("Android")>0&&!t;var r=/iP(ad|hone|od)/.test(navigator.userAgent)&&!t;var i=r&&/OS 4_\d(_\d)?/.test(navigator.userAgent);var s=r&&/OS ([6-9]|\d{2})_\d/.test(navigator.userAgent);var o=navigator.userAgent.indexOf("BB10")>0;e.prototype.needsClick=function(e){switch(e.nodeName.toLowerCase()){case"button":case"select":case"textarea":if(e.disabled){return true}break;case"input":if(r&&e.type==="file"||e.disabled){return true}break;case"label":case"iframe":case"video":return true}return/\bneedsclick\b/.test(e.className)};e.prototype.needsFocus=function(e){switch(e.nodeName.toLowerCase()){case"textarea":return true;case"select":return!n;case"input":switch(e.type){case"button":case"checkbox":case"file":case"image":case"radio":case"submit":return false}return!e.disabled&&!e.readOnly;default:return/\bneedsfocus\b/.test(e.className)}};e.prototype.sendClick=function(e,t){var n,r;if(document.activeElement&&document.activeElement!==e){document.activeElement.blur()}r=t.changedTouches[0];n=document.createEvent("MouseEvents");n.initMouseEvent(this.determineEventType(e),true,true,window,1,r.screenX,r.screenY,r.clientX,r.clientY,false,false,false,false,0,null);n.forwardedTouchEvent=true;e.dispatchEvent(n)};e.prototype.determineEventType=function(e){if(n&&e.tagName.toLowerCase()==="select"){return"mousedown"}return"click"};e.prototype.focus=function(e){var t;if(r&&e.setSelectionRange&&e.type.indexOf("date")!==0&&e.type!=="time"&&e.type!=="month"){t=e.value.length;e.setSelectionRange(t,t)}else{e.focus()}};e.prototype.updateScrollParent=function(e){var t,n;t=e.fastClickScrollParent;if(!t||!t.contains(e)){n=e;do{if(n.scrollHeight>n.offsetHeight){t=n;e.fastClickScrollParent=n;break}n=n.parentElement}while(n)}if(t){t.fastClickLastScrollTop=t.scrollTop}};e.prototype.getTargetElementFromEventTarget=function(e){if(e.nodeType===Node.TEXT_NODE){return e.parentNode}return e};e.prototype.onTouchStart=function(e){var t,n,s;if(e.targetTouches.length>1){return true}t=this.getTargetElementFromEventTarget(e.target);n=e.targetTouches[0];if(r){s=window.getSelection();if(s.rangeCount&&!s.isCollapsed){return true}if(!i){if(n.identifier&&n.identifier===this.lastTouchIdentifier){e.preventDefault();return false}this.lastTouchIdentifier=n.identifier;this.updateScrollParent(t)}}this.trackingClick=true;this.trackingClickStart=e.timeStamp;this.targetElement=t;this.touchStartX=n.pageX;this.touchStartY=n.pageY;if(e.timeStamp-this.lastClickTime<this.tapDelay){e.preventDefault()}return true};e.prototype.touchHasMoved=function(e){var t=e.changedTouches[0],n=this.touchBoundary;if(Math.abs(t.pageX-this.touchStartX)>n||Math.abs(t.pageY-this.touchStartY)>n){return true}return false};e.prototype.onTouchMove=function(e){if(!this.trackingClick){return true}if(this.targetElement!==this.getTargetElementFromEventTarget(e.target)||this.touchHasMoved(e)){this.trackingClick=false;this.targetElement=null}return true};e.prototype.findControl=function(e){if(e.control!==undefined){return e.control}if(e.htmlFor){return document.getElementById(e.htmlFor)}return e.querySelector("button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea")};e.prototype.onTouchEnd=function(e){var t,o,u,a,f,l=this.targetElement;if(!this.trackingClick){return true}if(e.timeStamp-this.lastClickTime<this.tapDelay){this.cancelNextClick=true;return true}if(e.timeStamp-this.trackingClickStart>this.tapTimeout){return true}this.cancelNextClick=false;this.lastClickTime=e.timeStamp;o=this.trackingClickStart;this.trackingClick=false;this.trackingClickStart=0;if(s){f=e.changedTouches[0];l=document.elementFromPoint(f.pageX-window.pageXOffset,f.pageY-window.pageYOffset)||l;l.fastClickScrollParent=this.targetElement.fastClickScrollParent}u=l.tagName.toLowerCase();if(u==="label"){t=this.findControl(l);if(t){this.focus(l);if(n){return false}l=t}}else if(this.needsFocus(l)){if(e.timeStamp-o>100||r&&window.top!==window&&u==="input"){this.targetElement=null;return false}this.focus(l);this.sendClick(l,e);if(!r||u!=="select"){this.targetElement=null;e.preventDefault()}return false}if(r&&!i){a=l.fastClickScrollParent;if(a&&a.fastClickLastScrollTop!==a.scrollTop){return true}}if(!this.needsClick(l)){e.preventDefault();this.sendClick(l,e)}return false};e.prototype.onTouchCancel=function(){this.trackingClick=false;this.targetElement=null};e.prototype.onMouse=function(e){if(!this.targetElement){return true}if(e.forwardedTouchEvent){return true}if(!e.cancelable){return true}if(!this.needsClick(this.targetElement)||this.cancelNextClick){if(e.stopImmediatePropagation){e.stopImmediatePropagation()}else{e.propagationStopped=true}e.stopPropagation();e.preventDefault();return false}return true};e.prototype.onClick=function(e){var t;if(this.trackingClick){this.targetElement=null;this.trackingClick=false;return true}if(e.target.type==="submit"&&e.detail===0){return true}t=this.onMouse(e);if(!t){this.targetElement=null}return t};e.prototype.destroy=function(){var e=this.layer;if(n){e.removeEventListener("mouseover",this.onMouse,true);e.removeEventListener("mousedown",this.onMouse,true);e.removeEventListener("mouseup",this.onMouse,true)}e.removeEventListener("click",this.onClick,true);e.removeEventListener("touchstart",this.onTouchStart,false);e.removeEventListener("touchmove",this.onTouchMove,false);e.removeEventListener("touchend",this.onTouchEnd,false);e.removeEventListener("touchcancel",this.onTouchCancel,false)};e.notNeeded=function(e){var t;var r;var i;if(typeof window.ontouchstart==="undefined"){return true}r=+(/Chrome\/([0-9]+)/.exec(navigator.userAgent)||[,0])[1];if(r){if(n){t=document.querySelector("meta[name=viewport]");if(t){if(t.content.indexOf("user-scalable=no")!==-1){return true}if(r>31&&document.documentElement.scrollWidth<=window.outerWidth){return true}}}else{return true}}if(o){i=navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);if(i[1]>=10&&i[2]>=3){t=document.querySelector("meta[name=viewport]");if(t){if(t.content.indexOf("user-scalable=no")!==-1){return true}if(document.documentElement.scrollWidth<=window.outerWidth){return true}}}}if(e.style.msTouchAction==="none"){return true}if(e.style.touchAction==="none"){return true}return false};e.attach=function(t,n){return new e(t,n)};if(typeof define=="function"&&typeof define.amd=="object"&&define.amd){define(function(){return e})}else if(typeof module!=="undefined"&&module.exports){module.exports=e.attach;module.exports.FastClick=e}else{window.FastClick=e}})()
+*/
+
+// removed "onTouchStart" from original js for conflicting reasons.
+(function(){"use strict";function e(t,r){function s(e,t){return function(){return e.apply(t,arguments)}}var i;r=r||{};this.trackingClick=false;this.trackingClickStart=0;this.targetElement=null;this.touchStartX=0;this.touchStartY=0;this.lastTouchIdentifier=0;this.touchBoundary=r.touchBoundary||10;this.layer=t;this.tapDelay=r.tapDelay||200;this.tapTimeout=r.tapTimeout||700;if(e.notNeeded(t)){return}var o=["onMouse","onClick","onTouchMove","onTouchEnd","onTouchCancel"];var u=this;for(var a=0,f=o.length;a<f;a++){u[o[a]]=s(u[o[a]],u)}if(n){t.addEventListener("mouseover",this.onMouse,true);t.addEventListener("mousedown",this.onMouse,true);t.addEventListener("mouseup",this.onMouse,true)}t.addEventListener("click",this.onClick,true);t.addEventListener("touchstart",this.onTouchStart,false);t.addEventListener("touchmove",this.onTouchMove,false);t.addEventListener("touchend",this.onTouchEnd,false);t.addEventListener("touchcancel",this.onTouchCancel,false);if(!Event.prototype.stopImmediatePropagation){t.removeEventListener=function(e,n,r){var i=Node.prototype.removeEventListener;if(e==="click"){i.call(t,e,n.hijacked||n,r)}else{i.call(t,e,n,r)}};t.addEventListener=function(e,n,r){var i=Node.prototype.addEventListener;if(e==="click"){i.call(t,e,n.hijacked||(n.hijacked=function(e){if(!e.propagationStopped){n(e)}}),r)}else{i.call(t,e,n,r)}}}if(typeof t.onclick==="function"){i=t.onclick;t.addEventListener("click",function(e){i(e)},false);t.onclick=null}}var t=navigator.userAgent.indexOf("Windows Phone")>=0;var n=navigator.userAgent.indexOf("Android")>0&&!t;var r=/iP(ad|hone|od)/.test(navigator.userAgent)&&!t;var i=r&&/OS 4_\d(_\d)?/.test(navigator.userAgent);var s=r&&/OS ([6-9]|\d{2})_\d/.test(navigator.userAgent);var o=navigator.userAgent.indexOf("BB10")>0;e.prototype.needsClick=function(e){switch(e.nodeName.toLowerCase()){case"button":case"select":case"textarea":if(e.disabled){return true}break;case"input":if(r&&e.type==="file"||e.disabled){return true}break;case"label":case"iframe":case"video":return true}return/\bneedsclick\b/.test(e.className)};e.prototype.needsFocus=function(e){switch(e.nodeName.toLowerCase()){case"textarea":return true;case"select":return!n;case"input":switch(e.type){case"button":case"checkbox":case"file":case"image":case"radio":case"submit":return false}return!e.disabled&&!e.readOnly;default:return/\bneedsfocus\b/.test(e.className)}};e.prototype.sendClick=function(e,t){var n,r;if(document.activeElement&&document.activeElement!==e){document.activeElement.blur()}r=t.changedTouches[0];n=document.createEvent("MouseEvents");n.initMouseEvent(this.determineEventType(e),true,true,window,1,r.screenX,r.screenY,r.clientX,r.clientY,false,false,false,false,0,null);n.forwardedTouchEvent=true;e.dispatchEvent(n)};e.prototype.determineEventType=function(e){if(n&&e.tagName.toLowerCase()==="select"){return"mousedown"}return"click"};e.prototype.focus=function(e){var t;if(r&&e.setSelectionRange&&e.type.indexOf("date")!==0&&e.type!=="time"&&e.type!=="month"){t=e.value.length;e.setSelectionRange(t,t)}else{e.focus()}};e.prototype.updateScrollParent=function(e){var t,n;t=e.fastClickScrollParent;if(!t||!t.contains(e)){n=e;do{if(n.scrollHeight>n.offsetHeight){t=n;e.fastClickScrollParent=n;break}n=n.parentElement}while(n)}if(t){t.fastClickLastScrollTop=t.scrollTop}};e.prototype.getTargetElementFromEventTarget=function(e){if(e.nodeType===Node.TEXT_NODE){return e.parentNode}return e};e.prototype.onTouchStart=function(e){var t,n,s;if(e.targetTouches.length>1){return true}t=this.getTargetElementFromEventTarget(e.target);n=e.targetTouches[0];if(r){s=window.getSelection();if(s.rangeCount&&!s.isCollapsed){return true}if(!i){if(n.identifier&&n.identifier===this.lastTouchIdentifier){e.preventDefault();return false}this.lastTouchIdentifier=n.identifier;this.updateScrollParent(t)}}this.trackingClick=true;this.trackingClickStart=e.timeStamp;this.targetElement=t;this.touchStartX=n.pageX;this.touchStartY=n.pageY;if(e.timeStamp-this.lastClickTime<this.tapDelay){e.preventDefault()}return true};e.prototype.touchHasMoved=function(e){var t=e.changedTouches[0],n=this.touchBoundary;if(Math.abs(t.pageX-this.touchStartX)>n||Math.abs(t.pageY-this.touchStartY)>n){return true}return false};e.prototype.onTouchMove=function(e){if(!this.trackingClick){return true}if(this.targetElement!==this.getTargetElementFromEventTarget(e.target)||this.touchHasMoved(e)){this.trackingClick=false;this.targetElement=null}return true};e.prototype.findControl=function(e){if(e.control!==undefined){return e.control}if(e.htmlFor){return document.getElementById(e.htmlFor)}return e.querySelector("button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea")};e.prototype.onTouchEnd=function(e){var t,o,u,a,f,l=this.targetElement;if(!this.trackingClick){return true}if(e.timeStamp-this.lastClickTime<this.tapDelay){this.cancelNextClick=true;return true}if(e.timeStamp-this.trackingClickStart>this.tapTimeout){return true}this.cancelNextClick=false;this.lastClickTime=e.timeStamp;o=this.trackingClickStart;this.trackingClick=false;this.trackingClickStart=0;if(s){f=e.changedTouches[0];l=document.elementFromPoint(f.pageX-window.pageXOffset,f.pageY-window.pageYOffset)||l;l.fastClickScrollParent=this.targetElement.fastClickScrollParent}u=l.tagName.toLowerCase();if(u==="label"){t=this.findControl(l);if(t){this.focus(l);if(n){return false}l=t}}else if(this.needsFocus(l)){if(e.timeStamp-o>100||r&&window.top!==window&&u==="input"){this.targetElement=null;return false}this.focus(l);this.sendClick(l,e);if(!r||u!=="select"){this.targetElement=null;e.preventDefault()}return false}if(r&&!i){a=l.fastClickScrollParent;if(a&&a.fastClickLastScrollTop!==a.scrollTop){return true}}if(!this.needsClick(l)){e.preventDefault();this.sendClick(l,e)}return false};e.prototype.onTouchCancel=function(){this.trackingClick=false;this.targetElement=null};e.prototype.onMouse=function(e){if(!this.targetElement){return true}if(e.forwardedTouchEvent){return true}if(!e.cancelable){return true}if(!this.needsClick(this.targetElement)||this.cancelNextClick){if(e.stopImmediatePropagation){e.stopImmediatePropagation()}else{e.propagationStopped=true}e.stopPropagation();e.preventDefault();return false}return true};e.prototype.onClick=function(e){var t;if(this.trackingClick){this.targetElement=null;this.trackingClick=false;return true}if(e.target.type==="submit"&&e.detail===0){return true}t=this.onMouse(e);if(!t){this.targetElement=null}return t};e.prototype.destroy=function(){var e=this.layer;if(n){e.removeEventListener("mouseover",this.onMouse,true);e.removeEventListener("mousedown",this.onMouse,true);e.removeEventListener("mouseup",this.onMouse,true)}e.removeEventListener("click",this.onClick,true);e.removeEventListener("touchstart",this.onTouchStart,false);e.removeEventListener("touchmove",this.onTouchMove,false);e.removeEventListener("touchend",this.onTouchEnd,false);e.removeEventListener("touchcancel",this.onTouchCancel,false)};e.notNeeded=function(e){var t;var r;var i;if(typeof window.ontouchstart==="undefined"){return true}r=+(/Chrome\/([0-9]+)/.exec(navigator.userAgent)||[,0])[1];if(r){if(n){t=document.querySelector("meta[name=viewport]");if(t){if(t.content.indexOf("user-scalable=no")!==-1){return true}if(r>31&&document.documentElement.scrollWidth<=window.outerWidth){return true}}}else{return true}}if(o){i=navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);if(i[1]>=10&&i[2]>=3){t=document.querySelector("meta[name=viewport]");if(t){if(t.content.indexOf("user-scalable=no")!==-1){return true}if(document.documentElement.scrollWidth<=window.outerWidth){return true}}}}if(e.style.msTouchAction==="none"){return true}if(e.style.touchAction==="none"){return true}return false};e.attach=function(t,n){return new e(t,n)};if(typeof define=="function"&&typeof define.amd=="object"&&define.amd){define(function(){return e})}else if(typeof module!=="undefined"&&module.exports){module.exports=e.attach;module.exports.FastClick=e}else{window.FastClick=e}})()
+
+
+/* Jonathan Snook - MIT License - https://github.com/snookca/prepareTransition */
+!(function(a){a.fn.prepareTransition=function(){return this.each(function(){var b=a(this);b.one("TransitionEnd webkitTransitionEnd transitionend oTransitionEnd",function(){b.removeClass("is-transitioning")});var c=["transition-duration","-moz-transition-duration","-webkit-transition-duration","-o-transition-duration"];var d=0;a.each(c,function(a,c){d=parseFloat(b.css(c))||d});if(d!=0){b.addClass("is-transitioning");b[0].offsetWidth}})}})(jQuery);
+
+            /* replaceUrlParam - http://stackoverflow.com/questions/7171099/how-to-replace-url-parameter-with-javascript-jquery */
+            function replaceUrlParam(e,r,a){var n=new RegExp("("+r+"=).*?(&|$)"),c=e;return c=e.search(n)>=0?e.replace(n,"$1"+a+"$2"):c+(c.indexOf("?")>0?"&":"?")+r+"="+a};
+/*
+ * Debounce function
+ * based on unminified version from http://davidwalsh.name/javascript-debounce-function
+ */
+            theme.debounce = function(n,t,u){var e;return function(){var a=this,r=arguments,i=function(){e=null,u||n.apply(a,r)},o=u&&!e;clearTimeout(e),e=setTimeout(i,t),o&&n.apply(a,r)}};
+
+            
+// Grids.Js => Start
+!function(i){"use strict";i.fn.equalHeight=function(){var t=[];return i.each(this,function(e,n){var r,s=i(n);r="border-box"===s.css("box-sizing")||"border-box"===s.css("-moz-box-sizing")?s.innerHeight():s.height(),t.push(r)}),this.css("height",Math.max.apply(window,t)+"px"),this},i.fn.equalHeightGrid=function(t){var e=this.filter(":visible");e.css("height","auto");for(var n=0;n<e.length;n++)if(n%t==0){for(var r=i(e[n]),s=1;s<t;s++)r=r.add(e[n+s]);r.equalHeight()}return this},i.fn.detectGridColumns=function(){var t=0,e=0;return this.filter(":visible").each(function(n,r){var s=i(r).offset().top;if(0!==t&&s!==t)return!1;e++,t=s}),e};var t=0;i.fn.responsiveEqualHeightGrid=function(){var e=this,n=".grids_"+t;function r(){var i=e.detectGridColumns();e.equalHeightGrid(i)}return e.data("grids-event-namespace",n),i(window).bind("resize"+n+" load"+n,r),r(),t++,this},i.fn.responsiveEqualHeightGridDestroy=function(){return this.css("height","auto"),i(window).unbind(this.data("grids-event-namespace")),this}}(window.jQuery);            
+// Grids.Js => end
+
+            /* ================ SLATE ================ */
+            window.theme = window.theme || {};
+
+            theme.Sections = function Sections() {
+              this.constructors = {};
+              this.instances = [];
+
+              $(document)
+              .on('shopify:section:load', this._onSectionLoad.bind(this))
+              .on('shopify:section:unload', this._onSectionUnload.bind(this))
+              .on('shopify:section:select', this._onSelect.bind(this))
+              .on('shopify:section:deselect', this._onDeselect.bind(this))
+              .on('shopify:block:select', this._onBlockSelect.bind(this))
+              .on('shopify:block:deselect', this._onBlockDeselect.bind(this));
+            };
+
+            theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
+              _createInstance: function(container, constructor) {
+                var $container = $(container);
+                var id = $container.attr('data-section-id');
+                var type = $container.attr('data-section-type');
+
+                constructor = constructor || this.constructors[type];
+
+                if (_.isUndefined(constructor)) {
+                  return;
+                }
+
+                var instance = _.assignIn(new constructor(container), {
+                  id: id,
+                  type: type,
+                  container: container
+                });
+
+                this.instances.push(instance);
+
+              },
+
+              _onSectionLoad: function(evt) {
+                var container = $('[data-section-id]', evt.target)[0];
+                if (container) {
+                  this._createInstance(container);
+                }
+              },
+
+              _onSectionUnload: function(evt) {
+                this.instances = _.filter(this.instances, function(instance) {
+                  var isEventInstance = (instance.id === evt.originalEvent.detail.sectionId);
+
+                  if (isEventInstance) {
+                    if (_.isFunction(instance.onUnload)) {
+                      instance.onUnload(evt);
+                    }
+                  }
+
+                  return !isEventInstance;
+                });
+              },
+
+              _onSelect: function(evt) {
+                // eslint-disable-next-line no-shadow
+                var instance = _.find(this.instances, function(instance) {
+                  return instance.id === evt.originalEvent.detail.sectionId;
+                });
+
+                if (!_.isUndefined(instance) && _.isFunction(instance.onSelect)) {
+                  instance.onSelect(evt);
+                }
+              },
+
+              _onDeselect: function(evt) {
+                // eslint-disable-next-line no-shadow
+                var instance = _.find(this.instances, function(instance) {
+                  return instance.id === evt.originalEvent.detail.sectionId;
+                });
+
+                if (!_.isUndefined(instance) && _.isFunction(instance.onDeselect)) {
+                  instance.onDeselect(evt);
+                }
+              },
+
+              _onBlockSelect: function(evt) {
+                // eslint-disable-next-line no-shadow
+                var instance = _.find(this.instances, function(instance) {
+                  return instance.id === evt.originalEvent.detail.sectionId;
+                });
+
+                if (!_.isUndefined(instance) && _.isFunction(instance.onBlockSelect)) {
+                  instance.onBlockSelect(evt);
+                }
+              },
+
+              _onBlockDeselect: function(evt) {
+                // eslint-disable-next-line no-shadow
+                var instance = _.find(this.instances, function(instance) {
+                  return instance.id === evt.originalEvent.detail.sectionId;
+                });
+
+                if (!_.isUndefined(instance) && _.isFunction(instance.onBlockDeselect)) {
+                  instance.onBlockDeselect(evt);
+                }
+              },
+
+              register: function(type, constructor) {
+                this.constructors[type] = constructor;
+
+                $('[data-section-type=' + type + ']').each(function(index, container) {
+                  this._createInstance(container, constructor);
+                }.bind(this));
+              }
+            });
+
+            /**
+ * Currency Helpers
+ * -----------------------------------------------------------------------------
+ * A collection of useful functions that help with currency formatting
+ *
+ * Current contents
+ * - formatMoney - Takes an amount in cents and returns it as a formatted dollar value.
+ *
+ * Alternatives
+ * - Accounting.js - http://openexchangerates.github.io/accounting.js/
+ *
+ */
+
+            theme.Currency = (function() {
+              var moneyFormat = '${{amount}}';
+
+              function formatMoney(cents, format) {
+                if (typeof cents === 'string') {
+                  cents = cents.replace('.', '');
+                }
+                var value = '';
+                var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+                var formatString = (format || moneyFormat);
+
+                function formatWithDelimiters(number, precision, thousands, decimal) {
+                  thousands = thousands || ',';
+                  decimal = decimal || '.';
+
+                  if (isNaN(number) || number == null) {
+                    return 0;
+                  }
+
+                  number = (number / 100.0).toFixed(precision);
+
+                  var parts = number.split('.');
+                  var dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+                  var centsAmount = parts[1] ? (decimal + parts[1]) : '';
+
+                  return dollarsAmount + centsAmount;
+                }
+
+                switch (formatString.match(placeholderRegex)[1]) {
+                  case 'amount':
+                    value = formatWithDelimiters(cents, 2);
+                    break;
+                  case 'amount_no_decimals':
+                    value = formatWithDelimiters(cents, 0);
+                    break;
+                  case 'amount_with_comma_separator':
+                    value = formatWithDelimiters(cents, 2, '.', ',');
+                    break;
+                  case 'amount_no_decimals_with_comma_separator':
+                    value = formatWithDelimiters(cents, 0, '.', ',');
+                    break;
+                  case 'amount_no_decimals_with_space_separator':
+                    value = formatWithDelimiters(cents, 0, ' ');
+                    break;
+                }
+
+                return formatString.replace(placeholderRegex, value);
+              }
+
+              return {
+                formatMoney: formatMoney
+              }
+            })();
+
+            /**
+ * Image Helper Functions
+ * -----------------------------------------------------------------------------
+ * A collection of functions that help with basic image operations.
+ *
+ */
+
+            theme.Images = (function() {
+
+              /**
+   * Preloads an image in memory and uses the browsers cache to store it until needed.
+   *
+   * @param {Array} images - A list of image urls
+   * @param {String} size - A shopify image size attribute
+   */
+
+              function preload(images, size) {
+                if (typeof images === 'string') {
+                  images = [images];
+                }
+
+                for (var i = 0; i < images.length; i++) {
+                  var image = images[i];
+                  this.loadImage(this.getSizedImageUrl(image, size));
+                }
+              }
+
+              /**
+   * Loads and caches an image in the browsers cache.
+   * @param {string} path - An image url
+   */
+              function loadImage(path) {
+                new Image().src = path;
+              }
+
+              /**
+   * Swaps the src of an image for another OR returns the imageURL to the callback function
+   * @param image
+   * @param element
+   * @param callback
+   */
+              function switchImage(image, element, callback) {
+                var size = this.imageSize(element.src);
+                var imageUrl = this.getSizedImageUrl(image.src, size);
+
+                if (callback) {
+                  callback(imageUrl, image, element); // eslint-disable-line callback-return
+                } else {
+                  element.src = imageUrl;
+                }
+              }
+
+              /**
+   * +++ Useful
+   * Find the Shopify image attribute size
+   *
+   * @param {string} src
+   * @returns {null}
+   */
+              function imageSize(src) {
+                var match = src.match(/.+_((?:pico|icon|thumb|small|compact|medium|large|grande)|\d{1,4}x\d{0,4}|x\d{1,4})[_\.@]/);
+
+                if (match !== null) {
+                  return match[1];
+                } else {
+                  return null;
+                }
+              }
+
+              /**
+   * +++ Useful
+   * Adds a Shopify size attribute to a URL
+   *
+   * @param src
+   * @param size
+   * @returns {*}
+   */
+              function getSizedImageUrl(src, size) {
+                if (size == null) {
+                  return src;
+                }
+
+                if (size === 'master') {
+                  return this.removeProtocol(src);
+                }
+
+                var match = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);
+
+                if (match != null) {
+                  var prefix = src.split(match[0]);
+                  var suffix = match[0];
+
+                  return this.removeProtocol(prefix[0] + '_' + size + suffix);
+                }
+
+                return null;
+              }
+
+              function removeProtocol(path) {
+                return path.replace(/http(s)?:/, '');
+              }
+
+              return {
+                preload: preload,
+                loadImage: loadImage,
+                switchImage: switchImage,
+                imageSize: imageSize,
+                getSizedImageUrl: getSizedImageUrl,
+                removeProtocol: removeProtocol
+              };
+            })();
+
+            /**
+ * Variant Selection scripts
+ * ------------------------------------------------------------------------------
+ *
+ * Handles change events from the variant inputs in any `cart/add` forms that may
+ * exist.  Also updates the master select and triggers updates when the variants
+ * price or image changes.
+ *
+ * @namespace variants
+ */
+
+            slate.Variants = (function() {
+
+              /**
+   * Variant constructor
+   *
+   * @param {object} options - Settings from `product.js`
+   */
+              function Variants(options) {
+                this.$container = options.$container;
+                this.product = options.product;
+                this.singleOptionSelector = options.singleOptionSelector;
+                this.originalSelectorId = options.originalSelectorId;
+                this.enableHistoryState = options.enableHistoryState;
+                this.currentVariant = this._getVariantFromOptions();
+
+                $(this.singleOptionSelector, this.$container).on('change', this._onSelectChange.bind(this));
+              }
+
+              Variants.prototype = _.assignIn({}, Variants.prototype, {
+
+                /**
+     * Get the currently selected options from add-to-cart form. Works with all
+     * form input elements.
+     *
+     * @return {array} options - Values of currently selected variants
+     */
+                _getCurrentOptions: function() {
+                  var currentOptions = _.map($(this.singleOptionSelector, this.$container), function(element) {
+                    var $element = $(element);
+                    var type = $element.attr('type');
+                    var currentOption = {};
+
+                    if (type === 'radio' || type === 'checkbox') {
+                      if ($element[0].checked) {
+                        currentOption.value = $element.val();
+                        currentOption.index = $element.data('index');
+
+                        return currentOption;
+                      } 
+                      else {
+                        return false;
+                      }
+                    } else {
+                      currentOption.value = $element.val();
+                      currentOption.index = $element.data('index');
+
+                      return currentOption;
+                    }
+                  });
+
+                  // remove any unchecked input values if using radio buttons or checkboxes
+                  currentOptions = _.compact(currentOptions);
+
+                  return currentOptions;
+                },
+
+                /**
+     * Find variant based on selected values.
+     *
+     * @param  {array} selectedValues - Values of variant inputs
+     * @return {object || undefined} found - Variant object from product.variants
+     */
+                _getVariantFromOptions: function() {
+                  var selectedValues = this._getCurrentOptions();
+                  var variants = this.product.variants;
+
+                  var found = _.find(variants, function(variant) {
+                    return selectedValues.every(function(values) {
+                      return _.isEqual(variant[values.index], values.value);
+                    });
+                  });
+
+                  return found;
+                },
+
+                /**
+     * Event handler for when a variant input changes.
+     */
+                _onSelectChange: function() {
+                  var variant = this._getVariantFromOptions();
+
+                  this.$container.trigger({
+                    type: 'variantChange',
+                    variant: variant
+                  });
+
+                  if (!variant) {
+                    return;
+                  }
+
+                  this._updateMasterSelect(variant);
+                  this._updateImages(variant);
+                  this._updatePrice(variant);
+                  this._updateSKU(variant);
+                  this.currentVariant = variant;
+
+                  if (this.enableHistoryState) {
+                    this._updateHistoryState(variant);
+                  }
+                },
+
+                /**
+     * Trigger event when variant image changes
+     *
+     * @param  {object} variant - Currently selected variant
+     * @return {event}  variantImageChange
+     */
+                _updateImages: function(variant) {
+                  var variantImage = variant.featured_image || {};
+                  var currentVariantImage = this.currentVariant.featured_image || {};
+
+                  if (!variant.featured_image || variantImage.src === currentVariantImage.src) {
+                    return;
+                  }
+
+                  this.$container.trigger({
+                    type: 'variantImageChange',
+                    variant: variant
+                  });
+                },
+
+                /**
+     * Trigger event when variant price changes.
+     *
+     * @param  {object} variant - Currently selected variant
+     * @return {event} variantPriceChange
+     */
+                _updatePrice: function(variant) {
+                  if (variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
+                    return;
+                  }
+
+                  this.$container.trigger({
+                    type: 'variantPriceChange',
+                    variant: variant
+                  });
+                },
+
+                /**
+     * Trigger event when variant SKU changes.
+     *
+     * @param  {object} variant - Currently selected variant
+     * @return {event} variantSKUChange
+     */
+                _updateSKU: function(variant) {
+                  if (variant.sku === this.currentVariant.sku) {
+                    return;
+                  }
+
+                  this.$container.trigger({
+                    type: 'variantSKUChange',
+                    variant: variant
+                  });
+                },
+
+                /**
+     * Update history state for product deeplinking
+     *
+     * @param  {variant} variant - Currently selected variant
+     * @return {k}         [description]
+     */
+                _updateHistoryState: function(variant) {
+                  if (!history.replaceState || !variant) {
+                    return;
+                  }
+
+                  var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?variant=' + variant.id;
+                  window.history.replaceState({path: newurl}, '', newurl);
+                },
+
+                /**
+     * Update hidden master select of variant change
+     *
+     * @param  {variant} variant - Currently selected variant
+     */
+                _updateMasterSelect: function(variant) {
+                  $(this.originalSelectorId, this.$container).val(variant.id);
+                }
+              });
+
+              return Variants;
+            })();
+
+
+            /* ================ MODULES ================ */
+            {% if settings.cart_type == 'drawer' %}
+
+/*============================================================================
+  Ajax the add to cart experience by revealing it in a side drawer
+  Plugin Documentation - http://shopify.github.io/Timber/#ajax-cart
+  (c) Copyright 2015 Shopify Inc. Author: Carson Shold (@cshold). All Rights Reserved.
+
+  This file includes:
+    - Basic Shopify Ajax API calls
+    - Ajax cart plugin
+
+  This requires:
+    - jQuery 1.8+
+    - handlebars.min.js (for cart template)
+    - modernizer.min.js
+    - snippet/ajax-cart-template.liquid
+
+  Customized version of Shopify's jQuery API
+  (c) Copyright 2009-2015 Shopify Inc. Author: Caroline Schnapp. All Rights Reserved.
+==============================================================================*/
+if ((typeof ShopifyAPI) === 'undefined') { ShopifyAPI = {}; }
+
+            /*============================================================================
+  API Helper Functions
+==============================================================================*/
+            function attributeToString(attribute) {
+              if ((typeof attribute) !== 'string') {
+                attribute += '';
+                if (attribute === 'undefined') {
+                  attribute = '';
+                }
+              }
+              return jQuery.trim(attribute);
+            };
+
+/*============================================================================
+  API Functions
+==============================================================================*/
+ShopifyAPI.onCartUpdate = function(cart) {
+  // alert('There are now ' + cart.item_count + ' items in the cart.');
+};
+
+ShopifyAPI.updateCartNote = function(note, callback) {
+  var params = {
+    type: 'POST',
+    url: '/cart/update.js',
+    data: 'note=' + attributeToString(note),
+    dataType: 'json',
+    success: function(cart) {
+      if ((typeof callback) === 'function') {
+        callback(cart);
+      }
+      else {
+        ShopifyAPI.onCartUpdate(cart);
+      }
+    },
+    error: function(XMLHttpRequest, textStatus) {
+      ShopifyAPI.onError(XMLHttpRequest, textStatus);
+    }
+  };
+  jQuery.ajax(params);
+};
+
+ShopifyAPI.onError = function(XMLHttpRequest, textStatus) {
+  var data = eval('(' + XMLHttpRequest.responseText + ')');
+  if (!!data.message) {
+    alert(data.message + '(' + data.status  + '): ' + data.description);
+  }
+};
+
+/*============================================================================
+  POST to cart/add.js returns the JSON of the cart
+    - Allow use of form element instead of just id
+    - Allow custom error callback
+==============================================================================*/
+ShopifyAPI.addItemFromForm = function(form, callback, errorCallback) {
+  var params = {
+    type: 'POST',
+    url: '/cart/add.js',
+    data: jQuery(form).serialize(),
+    dataType: 'json',
+    success: function(line_item) {
+      if ((typeof callback) === 'function') {
+        callback(line_item, form);
+      }
+      else {
+        ShopifyAPI.onItemAdded(line_item, form);
+      }
+      var qty = $(form).find('[name="quantity"]');
+      $('body').trigger('addToCart.livestock', [line_item, qty ? qty.val() : 1]);
+      
+      $(form).find('.ctm_add_to_cart #AddToCartText').text('Thank you!');
+      $(form).find('.ctm_add_to_cart').addClass('inverted');
+
+      $(form).find('.size_text_enabled #AddToCartText').text('Added');
+      $(form).find('.size_text_enabled').addClass('inverted');
+
+      $(form).find('.product-single__add-to-cart button span#AddToCartText').text('Thank you!');
+      $(form).find('.product-single__add-to-cart button').addClass('btn-invert');
+
+      $(form).find('.product-single__add-to-cart button.size_text_enabled span#AddToCartText').text('Added');
+      $(form).find('.product-single__add-to-cart button.size_text_enabled').addClass('btn-invert');
+
+      setTimeout(function(e){
+        $(form).find('.product-single__add-to-cart button span#AddToCartText').text('Add to cart');
+        $(form).find('.product-single__add-to-cart button').removeClass('btn-invert');
+        $(form).find('.ctm_add_to_cart').removeClass('inverted');
+        $(form).find('.ctm_add_to_cart').removeClass('disabled');
+        $(form).find('.ctm_add_to_cart #AddToCartText').text('Add to cart');
+        $(form).find('.ctm_add_to_cart').removeClass('size_text');
+      },3000)
+    },
+    error: function(XMLHttpRequest, textStatus) {
+      if ((typeof errorCallback) === 'function') {
+        errorCallback(XMLHttpRequest, textStatus);
+      }
+      else {
+        ShopifyAPI.onError(XMLHttpRequest, textStatus);
+      }
+      $(form).find('.product-single__add-to-cart .err').remove();
+      $(form).find('.ctm_add_to_cart #AddToCartText').text('Sold Out');
+      $(form).find('.product-single__add-to-cart').append('<span class="err">Maximum quantity reached.</span>');
+      setTimeout(function(e){
+        $(form).find('.ctm_add_to_cart').removeClass('disabled');
+        $(form).find('.product-single__add-to-cart .err').remove();
+        $(form).find('.ctm_add_to_cart #AddToCartText').text('Add to cart');
+      },3000)
+    }
+  };
+  jQuery.ajax(params);
+};
+
+
+
+/* Get from cart.js returns the cart in JSON*/
+ShopifyAPI.getCart = function(callback) {
+  jQuery.getJSON('/cart.js', function (cart, textStatus) {
+    if ((typeof callback) === 'function') {
+      callback(cart);
+      $('.cart-link__bubble').html(cart.item_count);
+    }
+    else {
+      ShopifyAPI.onCartUpdate(cart);
+    }
+  });
+};
+
+/* POST to cart/change.js returns the cart in JSON */
+ShopifyAPI.changeItem = function(line, quantity, callback) {
+  var params = {
+    type: 'POST',
+    url: '/cart/change.js',
+    data: 'quantity=' + quantity + '&line=' + line,
+    dataType: 'json',
+    success: function(cart) {
+      $('body').trigger('changeItem.livestock', [line, quantity, cart]);
+      if ((typeof callback) === 'function') {
+        callback(cart);
+      }
+      else {
+        ShopifyAPI.onCartUpdate(cart);
+      }
+    },
+    error: function(XMLHttpRequest, textStatus) {
+      ShopifyAPI.onError(XMLHttpRequest, textStatus);
+    }
+  };
+  jQuery.ajax(params);
+};
+
+/*============================================================================
+  Ajax Shopify Add To Cart
+==============================================================================*/
+
+
+var ajaxCart = (function(module, $) {
+  /* ================ */
+
+  'use strict';
+
+  // Public functions
+  var init, loadCart;
+
+  // Private general variables
+  var settings, isUpdating, $body;
+
+  // Private plugin variables
+  var $formContainer, $addToCart, $cartCountSelector, $cartCostSelector, $cartContainer, $drawerContainer;
+
+  // Private functions
+  var updateCountPrice, formOverride, itemAddedCallback, itemErrorCallback, cartUpdateCallback, buildCart, cartCallback, adjustCart, adjustCartCallback, qtySelectors, validateQty;
+
+  /*============================================================================
+    Initialise the plugin and define global options
+  ==============================================================================*/
+  init = function (options) {
+
+    // Default settings
+    settings = {
+      formSelector       : 'form[action^="/cart/add"]',
+      cartContainer      : '#CartContainer',
+      addToCartSelector  : 'input[type="submit"]',
+      cartCountSelector  : null,
+      cartCostSelector   : null,
+      moneyFormat        : '${{amount}}',
+      disableAjaxCart    : false,
+      enableQtySelectors : true
+    };
+
+    // Override defaults with arguments
+    $.extend(settings, options);
+
+    // Select DOM elements
+    $formContainer     = $(settings.formSelector);
+    $cartContainer     = $(settings.cartContainer);
+    $addToCart         = $formContainer.find(settings.addToCartSelector);
+    $cartCountSelector = $(settings.cartCountSelector);
+    $cartCostSelector  = $(settings.cartCostSelector);
+
+    // General Selectors
+    $body = $('body');
+
+    // Track cart activity status
+    isUpdating = false;
+
+    // Setup ajax quantity selectors on the any template if enableQtySelectors is true
+    if (settings.enableQtySelectors) {
+      qtySelectors();
+    }
+
+    // Take over the add to cart form submit action if ajax enabled
+    if (!settings.disableAjaxCart && $addToCart.length) {
+      formOverride();
+    }
+    NewformOverride();
+
+    // Run this function in case we're using the quantity selector outside of the cart
+    adjustCart();
+  };
+
+  loadCart = function () {
+    $body.addClass('drawer--is-loading');
+    ShopifyAPI.getCart(cartUpdateCallback);
+  };
+
+  updateCountPrice = function (cart) {
+    if ($cartCountSelector) {
+      $cartCountSelector.html(cart.item_count).removeClass('hidden-count');
+
+      if (cart.item_count === 0) {
+        $cartCountSelector.addClass('hidden-count');
+      }
+    }
+    if ($cartCostSelector) {
+      $cartCostSelector.html(theme.Currency.formatMoney(cart.total_price, settings.moneyFormat));
+    }
+  };
+
+  formOverride = function () {
+    $formContainer.on('submit', function(evt) {
+      evt.preventDefault();
+
+      // Add class to be styled if desired
+      $addToCart.removeClass('is-added').addClass('is-adding');
+
+      // Remove any previous quantity errors
+      $('.qty-error').remove();
+
+      ShopifyAPI.addItemFromForm(evt.target, itemAddedCallback, itemErrorCallback);
+    });
+  };
+  
+  function NewformOverride() {
+    $(document).on('click','.ctm_add_to_cart', function(evt) {
+      evt.preventDefault();
+      $(this).addClass('disabled');
+      var len = $(this).closest('form').find('.product-form__item.option-size .selected-label').length;
+      if(len > 0){
+        // Add class to be styled if desired
+        $(this).removeClass('is-added').addClass('is-adding');
+        // Remove any previous quantity errors
+        $('.qty-error').remove();
+        var $form = $(this).closest('form');
+        $(this).find('#AddToCartText').text('Adding...');
+        ShopifyAPI.addItemFromForm($form, itemAddedCallback, itemErrorCallback);
+      }else{
+      	$(this).find('#AddToCartText').text('Select Size');
+        $(this).addClass('disabled');
+        var _this = $(this);
+        setTimeout(function(e){
+          _this.find('#AddToCartText').text('Add to cart');
+          _this.removeClass('disabled');
+        },2000)
+      }
+      return false;
+    });
+  };
+  
+
+  itemAddedCallback = function (product) {
+    $addToCart.removeClass('is-adding').addClass('is-added');
+
+    ShopifyAPI.getCart(cartUpdateCallback);
+  };
+
+  itemErrorCallback = function (XMLHttpRequest, textStatus) {
+    var data = eval('(' + XMLHttpRequest.responseText + ')');
+    $addToCart.removeClass('is-adding is-added');
+
+    if (!!data.message) {
+      if (data.status == 422) {
+        $formContainer.after('<div class="errors qty-error">'+ data.description +'</div>')
+      }
+    }
+  };
+
+  cartUpdateCallback = function (cart) {
+    // Update quantity and price
+    updateCountPrice(cart);
+    buildCart(cart);
+  };
+
+  buildCart = function (cart) {
+    // Start with a fresh cart div
+    $cartContainer.empty();
+
+    // Show empty cart
+    if (cart.item_count === 0) {
+      $cartContainer
+      .append('<p class="cart--empty-message">' + {{ 'cart.general.empty' | t | json }} + '</p>\n'
+              + '<p class="cookie-message">' + {{ 'cart.general.cookies_required' | t | json }} + '</p>');
+      cartCallback(cart);
+      return;
+    }
+
+    // Handlebars.js cart layout
+    var items = [],
+        item = {},
+        data = {},
+        source = $("#CartTemplate").html(),
+        template = Handlebars.compile(source);
+
+    // Add each item to our handlebars.js data
+    $.each(cart.items, function(index, cartItem) {
+
+      /* Hack to get product image thumbnail
+       *   - If image is not null
+       *     - Remove file extension, add _small, and re-add extension
+       *     - Create server relative link
+       *   - A hard-coded url of no-image
+      */
+      if (cartItem.image != null){
+        var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_medium$1").replace('http:', '');
+      } else {
+        var prodImg = "//cdn.shopify.com/s/assets/admin/no-image-medium-cc9732cb976dd349a0df1d39816fbcc7.gif";
+      }
+
+      if (cartItem.properties !== null) {
+        $.each(cartItem.properties, function(key, value) {
+          if (key.charAt(0) === '_' || !value) {
+            delete cartItem.properties[key];
+          }
+        });
+      }
+
+      // Create item's data object and add to 'items' array
+      item = {
+        key: cartItem.key,
+        line: index + 1, // Shopify uses a 1+ index in the API
+        url: cartItem.url,
+        img: prodImg,
+        name: cartItem.product_title,
+        variation: cartItem.variant_title,
+        properties: cartItem.properties,
+        itemAdd: cartItem.quantity + 1,
+        itemMinus: cartItem.quantity - 1,
+        itemQty: cartItem.quantity,
+        price: theme.Currency.formatMoney(cartItem.price, settings.moneyFormat),
+        discountedPrice: theme.Currency.formatMoney((cartItem.price - (cartItem.total_discount/cartItem.quantity)), settings.moneyFormat),
+        discounts: cartItem.discounts,
+        discountsApplied: cartItem.price === (cartItem.price - cartItem.total_discount) ? false : true,
+        vendor: cartItem.vendor
+      };
+
+      items.push(item);
+    });
+
+    // Gather all cart data and add to DOM
+    data = {
+      items: items,
+      note: cart.note,
+      totalPrice: theme.Currency.formatMoney(cart.total_price, settings.moneyFormat),
+      totalCartDiscount: cart.total_discount === 0 ? 0 : {{ 'cart.general.savings_html' | t: price: '[savings]' | json }}.replace('[savings]', theme.Currency.formatMoney(cart.total_discount, settings.moneyFormat))
+    };
+
+    $cartContainer.append(template(data));
+
+    cartCallback(cart);
+  };
+
+  cartCallback = function(cart) {
+    $body.removeClass('drawer--is-loading');
+    $body.trigger('ajaxCart.afterCartLoad', cart);
+
+
+
+    if (window.Shopify && Shopify.StorefrontExpressButtons) {
+      Shopify.StorefrontExpressButtons.initialize();
+    }
+  };
+
+  adjustCart = function () {
+    // Delegate all events because elements reload with the cart
+
+    //======== removing item =======
+
+    $body.on('click', '.ajaxcart__qty--remove', function(e) {
+      if (isUpdating) {
+        //alert('test');
+        return;
+      }
+      // alert('test1');
+      var $el = $(this),
+          line = $el.data('line'),
+          //$qtySelector = $el.parent().parent().find('.qty1 .ajaxcart__qty-num'),
+          $qtySelector = $el.parent().siblings('.qty-class').find('.ajaxcart__qty-num'),
+          qty = parseInt($qtySelector.val().replace(/\D/g, ''));
+
+      var qty = validateQty(qty);
+      qty = 0;
+
+      // If it has a data-line, update the cart.
+      // Otherwise, just update the input's number
+      if (line) {
+        updateQuantity(line, qty);
+        // alert('test1');
+      } else {
+        $qtySelector.val(qty);
+        // alert('test2');
+      }
+    });
+
+
+
+    // Add or remove from the quantity
+    $body.on('click', '.ajaxcart__qty-adjust', function() {
+      if (isUpdating) {
+        return;
+      }
+      var $el = $(this),
+          line = $el.data('line'),
+          $qtySelector = $el.siblings('.ajaxcart__qty-num'),
+          qty = parseInt($qtySelector.val().replace(/\D/g, ''));
+
+      var qty = validateQty(qty);
+
+      // Add or subtract from the current quantity
+      if ($el.hasClass('ajaxcart__qty--plus')) {
+        qty += 1;
+      } else {
+        qty -= 1;
+        if (qty <= 0) qty = 0;
+      }
+
+      // If it has a data-line, update the cart.
+      // Otherwise, just update the input's number
+      if (line) {
+        updateQuantity(line, qty);
+      } else {
+        $qtySelector.val(qty);
+      }
+    });
+
+    // Update quantity based on input on change
+    $body.on('change', '.ajaxcart__qty-num', function() {
+      if (isUpdating) {
+        return;
+      }
+      var $el = $(this),
+          line = $el.data('line'),
+          qty = parseInt($el.val().replace(/\D/g, ''));
+
+      var qty = validateQty(qty);
+
+      // If it has a data-line, update the cart
+      if (line) {
+        updateQuantity(line, qty);
+      }
+    });
+
+    // Prevent cart from being submitted while quantities are changing
+    $body.on('submit', 'form.ajaxcart', function(evt) {
+      if (isUpdating) {
+        evt.preventDefault();
+      }
+    });
+
+    // Highlight the text when focused
+    $body.on('focus', '.ajaxcart__qty-adjust', function() {
+      var $el = $(this);
+      setTimeout(function() {
+        $el.select();
+      }, 50);
+    });
+
+    function updateQuantity(line, qty) {
+      isUpdating = true;
+
+      // Add activity classes when changing cart quantities
+      var $row = $('.ajaxcart__row[data-line="' + line + '"]').addClass('is-loading');
+
+      if (qty === 0) {
+        $row.parent().addClass('is-removed');
+      }
+
+      // Slight delay to make sure removed animation is done
+      setTimeout(function() {
+        ShopifyAPI.changeItem(line, qty, adjustCartCallback);
+      }, 250);
+    }
+
+    // Save note anytime it's changed
+    $body.on('change', 'textarea[name="note"]', function() {
+      var newNote = $(this).val();
+
+      // Update the cart note in case they don't click update/checkout
+      ShopifyAPI.updateCartNote(newNote, function(cart) {});
+    });
+  };
+
+  adjustCartCallback = function (cart) {
+    // Update quantity and price
+    updateCountPrice(cart);
+
+    // Reprint cart on short timeout so you don't see the content being removed
+    setTimeout(function() {
+      ShopifyAPI.getCart(buildCart);
+      isUpdating = false;
+    }, 150)
+  };
+
+  qtySelectors = function() {
+    
+    
+// do not apply on collection pages
+    const currentPath = window.location.pathname;
+    let isSparqPage = currentPath.includes('/collections/') || currentPath.includes('/pages/search-results');
+    if(isSparqPage){
+      return;
+    }
+    
+    // Change number inputs to JS ones, similar to ajax cart but without API integration.
+    // Make sure to add the existing name and id to the new input element
+    var numInputs = $('input[type="number"]');
+
+    if (numInputs.length) {
+      numInputs.each(function() {
+        var $el = $(this),
+            currentQty = $el.val(),
+            inputName = $el.attr('name'),
+            inputId = $el.attr('id');
+
+        var itemAdd = currentQty + 1,
+            itemMinus = currentQty - 1,
+            itemQty = currentQty;
+
+        var source   = $("#JsQty").html(),
+            template = Handlebars.compile(source),
+            data = {
+              key: $el.data('id'),
+              itemQty: itemQty,
+              itemAdd: itemAdd,
+              itemMinus: itemMinus,
+              inputName: inputName,
+              inputId: inputId
+            };
+
+        // Append new quantity selector then remove original
+        $el.after(template(data)).remove();
+      });
+
+      // Setup listeners to add/subtract from the input
+      $('.js-qty__adjust').on('click', function() {
+        var $el = $(this),
+            id = $el.data('id'),
+            $qtySelector = $el.siblings('.js-qty__num'),
+            qty = parseInt($qtySelector.val().replace(/\D/g, ''));
+
+        var qty = validateQty(qty);
+
+        // Add or subtract from the current quantity
+        if ($el.hasClass('js-qty__adjust--plus')) {
+          qty += 1;
+        } else {
+          qty -= 1;
+          if (qty <= 1) qty = 1;
+        }
+
+        // Update the input's number
+        $qtySelector.val(qty);
+      });
+    }
+  };
+
+  validateQty = function (qty) {
+    if((parseFloat(qty) == parseInt(qty)) && !isNaN(qty)) {
+      // We have a valid number!
+    } else {
+      // Not a number. Default to 1.
+      qty = 1;
+    }
+    return qty;
+  };
+
+  module = {
+    init: init,
+    load: loadCart
+  };
+
+  return module;
+
+}(ajaxCart || {}, jQuery));
+
+{% endif %}
+/*============================================================================
+  Money Format
+  - Shopify.format money is defined in option_selection.js.
+    If that file is not included, it is redefined here.
+==============================================================================*/
+window.timber = window.timber || {};
+
+timber.initCache = function () {
+  timber.cache = {
+    // General
+    $html                    : $('html'),
+    $body                    : $('body'),
+
+    // Navigation
+    $navigation              : $('#AccessibleNav'),
+    $mobileSubNavToggle      : $('.mobile-nav__toggle-btn'),
+
+    // Product Page
+    $productImage            : $('#ProductPhotoImg'),
+    $optionSelector          : $('.single-option-selector'),
+
+    // Customer Pages
+    $recoverPasswordLink     : $('#RecoverPassword'),
+    $hideRecoverPasswordLink : $('#HideRecoverPasswordLink'),
+    $recoverPasswordForm     : $('#RecoverPasswordForm'),
+    $customerLoginForm       : $('#CustomerLoginForm'),
+    $passwordResetSuccess    : $('#ResetSuccess')
+  };
+};
+
+timber.init = function () {
+  FastClick.attach(document.body);
+  timber.initCache();
+  timber.accessibleNav();
+  timber.drawersInit();
+  timber.responsiveVideos();
+  timber.loginForms();
+};
+
+timber.accessibleNav = function () {
+  var $nav = timber.cache.$navigation,
+      $allLinks = $nav.find('a'),
+      $topLevel = $nav.children('li').find('a'),
+      $parents = $nav.find('.site-nav--has-dropdown'),
+      $subMenuLinks = $nav.find('.site-nav__dropdown').find('a'),
+      activeClass = 'nav-hover',
+      focusClass = 'nav-focus';
+
+  // Mouseenter
+  $parents.on('mouseenter touchstart', function(evt) {
+    var $el = $(this);
+
+    if (!$el.hasClass(activeClass)) {
+      // force stop the click from happening
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
+    }
+
+    showDropdown($el);
+  });
+
+  // Mouseout
+  $parents.on('mouseleave', function() {
+    hideDropdown($(this));
+  });
+
+  $subMenuLinks.on('touchstart', function(evt) {
+    // Prevent touchstart on body from firing instead of link
+    evt.stopImmediatePropagation();
+  });
+
+  $allLinks.focus(function() {
+    handleFocus($(this));
+  });
+
+  $allLinks.blur(function() {
+    removeFocus($topLevel);
+  });
+
+  // accessibleNav private methods
+  function handleFocus ($el) {
+    var $subMenu = $el.next('ul'),
+        hasSubMenu = $subMenu.hasClass('sub-nav') ? true : false,
+        isSubItem = $('.site-nav__dropdown').has($el).length,
+        $newFocus = null;
+
+    // Add focus class for top level items, or keep menu shown
+    if (!isSubItem) {
+      removeFocus($topLevel);
+      addFocus($el);
+    } else {
+      $newFocus = $el.closest('.site-nav--has-dropdown').find('a');
+      addFocus($newFocus);
+    }
+  }
+
+  function showDropdown ($el) {
+    $el.addClass(activeClass);
+
+    setTimeout(function() {
+      timber.cache.$body.on('touchstart', function() {
+        hideDropdown($el);
+      });
+    }, 250);
+  }
+
+  function hideDropdown ($el) {
+    $el.removeClass(activeClass);
+    timber.cache.$body.off('touchstart');
+  }
+
+  function addFocus ($el) {
+    $el.addClass(focusClass);
+  }
+
+  function removeFocus ($el) {
+    $el.removeClass(focusClass);
+  }
+};
+
+timber.drawersInit = function () {
+  if (theme.settings.cartType === 'drawer') {
+    timber.RightDrawer = new timber.Drawers('CartDrawer', 'right', {
+      'onDrawerOpen': ajaxCart.load
+    });
+  }
+};
+
+timber.getHash = function () {
+  return window.location.hash;
+};
+
+timber.responsiveVideos = function () {
+  var $iframeVideo = $('iframe[src*="youtube.com/embed"], iframe[src*="player.vimeo"]');
+  var $iframeReset = $iframeVideo.add('iframe#admin_bar_iframe');
+
+  $iframeVideo.each(function () {
+    // Add wrapper to make video responsive
+    if (!$(this).parents('.video-wrapper').length) {
+      $(this).wrap('<div class="video-wrapper"></div>');
+    }
+  });
+
+  $iframeReset.each(function () {
+    // Re-set the src attribute on each iframe after page load
+    // for Chrome's "incorrect iFrame content on 'back'" bug.
+    // https://code.google.com/p/chromium/issues/detail?id=395791
+    // Need to specifically target video and admin bar
+    this.src = this.src;
+  });
+};
+
+timber.loginForms = function () {
+  function showRecoverPasswordForm() {
+    timber.cache.$recoverPasswordForm.show();
+    timber.cache.$customerLoginForm.hide();
+  }
+
+  function hideRecoverPasswordForm() {
+    timber.cache.$recoverPasswordForm.hide();
+    timber.cache.$customerLoginForm.show();
+  }
+
+  timber.cache.$recoverPasswordLink.on('click', function(evt) {
+    evt.preventDefault();
+    showRecoverPasswordForm();
+  });
+
+  timber.cache.$hideRecoverPasswordLink.on('click', function(evt) {
+    evt.preventDefault();
+    hideRecoverPasswordForm();
+  });
+
+  // Allow deep linking to recover password form
+  if (timber.getHash() == '#recover') {
+    showRecoverPasswordForm();
+  }
+};
+
+timber.resetPasswordSuccess = function () {
+  timber.cache.$passwordResetSuccess.show();
+};
+
+/*============================================================================
+  Drawer modules
+  - Docs http://shopify.github.io/Timber/#drawers
+==============================================================================*/
+timber.Drawers = (function () {
+  var Drawer = function (id, position, options) {
+    var defaults = {
+      close: '.js-drawer-close',
+      open: '.js-drawer-open-' + position,
+      openClass: 'js-drawer-open',
+      dirOpenClass: 'js-drawer-open-' + position
+    };
+
+    this.$nodes = {
+      parent: $('body, html'),
+      page: $('#PageContainer'),
+      moved: $('.page-container')
+    };
+
+    this.config = $.extend(defaults, options);
+    this.position = position;
+
+    this.$drawer = $('#' + id);
+
+    if (!this.$drawer.length) {
+      return false;
+    }
+
+    this.drawerIsOpen = false;
+    this.init();
+  };
+
+  Drawer.prototype.init = function () {
+    var $openBtn = $(this.config.open);
+
+    // Add aria controls
+    $openBtn.attr('aria-expanded', 'false');
+
+    $openBtn.on('click', $.proxy(this.open, this));
+    this.$drawer.find(this.config.close).on('click', $.proxy(this.close, this));
+  };
+
+  Drawer.prototype.open = function (evt) {
+    // Keep track if drawer was opened from a click, or called by another function
+    var externalCall = false;
+
+    // don't open an opened drawer
+    if (this.drawerIsOpen) {
+      return;
+    }
+
+    // Prevent following href if link is clicked
+    if (evt) {
+      evt.preventDefault();
+    } else {
+      externalCall = true;
+    }
+
+    // Without this, the drawer opens, the click event bubbles up to $nodes.page
+    // which closes the drawer.
+    if (evt && evt.stopPropagation) {
+      evt.stopPropagation();
+      // save the source of the click, we'll focus to this on close
+      this.$activeSource = $(evt.currentTarget);
+    }
+
+    if (this.drawerIsOpen && !externalCall) {
+      return this.close();
+    }
+
+    // Add is-transitioning class to moved elements on open so drawer can have
+    // transition for close animation
+    this.$nodes.moved.addClass('is-transitioning');
+    this.$drawer.prepareTransition();
+
+    this.$nodes.parent.addClass(this.config.openClass + ' ' + this.config.dirOpenClass);
+    this.drawerIsOpen = true;
+
+    // Set focus on drawer
+    Drawer.prototype.trapFocus({
+      $container: this.$drawer,
+      namespace: 'drawer_focus'
+    });
+
+    // Run function when draw opens if set
+    if (this.config.onDrawerOpen && typeof(this.config.onDrawerOpen) == 'function') {
+      if (!externalCall) {
+        this.config.onDrawerOpen();
+      }
+    }
+
+    if (this.$activeSource && this.$activeSource.attr('aria-expanded')) {
+      this.$activeSource.attr('aria-expanded', 'true');
+    }
+
+    this.bindEvents();
+  };
+
+  Drawer.prototype.close = function () {
+    // don't close a closed drawer
+    if (!this.drawerIsOpen) {
+      return;
+    }
+
+    // deselect any focused form elements
+    $(document.activeElement).trigger('blur');
+
+    // Ensure closing transition is applied to moved elements, like the nav
+    this.$nodes.moved.prepareTransition({ disableExisting: true });
+    this.$drawer.prepareTransition({ disableExisting: true });
+
+    this.$nodes.parent.removeClass(this.config.dirOpenClass + ' ' + this.config.openClass);
+
+    this.drawerIsOpen = false;
+
+    // Remove focus on drawer
+    Drawer.prototype.removeTrapFocus({
+      $container: this.$drawer,
+      namespace: 'drawer_focus'
+    });
+
+    if (this.$activeSource && this.$activeSource.attr('aria-expanded')) {
+      this.$activeSource.attr('aria-expanded', 'false');
+    }
+
+    this.unbindEvents();
+  };
+
+  /**
+   * Traps the focus in a particular container
+   *
+  * @param {object} options - Options to be used
+  * @param {jQuery} options.$container - Container to trap focus within
+  * @param {jQuery} options.$elementToFocus - Element to be focused when focus leaves container
+  * @param {string} options.namespace - Namespace used for new focus event handler
+  */
+  Drawer.prototype.trapFocus = function (options) {
+    var eventName = options.namespace
+    ? 'focusin.' + options.namespace
+    : 'focusin';
+
+    if (!options.$elementToFocus) {
+      options.$elementToFocus = options.$container;
+      options.$container.attr('tabindex', '-1');
+    }
+
+    options.$elementToFocus.focus();
+
+    $(document).on(eventName, function (evt) {
+      if (options.$container[0] !== evt.target && !options.$container.has(evt.target).length) {
+        options.$container.focus();
+      }
+    });
+  };
+
+  /**
+   * Removes the trap of focus in a particular container
+   *
+   * @param {object} options - Options to be used
+   * @param {jQuery} options.$container - Container to trap focus within
+   * @param {string} options.namespace - Namespace used for new focus event handler
+   */
+  Drawer.prototype.removeTrapFocus = function (options) {
+    var eventName = options.namespace
+    ? 'focusin.' + options.namespace
+    : 'focusin';
+
+    if (options.$container && options.$container.length) {
+      options.$container.removeAttr('tabindex');
+    }
+
+    $(document).off(eventName);
+  };
+
+  Drawer.prototype.bindEvents = function() {
+    // Lock scrolling on mobile
+    this.$nodes.page.on('touchmove.drawer', function () {
+      return false;
+    });
+
+    // Clicking out of drawer closes it
+    this.$nodes.page.on('click.drawer', $.proxy(function () {
+      this.close();
+      return false;
+    }, this));
+
+    // Pressing escape closes drawer
+    this.$nodes.parent.on('keyup.drawer', $.proxy(function(evt) {
+      if (evt.keyCode === 27) {
+        this.close();
+      }
+    }, this));
+  };
+
+  Drawer.prototype.unbindEvents = function() {
+    this.$nodes.page.off('.drawer');
+    this.$nodes.parent.off('.drawer');
+  };
+
+  return Drawer;
+})();
+
+// Initialize Timber's JS on docready
+$(timber.init);
+
+/*
+ * Shopify JS for customizing Slick.js
+ *   http://kenwheeler.github.io/slick/
+ *   Untouched JS in assets/slick.min.js
+ */
+
+/*
+ * Run function after window resize
+ * http://stackoverflow.com/questions/2854407/javascript-jquery-window-resize-how-to-fire-after-the-resize-is-completed
+ */
+var afterResize=(function(){var t={};return function(callback,ms,uniqueId){if(!uniqueId){uniqueId="Don't call this twice without a uniqueId";}if(t[uniqueId]){clearTimeout(t[uniqueId]);}t[uniqueId]=setTimeout(callback,ms);};})();
+
+var slickTheme = (function(module, $) {
+  'use strict';
+
+  // Public functions
+  var init, onInit, beforeChange, afterChange;
+
+  // Private variables
+  var settings, $slider, $allSlides, $activeSlide, $slickDots, windowHeight, scrolled, $heroText, $heroImage;
+  var currentActiveSlide = 0;
+
+  // Private functions
+  var cacheObjects, checkFirstOnIndex, setFullScreen, sizeFullScreen, setParallax, calculateParallax, slickColors, fixIE8;
+
+  /*============================================================================
+   Initialise the plugin and define global options
+  ==============================================================================*/
+  cacheObjects = function () {
+    slickTheme.cache = {
+      $html      : $('html'),
+      $window    : $(window),
+      $hero      : $('#Hero'),
+      $heroImage : $('.hero__image'),
+      $headerWrapper: $('.header-wrapper')
+    };
+
+    slickTheme.vars = {
+      slideClass      : 'slick-slide',
+      activeClass     : 'slick-active',
+      hiddenClass     : 'hero__slide--hidden',
+      heroHeaderClass : 'hero__header'
+    };
+  };
+
+  init = function (options) {
+    cacheObjects();
+
+    // Default settings
+    settings = {
+      // User options
+      $element       : null,
+      fullscreen     : false,
+      parallax       : false,
+
+      // Private settings
+      isTouch        : Modernizr.touch ? true : false,
+
+      // Slack options
+      arrows         : true,
+      dots           : false,
+      adaptiveHeight : true
+    };
+
+    // Override defaults with arguments
+    $.extend(settings, options);
+
+    // Check if this hero is the first one on the home page
+    settings.isFirstOnIndex = checkFirstOnIndex();
+
+    // Absolutely position header over hero as soon as possible
+    if (settings.isFirstOnIndex) {
+      slickTheme.cache.$headerWrapper.addClass(slickTheme.vars.heroHeaderClass);
+    }
+
+    /*
+     * Init slick slider
+     *   - Add any additional option changes here
+     *   - https://github.com/kenwheeler/slick/#options
+     */
+    settings.$element.slick({
+      arrows         : settings.arrows,
+      dots           : true,
+      adaptiveHeight : settings.fullscreen ? false : settings.adaptiveHeight,
+      draggable      : false,
+      fade           : true,
+      //autoplay       : theme.strings.slickAuto,
+      //autoplaySpeed  : theme.strings.slickAutoSpeed,
+      autoplay       : slickTheme.cache.$hero.data('autoplay'),
+      autoplaySpeed  : slickTheme.cache.$hero.data('autoplayspeed'),
+      onInit         : this.onInit,
+      onBeforeChange : this.beforeChange,
+      onAfterChange  : this.afterChange
+    });
+  };
+
+  checkFirstOnIndex = function () {
+    if (settings.$element.hasClass('hero--first')) {
+      return true;
+    };
+
+    return false;
+  };
+
+  onInit = function (obj) {
+    $slider = obj.$slider;
+    $allSlides = $slider.find('.' + slickTheme.vars.slideClass);
+    $activeSlide = $slider.find('.' + slickTheme.vars.activeClass);
+    $slickDots = $slider.find('.slick-dots');
+
+    if (!settings.isTouch) {
+      $allSlides.addClass(slickTheme.vars.hiddenClass);
+      $activeSlide.removeClass(slickTheme.vars.hiddenClass);
+    }
+
+    if (settings.fullscreen) {
+      setFullScreen();
+      slickColors();
+
+      if (slickTheme.cache.$html.hasClass('lt-ie9')) {
+        fixIE8();
+      }
+    }
+
+    if (settings.parallax && Modernizr.csstransforms3d) {
+      setParallax();
+    }
+  };
+
+  beforeChange = function (evt, currentSlide, nextSlide) {
+    if (settings.fullscreen) {
+      var $nextSlide = $allSlides.eq(nextSlide),
+          newTextColor = $nextSlide.data('color');
+
+      slickColors(newTextColor);
+    }
+
+    if (!settings.isTouch) {
+      $allSlides.removeClass(slickTheme.vars.hiddenClass);
+    }
+
+    // Set upcoming slide as index
+    currentActiveSlide = nextSlide;
+
+    // Set new active slide to proper parallax position
+    if (settings.parallax && Modernizr.csstransforms3d) {
+      calculateParallax(settings.fullscreen, currentActiveSlide);
+    }
+  };
+
+  afterChange = function (evt, currentSlide) {
+    if (!settings.isTouch) {
+      $activeSlide = $slider.find('.' + slickTheme.vars.activeClass);
+      $allSlides.addClass(slickTheme.vars.hiddenClass);
+      $activeSlide.removeClass(slickTheme.vars.hiddenClass);
+    }
+  };
+
+  setFullScreen = function () {
+    sizeFullScreen();
+
+    // Resize hero after screen resize
+    slickTheme.cache.$window.resize(function () {
+      afterResize(function() {
+        sizeFullScreen();
+      }, 200, 'sizeFullScreen');
+    });
+  };
+
+  sizeFullScreen = function () {
+    windowHeight = slickTheme.cache.$window.height();
+    settings.$element.css('height', windowHeight);
+  };
+
+  setParallax = function () {
+    $heroText = $('.hero__text-content');
+    $heroImage = $('.hero__image');
+
+    slickTheme.cache.$window.on('scroll', function(evt) {
+      calculateParallax(settings.fullscreen, currentActiveSlide);
+    });
+  };
+
+  calculateParallax = function (parallaxImage, currentSlide) {
+    scrolled = slickTheme.cache.$window.scrollTop();
+
+    $($heroText[currentSlide]).css({
+      transform: 'translate3d(0, '+ scrolled / 8 +'px, 0)'
+    })
+
+    if (parallaxImage) {
+      $($heroImage[currentSlide]).css({
+        transform: 'translate3d(0, '+ scrolled / 8 +'px, 0)'
+      })
+    }
+  };
+
+  slickColors = function (color) {
+    // Find the new color if one isn't sent
+    if (!color) {
+      var color = $('.slick-active').attr('data-color');
+    }
+
+    // Set an is-light or is-dark class on the header and nav dots to update colors
+    if (settings.isFirstOnIndex) {
+      slickTheme.cache.$headerWrapper.removeClass('is-light is-dark').addClass(color);
+    }
+
+    // Set an is-light or is-dark class on nav dots to update colors
+    if ($slickDots.length) {
+      $slickDots.removeClass('is-light is-dark').addClass(color);
+    }
+  };
+
+  fixIE8 = function () {
+    // Add an -ms- filter to make background-size: cover (mostly) work
+    slickTheme.cache.$heroImage.each(function() {
+      var $el = $(this),
+          img = $el.attr('data-image');
+
+      $el.css({
+        'background-image': 'none',
+        'filter': 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + img + '", sizingMethod="scale")'
+      });
+    });
+  };
+
+  module = {
+    init: init,
+    onInit: onInit,
+    beforeChange: beforeChange,
+    afterChange: afterChange
+  };
+
+  return module;
+
+}(slickTheme || {}, jQuery));
+
+/* ================ Sections ================ */
+window.theme = window.theme || {};
+
+theme.Product = (function() {
+  function Product(container) {
+    var $window = $(window);
+
+    this.settings = {
+      productPageLoad: false,
+      preloadImage: false,
+      enableHistoryState: true,
+      namespace: '.productSection'
+    };
+
+    this.selectors = {
+      productImages: '.product-single__photos',
+      productImagePhoto: '.product-single__photo',
+      productImage: '#ProductPhotoImg',
+      addToCart: '#AddToCart',
+      productPrice: '#ProductPrice',
+      SKU: '.variant-sku',
+      priceA11y: '#PriceA11y',
+      comparePrice: '#ComparePrice',
+      comparePriceA11y: '#ComparePriceA11y',
+      priceWrapper: '.product-single__price--wrapper',
+      quantityElements: '.js-quantity-selector, label + .js-qty',
+      addToCartText: '#AddToCartText',
+      originalSelectorId: '#ProductSelect',
+      singleOptionSelector: '.single-option-selector__radio',
+      radioWrapper: '.radio-wrapper',
+      meta: '.product-single__meta',
+      productWrapper: '.product-single'
+    };
+
+    var $container = this.$container = $(container);
+    var sectionId = $container.attr('data-section-id');
+
+    if (!$('#ProductJson-' + sectionId).html()) {
+      return;
+    }
+    this.productSingleObject = JSON.parse(document.getElementById('ProductJson-' + sectionId).innerHTML);
+    this.zoomType = $container.data('image-zoom-type');
+
+    this.initBreakpoints();
+    this.stringOverrides();
+    this.initProductVariant();
+    this.initStickyProductMeta();
+
+    if (this.zoomType) {
+      this.productImageZoom();
+    }
+
+    if (theme.settings.cartType == 'drawer') {
+      ajaxCart.init({
+        formSelector: '#AddToCartForm',
+        cartContainer: '#CartContainer',
+        addToCartSelector: '#AddToCart',
+        enableQtySelectors: true,
+        moneyFormat: theme.strings.moneyFormat
+      });
+    }
+
+    $window
+    .on('load' + this.settings.namespace, theme.initStickyProductMeta)
+    .on('resize' + this.settings.namespace, theme.debounce(this.initStickyProductMeta, 150).bind(this));
+  }
+
+  Product.prototype = _.assignIn({}, Product.prototype, {
+    initProductVariant: function() {
+      var options = {
+        $container: this.$container,
+        enableHistoryState: this.$container.data('enable-history-state') || false,
+        singleOptionSelector: this.selectors.singleOptionSelector,
+        originalSelectorId: this.selectors.originalSelectorId,
+        product: this.productSingleObject
+      };
+
+      this.variants = new slate.Variants(options);
+      this.$container.on('variantChange' + this.settings.namespace, this.productPage.bind(this));
+      this.$container.on('variantImageChange' + this.settings.namespace, this.showVariantImage.bind(this));
+    },
+
+    initBreakpoints: function() {
+      var self = this;
+      var $container = self.$container;
+      self.zoomType = $container.data('image-zoom-type');
+
+      if (!$('html').hasClass('lt-ie9')) {
+        enquire.register(theme.variables.mediaQueryMedium1, {
+          match: function() {
+            self.createImageCarousel();
+            if (self.zoomType) {
+              if ($(self.selectors.productImagePhoto).length) {
+                // remove event handlers for product zoom on mobile
+                $(self.selectors.productImagePhoto).off();
+              }
+            }
+          },
+          unmatch: function() {
+            self.destroyImageCarousel();
+            if (self.zoomType) {
+              // reinit product zoom
+              self.productImageZoom();
+            }
+          }
+        });
+      }
+    },
+
+    stringOverrides: function() {
+      // Override defaults in theme.strings with potential
+      // template overrides
+
+      theme.productStrings = theme.productStrings || {};
+      $.extend(theme.strings, theme.productStrings);
+    },
+
+    resizeElements: function() {
+      $(this.selectors.productGridImages).imagesLoaded(function() {
+        $(this.selectors.productGridImages).css('height', 'auto').equalHeights();
+      });
+    },
+
+    showVariantImage: function(evt) {
+      var variant = evt.variant;
+      var $newImage = $('.product-single__photo[data-image-id="' + variant.featured_image.id + '"]');
+      var imageIndex;
+
+      if (theme.variables.bpSmall) {
+        // Switch carousel slide, unless it's the first photo on load
+        imageIndex = $newImage.closest('.slick-slide').attr('index');
+        // Navigate to slide unless it's the first photo on load
+
+        // If there is no index, slider is not initalized.
+        if (_.isUndefined(imageIndex)) {
+          return;
+        }
+
+        if (imageIndex !== 0 || theme.variables.productPageLoad) {
+          $(this.selectors.productImages).slickGoTo(imageIndex);
+        }
+      } else {
+        imageIndex = $newImage.closest('.slick-slide').index();
+        // Scroll to/reorder image unless it's the first photo on load
+        if (imageIndex !== 0 || theme.variables.productPageLoad) {
+          if (theme.variables.productPageSticky) {
+            // Scroll to variant image
+            $('html, body').animate({
+              scrollTop: $newImage.offset().top
+            }, 250);
+          } else {
+            // Move selected variant image to top, preventing scrolling
+            var currentScroll = $(document).scrollTop();
+            $newImage.parent().prependTo($(this.selectors.productImages));
+            $(document).scrollTop(currentScroll);
+          }
+        }
+      }
+
+      if (!theme.variables.productPageLoad) {
+        theme.variables.productPageLoad = true;
+      }
+    },
+
+    productImageZoom: function() {
+      if (!$(this.selectors.productImagePhoto).length || theme.variables.bpSmall) {
+        return;
+      }
+
+      $(this.selectors.productImagePhoto).magnificPopup({
+        type: 'image',
+        mainClass: 'mfp-fade',
+        closeOnBgClick: true,
+        closeBtnInside: false,
+        closeOnContentClick: true,
+        tClose: theme.strings.zoomClose,
+        removalDelay: 500,
+        gallery: {
+          enabled: true,
+          navigateByImgClick: false,
+          arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"><span class="mfp-chevron mfp-chevron-%dir%"></span></button>',
+          tPrev: theme.strings.zoomPrev,
+          tNext: theme.strings.zoomNext
+        }
+      });
+    },
+
+    createImageCarousel: function() {
+      if (!$(this.selectors.productImages).length || $(this.selectors.productImagePhoto).length < 2) {
+        return;
+      }
+
+//       $(this.selectors.productImages).slick({
+//         arrows: false,
+//         dots: true,
+//         adaptiveHeight: true
+//       });
+    },
+
+    destroyImageCarousel: function() {
+      if (!$(this.selectors.productImages).length) {
+        return;
+      }
+
+      $(this.selectors.productImages).unslick();
+    },
+
+
+    productPage: function(evt) {
+      var moneyFormat = theme.strings.moneyFormat;
+      var variant = evt.variant;
+      var translations = theme.strings;
+      var optionLength = $('.product-single__form .radio-wrapper.product-form__item').length;
+      var selectedLableLength = $('.product-single__form .selected-label').length;
+      if (variant) {
+        // Select a valid variant if available
+        if (variant.available) {
+          var cookieCurrency = Currency.cookie.read();
+          var currencyData = $('#ComparePrice').html();
+          var pricecurrencyData = $('#ProductPrice').html();
+          // Available, enable the submit button, change text, show quantity elements
+          if(selectedLableLength == optionLength){
+            $(this.selectors.addToCart).removeClass('disabled').prop('disabled', false);
+            $(this.selectors.addToCartText).text("Add to cart");
+            $(this.selectors.quantityElements).show();
+          }
+        } else {
+          // Sold out, disable the submit button, change text, hide quantity elements
+          if(selectedLableLength == optionLength){
+            $(this.selectors.addToCart).addClass('disabled').prop('disabled', true);
+            $(this.selectors.addToCartText).html(translations.soldOut);
+            $(this.selectors.quantityElements).hide();
+          }
+        }
+        $(this.selectors.productPrice).html(theme.Currency.formatMoney(variant.price, moneyFormat)).show();
+        $(this.selectors.productPrice).html(pricecurrencyData);
+        // Also update and show the product's compare price if necessary
+        if (variant.compare_at_price > variant.price) {
+          $(this.selectors.comparePrice).html(theme.Currency.formatMoney(variant.compare_at_price, moneyFormat));
+          $(this.selectors.comparePrice).html(currencyData);
+          $(this.selectors.priceWrapper).show();
+          $(this.selectors.productPrice).addClass('on-sale');
+          $(this.selectors.comparePriceA11y).attr('aria-hidden', 'false');
+          $(this.selectors.priceA11y).attr('aria-hidden', 'false');
+        } else {
+          $(this.selectors.priceWrapper).hide();
+          $(this.selectors.productPrice).removeClass('on-sale');
+          $(this.selectors.comparePriceA11y).attr('aria-hidden', 'true');
+        }
+
+        // Also Show SKU
+
+        $(this.selectors.SKU).html(variant.sku);
+
+      } else {
+        // The variant doesn't exist, disable submit button.
+        // This may be an error or notice that a specific variant is not available.
+        // To only show available variants, implement linked product options:
+        //   - http://docs.shopify.com/manual/configuration/store-customization/advanced-navigation/linked-product-options
+        $(this.selectors.addToCart).addClass('disabled').prop('disabled', true);
+        $(this.selectors.addToCartText).html(translations.unavailable);
+        $(this.selectors.quantityElements).hide();
+      }
+    },
+
+    initStickyProductMeta: function() {
+      var $meta = $(this.selectors.meta);
+      var $wrapper = $(this.selectors.productWrapper);
+
+      if ($meta.find('#shopify-product-reviews').length) {
+        theme.variables.productPageSticky = false;
+        return;
+      }
+
+      if (!$meta.length || $(this.selectors.productImagePhoto).length < 2) {
+        return;
+      }
+
+      // Don't bother on IE8
+      if ($('html').hasClass('lt-ie9')) {
+        return;
+      }
+
+      // Force detatch if already detached. Prevent layout issues.
+      $meta.trigger('detach.ScrollToFixed');
+
+      // Detach and stop if on mobile breakpoint
+      if (theme.variables.bpSmall) {
+        return;
+      }
+
+      var productCopyHeight = $meta.outerHeight();
+      var productImagesHeight = $(this.selectors.productImages).height();
+
+      /*============================================================================
+        Calculate when to detach fixed element to avoid content overlap.
+        Subtract product copy height from the limit because plugin uses offset().top
+      ==============================================================================*/
+      var calcLimit = $wrapper.offset().top + $wrapper.height();
+      calcLimit -= productCopyHeight;
+
+      // Init sticky if desc shorter than images and fits in viewport
+      if (productCopyHeight < productImagesHeight && productCopyHeight < $(window).height()) {
+        theme.variables.productPageSticky = true;
+        $meta.scrollToFixed({
+          limit: calcLimit
+        });
+      } else {
+        theme.variables.productPageSticky = false;
+      }
+    },
+
+    onUnload: function() {
+      this.$container.off(this.settings.namespace);
+      this.destroyImageCarousel();
+    }
+  });
+
+  return Product;
+})();
+
+window.theme = window.theme || {};
+
+theme.Collection = (function() {
+  function Collection(container) {
+    this.selectors = {
+      productGridImages: '.grid-uniform .grid-product__image-wrapper',
+      $productGridRows: $('.collage-grid__row'),
+      productGridPhotosLarge: '.grid__item--large .grid-product__image-link',
+      $collectionImage: $('.collection-hero__image')
+    };
+
+    var $container = this.$container = $(container);
+    this.gridType = $container.data('grid-type');
+
+    this.selectors.$collectionImage.addClass('is-init');
+
+    // Enable parallax effect if 3d transforms are supported
+    if (!Modernizr.csstransforms3d) {
+      return;
+    }
+
+    theme.cache.$window.on('scroll', function(evt) {
+      var scrolled = theme.cache.$window.scrollTop();
+      theme.cache.$collectionImage.css({
+        'transform': 'translate3d(0, ' + scrolled / 4.5 + 'px, 0)'
+      })
+    });
+
+    this.init();
+  }
+
+  Collection.prototype = _.assignIn({}, Collection.prototype, {
+    init: function(){
+      this.cacheSelectors();
+
+      if (this.gridType === 'collage') {
+        this.initCollageGrid();
+      } else if (this.gridType === 'grid') {
+        this.equalHeights();
+      }
+
+    },
+
+    cacheSelectors: function(){
+      cache = {
+        $window: $(window),
+        $productGridImages: $(this.selectors.productGridImages),
+        $productGridRows: $(this.selectors.productGridRows),
+        $productGridPhotosLarge: $(this.selectors.productGridPhotosLarge)
+      }
+    },
+
+    equalHeights: function() {
+      cache.$window.on('load', resizeElements());
+
+      cache.$window.on('resize',
+                       afterResize(function() {
+        resizeElements();
+      }, 250, 'equal-heights')
+                      );
+
+      function resizeElements() {
+        cache.$productGridImages.css('height', 'auto').equalHeights();
+      }
+    },
+
+    initCollageGrid: function () {
+      if (!cache.$productGridRows.length) {
+        return;
+      };
+
+      this.collageGridHeights();
+
+      cache.$window.on('resize', theme.debounce(this.collageGridHeights, 500));
+    },
+
+    collageGridHeights: function () {
+      if (theme.variables.bpSmall || !cache.$productGridRows.length) {
+        return;
+      }
+
+      // calculate image heights for each row of grid images
+      for (var i = cache.$productGridRows.length - 1; i >= 0; i--) {
+        var $currentRow = $(cache.$productGridRows[i]);
+        var $smallImages = $currentRow.find('.grid__item--small .grid-product__image-wrapper');
+        var $largeImageWrapper = $currentRow.find('.grid__item--large .grid-product__image-wrapper');
+        var $largeImage = $largeImageWrapper.find('.grid-product__image-link');
+
+        // calculate the bottom edge of the small image
+        var smallImageOffset = $smallImages[1].offsetTop + $smallImages[1].offsetHeight;
+
+        // calculate the bottom edge of the large image for the row
+        var largeImageOffset = $largeImageWrapper[0].offsetTop + $largeImageWrapper[0].offsetHeight;
+
+        // Depending on which image is lower, increase or decrease the large
+        // image size
+        if (smallImageOffset > largeImageOffset) {
+          var largeImageHeight = $largeImage.height() + (smallImageOffset - largeImageOffset);
+        } else {
+          var largeImageHeight = $largeImage.height() - (largeImageOffset - smallImageOffset);
+        };
+
+        $largeImage.css('height', largeImageHeight);
+      };
+    },
+
+    clearCollageGridHeights: function () {
+      if (!cache.$productGridRows.length) {
+        return;
+      };
+
+      cache.$productGridPhotosLarge.removeAttr('style');
+    }
+
+  });
+
+  return Collection;
+})();
+
+window.theme = window.theme || {};
+
+theme.HeaderSection = (function() {
+
+  function Header(container) {
+    timber.drawersInit();
+    theme.initCache();
+    theme.fitNav();
+    theme.resizeLogo();
+
+    var $container = this.$container = $(container);
+    var sectionId = $container.attr('data-section-id');
+
+    this.template = $container.attr('data-template');
+
+    // ajaxCart.init will run from Product.prototype when on the product page
+    if (theme.settings.cartType == 'drawer' && this.template.indexOf('product') == -1) {
+
+      ajaxCart.init({
+        formSelector: '#AddToCartForm',
+        cartContainer: '#CartContainer',
+        addToCartSelector: '#AddToCart',
+        enableQtySelectors: true,
+        moneyFormat: theme.strings.moneyFormat
+      });
+    }
+
+    theme.cache.$window.on('load', theme.resizeLogo);
+    theme.cache.$window.on('resize', theme.debounce(theme.resizeLogo, 150));
+
+    // Check for header absolute position
+    if ($('#Hero').hasClass('hero')) {
+      $('.header-wrapper').addClass('hero__header');
+    } else {
+      $('.header-wrapper').removeClass('hero__header');
+    }
+  }
+
+  return Header;
+
+})();
+
+window.theme = window.theme || {};
+
+theme.FeaturedContentSection = (function() {
+
+  function FeaturedContent() {
+    theme.styleTextLinks();
+  }
+
+  return FeaturedContent;
+})();
+
+theme.SlideshowSection = (function() {
+
+  function SlideshowSection(container) {
+
+    theme.initCache();
+
+    var $container = this.$container = $(container);
+    var sectionId = $container.attr('data-section-id');
+    var slideshow = this.slideshow = '#Hero';
+    //var autoplay = $(this.slideshow).attr('data-autoplay');
+    //var autoplay = $(this.slideshow).attr('data-autoplayspeed');
+
+    slickTheme.init({
+      $element     : $(slideshow),
+      fullscreen   : $(slideshow).data('fullscreen'),
+      parallax     : $(slideshow).data('parallax'),
+      autoplay       : $(slideshow).data('autoplay'),
+      autoplaySpeed  : $(slideshow).data('autoplayspeed')
+    });
+
+    // remove header absolute display if slideshow is empty
+    if (!$(this.slideshow).hasClass('hero')) {
+      $('.header-wrapper').removeClass('hero__header is-light is-dark');
+    }
+  }
+
+  return SlideshowSection;
+})();
+
+theme.SlideshowSection.prototype = _.assignIn({}, theme.SlideshowSection.prototype, {
+
+  onUnload: function() {
+    $(this.slideshow).unslick();
+  },
+
+  onSelect: function() {
+    $(this.slideshow).slickPause();
+  },
+
+  onDeselect: function() {
+    $(this.slideshow).slickPlay();
+  },
+
+  onBlockSelect: function(evt) {
+    // Ignore the cloned version
+    var $slide = $('.slide--' + evt.detail.blockId);
+    var slideIndex = $slide.attr('index');
+
+    // Go to selected slide, pause autoplay
+    $(this.slideshow).slickGoTo(slideIndex).slickPause();
+  },
+
+  onBlockDeselect: function() {
+    // Resume autoplay
+    $(this.slideshow).slickPlay();
+  }
+});
+
+window.theme = window.theme || {};
+
+theme.settings = {
+  cartType: {{ settings.cart_type | json }},
+};
+
+theme.PasswordHeader = (function() {
+  function PasswordHeader() {
+    this.init();
+  }
+
+  PasswordHeader.prototype = _.assignIn({}, PasswordHeader.prototype, {
+    init: function() {
+      $('.js-toggle-login-modal').magnificPopup({
+        type: 'inline',
+        mainClass: 'mfp-fade',
+        closeOnBgClick: false,
+        closeBtnInside: false,
+        closeOnContentClick: false,
+        tClose: {{ 'products.zoom.close' | t | json }},
+        removalDelay: 500,
+        callbacks: {
+        open: function() {
+        window.setTimeout( function() { document.getElementById('password').focus(); }, 50 );
+    },
+    close: function() {
+      window.setTimeout( function() { document.getElementById('email').focus(); }, 50 );
+    }
+  }
+                                        });
+  if ( $('.storefront-password-form .errors').length ) {
+    $('.js-toggle-login-modal').click();
+  }
+}
+                        });
+
+  return PasswordHeader;
+})();
+
+
+theme.variables = {
+  productPageLoad     : false,
+  productPageSticky   : true,
+
+  // Breakpoints from src/stylesheets/global/variables.scss.liquid
+  mediaQuerySmall     : 'screen and (max-width: 590px)',
+  mediaQueryMedium    : 'screen and (min-width: 591px) and (max-width: 768px)',
+  mediaQueryMedium1    : 'screen and (max-width: 768px)',
+  mediaQueryMediumUp  : 'screen and (min-width: 591px)',
+  mediaQueryLarge     : 'screen and (min-width: 769px)',
+  bpSmall             : false
+};
+
+theme.initCache = function() {
+  theme.cache = {
+    $window                 : $(window),
+    $html                   : $('html'),
+    $body                   : $('body'),
+    $drawerRight            : $('.drawer--right'),
+
+    $hero                   : $('#Hero'),
+    $customSelect           : $('.js-selector'),
+
+    $collectionImage        : $('.collection-hero__image'),
+
+    $siteNav                : $('.site-nav'),
+    $cartBuggle             : $('.cart-link__bubble'),
+    $logo                   : $('.site-header__logo img'),
+
+    $productImages          : $('.product-single__photos'),
+    $productImagePhoto      : $('.product-single__photo'),
+
+    $indentedRteImages      : $('.rte--indented-images'),
+
+    $productGridRows        : $('.collage-grid__row'),
+    $productGridPhotosLarge : $('.grid__item--large .grid-product__image-link'),
+
+    // Equal height elements
+    $productGridImages      : $('.grid-uniform .grid-product__image-wrapper'),
+
+    $returnLink             : $('.return-link')
+  };
+};
+
+theme.init = function() {
+  theme.initCache();
+  theme.setBreakpoints();
+  theme.fitNav();
+  theme.cartInit();
+  theme.afterCartLoad();
+  theme.checkoutIndicator();
+  theme.returnLink();
+  theme.styleTextLinks();
+
+  // Functions to run on load so image sizes can be calculated
+  theme.cache.$window.on('load', theme.resizeLogo);
+  theme.cache.$window.on('load', theme.articleImages);
+
+  // Functions to re-run on resize
+  theme.cache.$window.on('resize', theme.debounce(theme.resizeLogo, 150));
+};
+
+theme.returnLink = function() {
+  if (!document.referrer || !theme.cache.$returnLink.length || !window.history.length) {
+    return;
+  }
+
+  theme.cache.$returnLink.on('click', theme.backButton);
+};
+
+theme.backButton = function() {
+  var referrerDomain = urlDomain(document.referrer);
+  var shopDomain = urlDomain(document.url);
+
+  if (shopDomain === referrerDomain) {
+    history.back();
+    return false;
+  }
+
+  function urlDomain(url) {
+    var    a      = document.createElement('a');
+    a.href = url;
+    return a.hostname;
+  }
+};
+
+theme.setBreakpoints = function() {
+  if(!theme.cache.$html.hasClass('lt-ie9')) {
+    enquire.register(theme.variables.mediaQuerySmall, {
+      match: function() {
+        if (theme.settings.gridType === 'collage') {
+          theme.clearCollageGridHeights();
+        }
+
+        theme.variables.bpSmall = true;
+      },
+      unmatch: function() {
+        theme.variables.bpSmall = false;
+      }
+    });
+  }
+};
+
+theme.fitNav = function() {
+  // Measure children of site nav on load and resize.
+  // If wider than parent, switch to mobile nav.
+  controlNav();
+  theme.cache.$window.on('load', controlNav);
+  theme.cache.$window.on('resize', theme.debounce(controlNav, 150));
+
+  function controlNav() {
+    // Subtract 20 from width to account for inline-block spacing
+    var navWidth = theme.cache.$siteNav.parent().outerWidth() - 20;
+    var navItemWidth = 0;
+    theme.cache.$siteNav.find('> li').each(function() {
+      var $el = $(this);
+      if (!$el.hasClass('site-nav--compress__menu')) {
+        // Round up to be safe
+        //         navItemWidth += Math.ceil($(this).width());
+      }
+    });
+
+    if (navItemWidth > navWidth) {
+      theme.cache.$siteNav.addClass('site-nav--compress');
+    } else {
+      theme.cache.$siteNav.removeClass('site-nav--compress');
+    }
+
+    theme.cache.$siteNav.addClass('site-nav--init');
+  }
+};
+
+theme.resizeLogo = function() {
+  // Using .each() as there can be a reversed logo too
+  theme.cache.$logo.each(function() {
+    var $el = $(this),
+        logoWidthOnScreen = $el.width(),
+        containerWidth = $el.closest('.grid__item').width();
+    // If image exceeds container, let's make it smaller
+    if (logoWidthOnScreen > containerWidth) {
+      $el.css('maxWidth', containerWidth);
+    }
+    else {
+      $el.removeAttr('style');
+    }
+  });
+};
+
+theme.sizeCartDrawerFooter = function() {
+  // Stop if our drawer doesn't have a fixed footer
+  if (!theme.cache.$drawerRight.hasClass('drawer--has-fixed-footer')) {
+    return;
+  }
+
+  // Elements are reprinted regularly so selectors are not cached
+  var $cartFooter = $('.ajaxcart__footer').removeAttr('style'),
+      $cartInner = $('.ajaxcart__inner').removeAttr('style'),
+      cartFooterHeight = $cartFooter.outerHeight();
+  //cartFooterHeight = 430+'px' ;
+  $cartInner.css('bottom', cartFooterHeight);
+  $cartFooter.css('height', cartFooterHeight);
+};
+
+theme.afterCartLoad = function() {
+  theme.cache.$body.on('ajaxCart.afterCartLoad', function(evt, cart) {
+    // Open cart drawer
+    timber.RightDrawer.open();
+
+    // Size the cart's fixed footer
+    theme.sizeCartDrawerFooter();
+
+    // Show cart bubble in nav if items exist
+    if (cart.items.length > 0) {
+      theme.cache.$cartBuggle.addClass('cart-link__bubble--visible');
+    } else {
+      // theme.cache.$cartBuggle.removeClass('cart-link__bubble--visible');
+    }
+  });
+};
+
+theme.checkoutIndicator = function() {
+  // Add a loading indicator on the cart checkout button (/cart and drawer)
+  theme.cache.$body.on('click', '.cart__checkout', function() {
+    $(this).addClass('btn--loading');
+  });
+};
+
+theme.clearCollageGridHeights = function() {
+  if (!theme.cache.$productGridRows.length) {
+    return;
+  };
+
+  theme.cache.$productGridPhotosLarge.removeAttr('style');
+};
+
+theme.articleImages = function() {
+  if (!theme.cache.$indentedRteImages.length) {
+    return;
+  }
+
+  theme.cache.$indentedRteImages.find('img').each(function() {
+    var $el = $(this);
+    var attr = $el.attr('style');
+
+    // Check if undefined or float: none
+    if (!attr || attr == 'float: none;') {
+      // Remove grid-breaking styles if image isn't wider than parent
+      if ($el.width() < theme.cache.$indentedRteImages.width()) {
+        $el.addClass('rte__no-indent');
+      }
+    }
+  });
+};
+
+theme.styleTextLinks = function() {
+  $('.rte').find('a:not(:has(img))').addClass('text-link');
+};
+
+theme.cartInit = function() {
+  if (!theme.cookiesEnabled()) {
+    theme.cache.$body.addClass('cart--no-cookies');
+  }
+};
+
+theme.cookiesEnabled = function() {
+  var cookieEnabled = navigator.cookieEnabled;
+
+  if (!cookieEnabled){
+    document.cookie = 'testcookie';
+    cookieEnabled = (document.cookie.indexOf('testcookie') !== -1);
+  }
+  return cookieEnabled;
+}
+
+theme.initAddEvent = function(){
+  if(window.upcoming_article){
+    var upcoming_keys = Object.keys(window.upcoming_article);
+    if(upcoming_keys.length > 1){
+      var upcoming_articles = [];
+      upcoming_keys.map(function(id){
+          upcoming_articles.push(window.upcoming_article[id])
+      });
+      upcoming_articles.sort(function (a, b) {
+        if (a.dateObj > b.dateObj) return 1;
+        if (a.dateObj < b.dateObj) return -1;
+        return 0;
+      });
+      upcoming_articles.reverse();
+      upcoming_articles.map(function(a){
+        var elem = $('.upcoming-template .article-items .article-item[data-id="'+ a.id +'"]');
+        if(elem && elem.length){
+         elem.prependTo( $( ".upcoming-template .article-items" ) ); 
+        }
+      });
+    }
+  }
+  
+  if(window.released_article){
+    var released_keys = Object.keys(window.released_article);
+    if(released_keys.length > 1){
+      var released_articles = [];
+      released_keys.map(function(id){
+          released_articles.push(window.released_article[id])
+      });
+      released_articles.sort(function (a, b) {
+        if (a.dateObj > b.dateObj) return 1;
+        if (a.dateObj < b.dateObj) return -1;
+        return 0;
+      });
+      //released_articles.reverse();
+      released_articles.map(function(a){
+        var elem = $('.released-template .article-itemss .swiper-wrapper .article-item[data-id="'+ a.id +'"]');
+        if(elem && elem.length){
+         elem.prependTo( $( ".released-template .article-itemss .swiper-wrapper" ) ); 
+        }
+      });
+    }
+  }
+  
+  if(window.upcoming_article){
+    $('.modal-container .Add-google').each(function(){
+    	var articleId = $(this).data('id');
+        if(articleId){
+          var article = window.upcoming_article[articleId];
+          if(article){
+            var htmlUrl_google = 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates={dates}&location={location}&text={text}&details={details}';
+            var htmlUrl_apple = 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:{URL}\nDTSTART:{DTSTART}\nDTEND{DTEND}\nSUMMARY:{SUMMARY}\nDESCRIPTION:{DESCRIPTION}\nLOCATION:{LOCATION}END:VEVENT\nEND:VCALENDAR';
+            var released_date = article.fullTime;
+            var released_end = article.released_end;
+            var today = article.today;
+            //var d1 = new Date(released_date);
+            //var d2 = new Date(today);
+            var d1 = new Date(released_end);
+            var d2 = new Date(released_date);
+            
+            var date_url_start = d1.toISOString().replace(/\-/g,'').replace(/\:/g,'').replace(/\./g,'');
+            var date_url_end = d2.toISOString().replace(/\-/g,'').replace(/\:/g,'').replace(/\./g,'');
+            
+            var dates = date_url_end + '/' + date_url_start;
+            var location = window.location.origin;
+            var text = article.articleTitle;
+            var details = window.location.href // article.productURL;
+			
+            htmlUrl_google = htmlUrl_google.replace('{dates}',dates);
+            htmlUrl_google = htmlUrl_google.replace('{location}',location);
+            htmlUrl_google = htmlUrl_google.replace('{text}',text);
+            htmlUrl_google = htmlUrl_google.replace('{details}',details);
+            
+            htmlUrl_apple = htmlUrl_apple.replace('{URL}',location);
+            htmlUrl_apple = htmlUrl_apple.replace('{DTSTART}',date_url_start);
+            htmlUrl_apple = htmlUrl_apple.replace('{DTEND}',date_url_end);
+            htmlUrl_apple = htmlUrl_apple.replace('{SUMMARY}',text);
+            htmlUrl_apple = htmlUrl_apple.replace('{DESCRIPTION}',details);
+            htmlUrl_apple = htmlUrl_apple.replace('{LOCATION}',location);
+            
+            var newHtmlUrl_google = encodeURI(htmlUrl_google);
+            var newHtmlUrl_apple = encodeURI(htmlUrl_apple);
+            
+            $(this).find('.addevent-google a').attr({
+              'href': newHtmlUrl_google,
+              'target':'_blank'
+            });
+          }
+        }
+  	});
+  }
+  // .addevent-google a, 
+  $(document).on('click', '.addevent-apple a', function(e){
+    e.preventDefault();
+    var articleId = $(this).closest('.Add-google').data('id');
+    if(window.ics && window.upcoming_article && articleId){
+      var article = window.upcoming_article[articleId];
+      if(article){
+        $(this).addClass('loading');
+        var cal = window.ics();
+        var subject = article.articleTitle;
+        var description = window.location.href //article.productURL;
+        var location = window.location.href; //"Vancouver";
+        var begin = article.today;
+        var end = article.fullTime;
+        var released_end = article.released_end;
+        
+//         var d1 = new Date(begin);
+//         var d2 = new Date(end);
+        
+        var d1 = new Date(end);
+        var d2 = new Date(released_end);
+        
+        var begin_time = d1.getTime();
+        var end_time = d2.getTime();
+        
+        if(end_time < begin_time && 0){
+          var diff = begin_time - end_time;
+          var d3 = new Date(diff);
+          d2.setDate(d1.getDate()+d3.getDate()+1);
+          end = d2.getFullYear() + '-' + d2.getMonth() + '-' + d2.getDate();
+        }
+        
+        var filename = 'deadstock-ca-google-event';
+        if($(this).closest('li').hasClass('addevent-apple')){
+          filename = 'deadstock-ca-apple-event';
+        }
+        
+    	//cal.addEvent(subject, description, location, begin, end);
+        cal.addEvent(subject, description, location, end, released_end);
+        cal.download(filename);
+        $(this).removeClass('loading');
+      }
+    }
+  });
+}
+
+$(document).ready(function() {
+  theme.init();
+  
+  if($('body.blog-release').length){
+    theme.initAddEvent();
+  }
+  
+  var sections = new theme.Sections();
+
+  sections.register('product-template', theme.Product);
+  sections.register('collection-template', theme.Collection);
+  sections.register('header-section', theme.HeaderSection);
+  sections.register('featured-content-section', theme.FeaturedContentSection);
+  sections.register('slideshow-section', theme.SlideshowSection);
+  sections.register('password-header', theme.PasswordHeader);
+  
+  if($('.page-no-title .loader')[0]){
+  	setTimeout( function(){
+       	 $('.page-no-title .loader').fadeOut();
+      }, 1000);
+  }
+
+  $('.blog_release_grid_wrap .article-wrapper').responsiveEqualHeightGrid();
+//   $('.blog_release_grid_wrap .product-info').responsiveEqualHeightGrid();
+});

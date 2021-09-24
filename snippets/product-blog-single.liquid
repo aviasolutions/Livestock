@@ -1,0 +1,31 @@
+<div id="product-{{ product.id }}" class="quick_shop_modal modal">
+  <div class="container section" style="width: inherit">
+    
+    <div class="six columns">
+
+      {% include 'product-notify-me' %}
+
+{% comment %}      {% if settings.product_description_position == "top" %}
+        {% if settings.quick_shop_full_description %}
+          {{ product.description }}
+        {% else %}
+          <p>
+            {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
+          </p>
+        {% endif %}
+      {% endif %}{% endcomment %}
+      
+      {% include 'product-form-single' %}
+
+      {% if settings.product_description_position == "bottom" %}
+        {% if settings.quick_shop_full_description %}
+          {{ product.description | split: '<!-- split -->' | first }}
+        {% else %}
+          <p>
+            {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
+          </p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
