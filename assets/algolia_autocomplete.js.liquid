@@ -45,7 +45,6 @@
           } else {
             extendedHits = res.hits
           }
-          $('body').trigger('keywordSearch.livestock', [query, extendedHits]);
           return cb(extendedHits, res);
         })
           .catch((err) => cb([], err));
@@ -329,7 +328,7 @@
     if (algolia.config.analytics_enabled) {
       var clickData = {
         index: datum._index,
-        eventName: 'Product Clicked',
+        eventName: 'click',
         queryID: datum._queryID,
         objectIDs: [datum.objectID],
         positions: [datum._position],
@@ -343,10 +342,6 @@
        */
       algolia.saveForConversionTracking(clickData);
     }
-
-    const event = new CustomEvent('autocomplete:selected', [evt, datum, name]);
-	document.body.dispatchEvent(event);
-                                  
     switch (name) {
       case 'products': {
         var addVariantId =

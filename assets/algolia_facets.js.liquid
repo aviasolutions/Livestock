@@ -41,9 +41,8 @@
    * parameter in your Algolia Dashboard.
    * The default sort function is refined > count > name.
    */
-  var sizes = ['2xs', 'xs', 'xs/sm', 'sm', 'sm/med', 'med', 'med/lrg', 'lrg', 'lrg/xlrg', 'xlrg', '2xlrg', '3xlrg'];
+  var sizes = ['xs', 'sm', 'sm/med', 'med', 'med/lrg', 'lrg', 'xlrg', '2xlrg'];
   var map = {
-    '2xs': 'XX-Small',
     xs: 'X-Small',
     sm: 'Small',
     'sm/med': 'Small / Medium',
@@ -52,13 +51,7 @@
     lrg: 'Large',
     xlrg: 'X-Large',
     '2xlrg': 'XX-Large',
-    '3xlrg': 'XXX-Large',
     'one size': 'One Size',
-    '2xs/xs': 'XX-Small / X-Small',
-    'xs/sm': 'X-Small / Small',
-    'sm/med': 'Small / Medium',
-    'med/lrg': 'Medium / Large',
-    'lrg/xlrg': 'Large / X-Large',
   };
   algolia.facetSortFunctions = {
     price_range: sortByRefined(function sortRanges(a, b) {

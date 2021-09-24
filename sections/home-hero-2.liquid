@@ -8,28 +8,24 @@
   {% endif  %}
   <div class="hero__slide--overlay"></div>
   <div class="hero-section-img">
-    {% assign desktop_img = section.settings.image %}
-    {% if section.settings.image != blank  %} 
-    {% assign desktop_imgSrc = desktop_img | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
-    <img class="blur-up image desktop-hero lazyload"
-         src="{{ desktop_img | img_url: '30x' }}"
-         data-src="{{ desktop_imgSrc }}"
-         data-widths="[300,600,800,1024,2048]"
-         data-aspectratio="{{ desktop_img.aspect_ratio }}"
-         data-sizes="auto"
-         tabindex="-1"
-         alt="{{ desktop_img.alt | escape }}"> 
+      {% assign desktop_img = section.settings.image %}
+      {% if section.settings.image != blank  %} <img class="blur-up image desktop-hero lazyload"
+                                                     src="{{ desktop_img | img_url: '30x' }}"
+                                                     data-src="{{ desktop_img | img_url: '2000x' }}"
+                                                     data-widths="[300,600,800,1024,2048]"
+                                                     data-aspectratio="{{ desktop_img.aspect_ratio }}"
+                                                     data-sizes="auto"
+                                                     tabindex="-1"
+                                                     alt="{{ desktop_img.alt | escape }}"> 
     {% assign mobile_img = section.settings.image_mobile %}
-    {% if section.settings.image_mobile != blank  %} 
-    {% assign mobile_imgSrc = mobile_img | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
-    <img class="mobile-hero blur-up image lazyload"
-         src="{{ mobile_img | img_url: '30x' }}"
-         data-src="{{ mobile_imgSrc }}"
-         data-widths="[300,600,800]"
-         data-aspectratio="{{ mobile_img.aspect_ratio }}"
-         data-sizes="auto"
-         tabindex="-1"
-         alt="{{ mobile_img.alt | escape }}"> {% endif  %}
+    {% if section.settings.image_mobile != blank  %} <img class="mobile-hero blur-up image lazyload"
+                                                          src="{{ mobile_img | img_url: '30x' }}"
+                                                          data-src="{{ mobile_img | img_url: '800x' }}"
+                                                          data-widths="[300,600,800]"
+                                                          data-aspectratio="{{ mobile_img.aspect_ratio }}"
+                                                          data-sizes="auto"
+                                                          tabindex="-1"
+                                                          alt="{{ mobile_img.alt | escape }}"> {% endif  %}
     
     {% else %}
     <div class="hero-section-video">

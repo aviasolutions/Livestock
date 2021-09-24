@@ -7,11 +7,10 @@
       <div class="image-with-text-left">
         {% assign image = section.settings.image %}
         {% if section.settings.image != blank  %}   
-            {% assign imageSrc = image | img_url: '1024x' | replace: '_1024x.', '_{width}x.' %}
         <img 
              class="blur-up lazyload image"
              src="{{ image | img_url: '30x' }}"
-             data-src="{{ imageSrc }}"
+             data-src="{{ image | img_url: '1024x' }}"
              data-widths="[300,600,800,1024]"
              data-aspectratio="{{ image.aspect_ratio }}"
              data-sizes="auto"

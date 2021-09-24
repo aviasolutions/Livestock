@@ -1,6 +1,10 @@
 {% assign md = '767px'; %}
 {% assign lg = '1111px'; %}
 
+:root {
+   --app-height: 100%;
+}
+
 .ais-page, .brand-seo {
 	font-family: Roboto, sans-serif;
 	font-weight: 400;
@@ -169,11 +173,11 @@ body.filtering {
 }
 
 @media screen and (min-width: {{lg}}) {
-  .ais-search-header  {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
+	.ais-search-header  {
+		display: flex;
+      align-items: center;
+      justify-content: flex-end;
+	}
 }
 
 .ais-Stats {
@@ -564,12 +568,6 @@ body.filtering {
 .ais-Hits-item {
 	flex: 0 0 50%;
 	padding: 0 8px;
-}
-
-@media screen and (min-width: 900px) {
-	.ais-Hits-item {
-		flex-basis: 33.3333%;
-	}
 }
 
 @media (hover) {

@@ -13,27 +13,14 @@
     {{ checkout_scripts }}
     
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {{ 'checkout.scss.css' | asset_url | stylesheet_tag }}
     {{ 'checkout_script.js' | asset_url | script_tag }}
-
-    <link rel="preconnect" href="//cdn.dynamicyield.com">
-    <link rel="preconnect" href="//st.dynamicyield.com">
-    <link rel="preconnect" href="//rcom.dynamicyield.com">
-    <link rel="dns-prefetch" href="//cdn.dynamicyield.com">
-    <link rel="dns-prefetch" href="//st.dynamicyield.com">
-    <link rel="dns-prefetch" href="//rcom.dynamicyield.com">
-    <script>
-      window.DY = window.DY || {};
-      DY.recommendationContext = {type: 'OTHER'};
-    </script>
-    <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_dynamic.js"></script>
-    <script type="text/javascript" src="//cdn.dynamicyield.com/api/8777712/api_static.js"></script>
     
     <script>
       $(document).ready(function(){
@@ -48,20 +35,7 @@
         }
       })
     </script>
-    <!-- Algolia head -->
-    {{ 'algolia_config.js' | asset_url | script_tag }}
-
-
-    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hogan.js@3.0.2/dist/hogan-3.0.2.min.js" integrity="sha256-jIAAmB65ff5CEFvV6DRfRWjHFwqq+AHeV4le8f8PYp4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js" integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/search-insights@1.6.3/dist/search-insights.min.js" integrity="sha256-8r3eU2ketKjC+f59eAY6ejwSsgPjNY5Ca1yt67nz2TM=" crossorigin="anonymous"></script>
-  {{ 'algolia_dependency_font-awesome-4-4-0.min.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'algolia_externals.js' | asset_url }}"></script>
-  {{ 'algolia_init.js' | asset_url | script_tag }}
-  <script src="{{ 'algolia_analytics.js' | asset_url }}" defer></script>
-  <!-- /Algolia head -->
+    
   </head>
   <body>
     {{skip_to_content_link}}
@@ -112,14 +86,12 @@
           
           
           <div class="mobile_checkout-text">
-            {% if settings.text != blank %}
-            <div class="title title-cus">{{settings.text}}</div>
-            {% endif %}
-
-            {% if settings.text != blank %}
-            <div class="customer_service_hours_title">{{settings.customer_service_hours_title}}</div>
-            <div class="customer_service_hours">{{settings.customer_service_hours}}</div>
-            {% endif %}
+           
+            
+     
+   {% if settings.customer_service_hours_title != blank %} <div class="customer_service_hours_title">{{settings.customer_service_hours_title}}</div>    {% endif %}
+  {% if settings.customer_service_hours != blank %}  <div class="customer_service_hours">{{settings.customer_service_hours}}</div>   {% endif %}
+           
           </div>
 
           
@@ -145,7 +117,7 @@
     {{ tracking_code }}
       <!-- Nico: Custom code - DO NOT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING -->
     <script>
-    if (Shopify && Shopify.Checkout && Shopify.Checkout.step) {
+    if (Shopify && Shopify.Checkout) {
         // Reorder the IN STORE PICKUP option during the shipping options step
         if (Shopify.Checkout.step.includes('shipping_method')) {
             document.querySelectorAll('.section--shipping-method .content-box__row label .radio__label__primary').forEach(
@@ -163,31 +135,10 @@
                     }
                 }
             );
+
         }
-    }
-    if(document.querySelector(".page--thank-you")) {
-      DY.API("event", {
-        name: "Purchase", // Human-readable name, not used to identify an event type
-        properties: {
-          uniqueTransactionId: "{{checkout.order_number}}", // Will remove redundant events. Must be a string. Max 64 characters.
-          dyType: "purchase-v1", // Identifies this event as a purchase
-          value: {{checkout.line_items_subtotal_price | money_without_currency}}, // Total cart value in actual payment currency, as float (dollars dot cents)
-          currency: "{{checkout.currency}}", // Optional non-default currency used
-          cart: [
-            {%- for item in checkout.line_items %}
-            {
-              productId: '{{item.sku}}',
-              itemPrice: {{item.final_price | money_without_currency}},
-              quantity: {{item.quantity}},
-              {%- for option in item.options_with_values %}
-              {{option.name}}: '{{option.value}}',
-              {%- endfor %}
-            },
-            {%- endfor %}
-          ]
-        }
-      });
     }
     </script>
+
   </body>
 </html>

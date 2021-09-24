@@ -140,7 +140,9 @@ td.total-line__price.payment-due{   padding-top: 15px !important;}
  td.total-line__price.payment-due:before{opacity:0;}
 
 tfoot.total-line-table__footer .total-line{position:relative; border-top:rgba(175,175,175,0.34) solid 1px;;}
-
+tr.total-line.total-line--shipping th {
+    padding-bottom: 10px;
+}
 
 @media (min-width: 1000px){
   .order-summary__sections {

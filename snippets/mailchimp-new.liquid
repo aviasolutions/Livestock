@@ -1,0 +1,106 @@
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+  #mc_embed_signup{background:{{section.settings.bg}}; clear:left; font:14px Helvetica,Arial,sans-serif; }
+	/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+	   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup" class="hide">
+<form action="{{section.settings.footer_mailchimp}}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll" class="newsletter--form">
+	<div class="input-group">
+	<input type="email" value="" name="EMAIL" class="email input-group-field newsletter__input" id="mce-EMAIL" placeholder="Enter Email" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_091f3f24ae016978b6e0964de_a3bcc981ed" tabindex="-1" value=""></div>
+    <span class="input-group-btn"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button btn newsletter__submit"></span>
+    </div>
+  </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+
+
+<form id="email_signup_header" class="klaviyo_styling klaviyo_gdpr_embed_UDBYbN input-group " action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">
+ 
+  <input type="hidden" name="g" value="UDBYbN">
+  <input type="hidden" name="$fields" value="$consent">
+  <input type="hidden" name="$list_fields" value="nav">
+  <div class="klaviyo-cover">
+ 
+    <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="Enter Email" 
+           name="email" id="k_id_email" class="email input-group-field newsletter__input" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off">
+    <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe-kla" class="button btn newsletter__submit">
+  </div>
+  <div class="klaviyo_messages">
+    <div class="success_message" style="display:none;"></div>
+    <div class="error_message" style="display:none;"></div>
+  </div>
+ 
+</form>
+
+
+<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+<script type="text/javascript">
+  KlaviyoSubscribe.attachToForms('#email_signup_header', {
+    hide_form_on_success: true,
+    extra_properties: {
+      $source: 'HomePageSignUp',
+      $method_type: "Klaviyo Form",
+      $method_id: 'embed',
+      $consent_version: 'Embed default text'
+    }
+  });
+</script>
+
+
+<style>
+  #mc_embed_signup form {
+    padding: 0px !important;
+}
+  .klaviyo-cover{display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+ 
+  -webkit-box-align: center;
+  -moz-box-align: center;
+
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  border-bottom: 2px solid #000!important;
+  }
+  
+  .klaviyo-cover .newsletter__input {
+    font-size: 13px !important;
+    padding: 0;
+    height: auto; border-radius:0px !important;
+    border:0px !important; padding-right:10px !important; padding-left:0px !important;
+}
+  
+.klaviyo-cover .newsletter__submit {
+  
+    background: url(https://cdn.shopify.com/s/files/1/0616/3517/t/354/assets/submit-arrow.svg) no-repeat!important;
+    padding: 0!important;
+    font-size: 12px;
+    color: #000;
+    background-size: 7px auto!important;
+    background-position: 70px 10px !important;
+    height: 35px;
+    padding-right: 13px !important;
+}
+.site-footer .newsletter {
+    margin: -12px;
+    max-width: 220px;
+    background: transparent;
+}
+  .klaviyo_messages .success_message {
+    margin: 0px !important;
+    padding: 5px 0 0;
+}
+  .klaviyo_messages{text-align:center;}
+  .klaviyo_messages div{    font-family: 'Roboto Condensed', sans-serif;}
+</style>

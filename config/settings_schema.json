@@ -4030,11 +4030,6 @@
     "settings": [
       {
         "type": "textarea",
-        "id": "text",
-        "label": "text"
-      },
-      {
-        "type": "textarea",
         "id": "customer_service_hours_title",
         "label": "Customer service hours title"
       },

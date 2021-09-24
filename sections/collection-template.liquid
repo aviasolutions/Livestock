@@ -7,6 +7,7 @@
 {% if section.settings.enable_sorting %}
 	{% include 'collection-sortby-menu' %}
 {% endif %}
+{% endcomment %}
 
 
 <div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template" data-grid-type="{{ section.settings.collection_products_grid }}">
@@ -87,5 +88,3 @@
     ]
   }
 {% endschema %}
-
-{% endcomment %}

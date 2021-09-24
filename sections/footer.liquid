@@ -78,7 +78,7 @@
         <ul class="no-bullets social-icons">
           {% if settings.social_instagram_link != blank %}
           <li>
-            <a target="_blank" rel="noreferrer" href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+            <a target="_blank" href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
               <span class="icon icon-instagram" aria-hidden="true"></span>
 
             </a>
@@ -86,7 +86,7 @@
           {% endif %}
           {% if settings.social_twitter_link != blank %}
           <li>
-            <a rel="noreferrer" href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+            <a href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
               <span class="icon icon-twitter" aria-hidden="true"></span>
 
             </a>
@@ -94,7 +94,7 @@
           {% endif %}
           {% if settings.social_pinterest_link != blank %}
           <li>
-            <a href="{{ settings.social_pinterest_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+            <a href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
               <span class="icon icon-pinterest" aria-hidden="true"></span>
               Pinterest
             </a>
@@ -102,7 +102,7 @@
           {% endif %}
           {% if settings.social_facebook_link != blank %}
           <li>
-            <a href="{{ settings.social_facebook_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+            <a href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
               <span class="icon icon-facebook" aria-hidden="true"></span>
 
             </a>
@@ -111,7 +111,7 @@
 
           {% if settings.social_snapchat_link != blank %}
           <li>
-            <a href="{{ settings.social_snapchat_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+            <a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
               <span class="icon icon-snapchat" aria-hidden="true"></span>
               Snapchat
             </a>
@@ -119,7 +119,7 @@
           {% endif %}
           {% if settings.social_google_plus_link != blank %}
           <li>
-            <a href="{{ settings.social_google_plus_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+            <a href="{{ settings.social_google_plus_link | escape }}" rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
               <span class="icon icon-google_plus" aria-hidden="true"></span>
               Google Plus
             </a>
@@ -127,7 +127,7 @@
           {% endif %}
           {% if settings.social_tumblr_link != blank %}
           <li>
-            <a href="{{ settings.social_tumblr_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+            <a href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
               <span class="icon icon-tumblr" aria-hidden="true"></span>
               Tumblr
             </a>
@@ -135,7 +135,7 @@
           {% endif %}
           {% if settings.social_youtube_link != blank %}
           <li>
-            <a href="{{ settings.social_youtube_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+            <a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
               <span class="icon icon-youtube" aria-hidden="true"></span>
               YouTube
             </a>
@@ -143,7 +143,7 @@
           {% endif %}
           {% if settings.social_vimeo_link != blank %}
           <li>
-            <a href="{{ settings.social_vimeo_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+            <a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
               <span class="icon icon-vimeo" aria-hidden="true"></span>
               Vimeo
             </a>
@@ -151,7 +151,7 @@
           {% endif %}
           {% if settings.social_fancy_link != blank %}
           <li>
-            <a href="{{ settings.social_fancy_link | escape }}" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+            <a href="{{ settings.social_fancy_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
               <span class="icon icon-fancy" aria-hidden="true"></span>
               Fancy
             </a>
@@ -193,7 +193,7 @@
           {% endif %}
 
 
-          <li><a href="{{ link.url }}" {% if open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a></li>
+          <li><a href="{{ link.url }}" {% if open_in_new_tab %}target="_blank"{% endif %}>{{ link.title }}</a></li>
 
           {% endfor %}
           <li class="mobile-block">
@@ -208,7 +208,7 @@
         <ul class="no-bullets social-icons">
           {% if settings.social_instagram_link != blank %}
           <li>
-            <a href="{{ settings.social_instagram_link | escape }}" rel="noreferrer" target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+            <a href="{{ settings.social_instagram_link | escape }}" target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
               <span class="icon icon-instagram" aria-hidden="true"></span>
 
             </a>
@@ -216,7 +216,7 @@
           {% endif %}
           {% if settings.social_twitter_link != blank %}
           <li>
-            <a href="{{ settings.social_twitter_link | escape }}" rel="noreferrer"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+            <a href="{{ settings.social_twitter_link | escape }}"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
               <span class="icon icon-twitter" aria-hidden="true"></span>
 
             </a>
@@ -224,7 +224,7 @@
           {% endif %}
           {% if settings.social_pinterest_link != blank %}
           <li>
-            <a href="{{ settings.social_pinterest_link | escape }}" rel="noreferrer" target="_blank"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+            <a href="{{ settings.social_pinterest_link | escape }}" target="_blank"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
               <span class="icon icon-pinterest" aria-hidden="true"></span>
               Pinterest
             </a>
@@ -232,7 +232,7 @@
           {% endif %}
           {% if settings.social_facebook_link != blank %}
           <li>
-            <a href="{{ settings.social_facebook_link | escape }}" rel="noreferrer"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+            <a href="{{ settings.social_facebook_link | escape }}"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
               <span class="icon icon-facebook" aria-hidden="true"></span>
 
             </a>
@@ -241,7 +241,7 @@
 
           {% if settings.social_snapchat_link != blank %}
           <li>
-            <a href="{{ settings.social_snapchat_link | escape }}" rel="noreferrer" target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+            <a href="{{ settings.social_snapchat_link | escape }}"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
               <span class="icon icon-snapchat" aria-hidden="true"></span>
               Snapchat
             </a>
@@ -249,7 +249,7 @@
           {% endif %}
           {% if settings.social_google_plus_link != blank %}
           <li>
-            <a href="{{ settings.social_google_plus_link | escape }}" target="_blank" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+            <a href="{{ settings.social_google_plus_link | escape }}"  target="_blank"  rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
               <span class="icon icon-google_plus" aria-hidden="true"></span>
               Google Plus
             </a>
@@ -257,7 +257,7 @@
           {% endif %}
           {% if settings.social_tumblr_link != blank %}
           <li>
-            <a href="{{ settings.social_tumblr_link | escape }}"  target="_blank" rel="noreferrer"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+            <a href="{{ settings.social_tumblr_link | escape }}"  target="_blank"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
               <span class="icon icon-tumblr" aria-hidden="true"></span>
               Tumblr
             </a>
@@ -265,7 +265,7 @@
           {% endif %}
           {% if settings.social_youtube_link != blank %}
           <li>
-            <a href="{{ settings.social_youtube_link | escape }}"  target="_blank" rel="noreferrer"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+            <a href="{{ settings.social_youtube_link | escape }}"  target="_blank"  title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
               <span class="icon icon-youtube" aria-hidden="true"></span>
               YouTube
             </a>
@@ -273,7 +273,7 @@
           {% endif %}
           {% if settings.social_vimeo_link != blank %}
           <li>
-            <a href="{{ settings.social_vimeo_link | escape }}"  target="_blank" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+            <a href="{{ settings.social_vimeo_link | escape }}"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
               <span class="icon icon-vimeo" aria-hidden="true"></span>
               Vimeo
             </a>
@@ -281,7 +281,7 @@
           {% endif %}
           {% if settings.social_fancy_link != blank %}
           <li>
-            <a href="{{ settings.social_fancy_link | escape }}"  target="_blank" rel="noreferrer" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+            <a href="{{ settings.social_fancy_link | escape }}"  target="_blank" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
               <span class="icon icon-fancy" aria-hidden="true"></span>
               Fancy
             </a>
@@ -314,7 +314,37 @@
       <div class="grid__item  footer-links {% if num_footer_columns == 1 %}text-center{% else %}large--text-right{% endif %}" >
 
         <div class="newsletter">
-          {% include 'klaviyo' %}
+          
+          {% include 'mailchimp-new' %}
+          
+          {% comment %}
+          <div class="">
+            {% form 'customer' %}
+            {{ form.errors | default_errors }}
+            {% if form.posted_successfully? %}
+            <div class="newsletter--form">
+              <div class="note form-success">{{ 'general.newsletter_form.newsletter_confirmation' | t }}</div>
+            </div>
+            {% else %}
+            <label for="Email" class="newsletter__label hidden-label">{{ 'general.newsletter_form.newsletter_email' | t }}</label>
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="newsletter--form">
+              <div class="input-group">
+                <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="Subscribe" name="contact[email]" id="Email" class="input-group-field newsletter__input" autocorrect="off" autocapitalize="off">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+                    <span class="newsletter__submit-text--large">{% comment %}{{ 'general.newsletter_form.submit' | t }}{% endcomment%}</span>
+                    <span class="newsletter__submit-text--small">
+                      <span class="icon icon-arrow-right" aria-hidden="true"></span>
+                    </span>
+                  </button>
+                </span>
+              </div>
+            </div>
+            {% endif %}
+            {% endform %}
+          </div>
+          {% endcomment %}
         </div>
 
       </div>

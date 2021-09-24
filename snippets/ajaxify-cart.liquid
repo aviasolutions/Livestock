@@ -108,17 +108,17 @@ Shopify.AjaxifyCart = (function($) {
                   }, _config.howLongTillBtnReturnsToNormal);
                   // Update cart count and show cart link.
                   $.getJSON(_config.shopifyAjaxCartURL, function(cart) {
-                    if (_config.cartCountSelector && $(_config.cartCountSelector).length) {
+                    if (_config.cartCountSelector && $(_config.cartCountSelector).size()) {
                       var value = $(_config.cartCountSelector).html() || '0';
                       $(_config.cartCountSelector).html(value.replace(/[0-9]+/,cart.item_count)).removeClass('hidden-count');
                     }
-                    if (_config.cartTotalSelector && $(_config.cartTotalSelector).length) {
+                    if (_config.cartTotalSelector && $(_config.cartTotalSelector).size()) {
                       if (typeof Currency !== 'undefined' && typeof Currency.moneyFormats !== 'undefined') {
                         var newCurrency = '';
-                        if ($('[name="currencies"]').length) {
+                        if ($('[name="currencies"]').size()) {
                           newCurrency = $('[name="currencies"]').val();
                         }
-                        else if ($('#currencies span.selected').length) {
+                        else if ($('#currencies span.selected').size()) {
                           newCurrency = $('#currencies span.selected').attr('data-currency');
                         }
                         if (newCurrency) {
@@ -198,6 +198,8 @@ Shopify.AjaxifyCart.init();
 {% comment %}
 {{ '//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.0/animate.min.css' | stylesheet_tag }}
 {% endcomment %}
+
+{{ '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css' | stylesheet_tag }}
 
 
 <style>

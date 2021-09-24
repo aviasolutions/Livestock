@@ -11,27 +11,20 @@
    title="[[# helpers.fullTitle ]][[/ helpers.fullTitle ]]"
    >
   <a class="product__image" href="[[# helpers.instantsearchLink ]][[/ helpers.instantsearchLink ]]">
-    <picture class="product__image-main">
-      <source 
-        media="(min-width: 90em)" 
-        data-srcset="[[# helpers.sizedImage]]880x880[[/ helpers.sizedImage]] 2x, [[# helpers.sizedImage]]440x440[[/ helpers.sizedImage]] 1x">
-      <img 
-        src="[[# helpers.sizedImage]]30x30[[/ helpers.sizedImage]]"
-           data-src="[[# helpers.sizedImage]]300x300[[/ helpers.sizedImage]]" 
-           data-srcset="[[# helpers.sizedImage]]600x600[[/ helpers.sizedImage]] 2x, [[# helpers.sizedImage]]300x300[[/ helpers.sizedImage]] 1x" 
-           alt="[[# helpers.fullTitle ]][[/ helpers.fullTitle ]]"
-           class="lazyload">
-    </picture>
-    <picture class="product__image-hover">
-      <source 
-              media="(min-width: 90em)" 
-              data-srcset="[[# helpers.secondaryImage]]880x880[[/ helpers.secondaryImage]] 2x, [[# helpers.secondaryImage]]440x440[[/ helpers.secondaryImage]] 1x">
-      <img 
-        src="[[# helpers.secondaryImage]]30x30[[/ helpers.secondaryImage]]"
-           data-src="[[# helpers.secondaryImage]]300x300[[/ helpers.secondaryImage]]" 
-           data-srcset="[[# helpers.secondaryImage]]600x600[[/ helpers.secondaryImage]] 2x, [[# helpers.secondaryImage]]300x300[[/ helpers.secondaryImage]] 1x"
-           class="lazyload">
-    </picture>
+  	<img 
+         srcset="[[# helpers.sizedImage]]680x680[[/ helpers.sizedImage]] 680w,
+                 [[# helpers.sizedImage]]300x300[[/ helpers.sizedImage]] 300w"
+         sizes="(max-width: 640px) 300px,
+                680px"
+         src="[[# helpers.sizedImage]]680x680[[/ helpers.sizedImage]]" 
+         class="product__image-main" />
+    <img 
+         srcset="[[# helpers.secondaryImage]]680x680[[/ helpers.secondaryImage]] 680w,
+                 [[# helpers.secondaryImage]]300x300[[/ helpers.secondaryImage]] 300w"
+         sizes="(max-width: 640px) 300px,
+                680px"
+         src="[[# helpers.secondaryImage]]680x680[[/ helpers.secondaryImage]]" 
+         class="product__image-hover" />
   </a>
   <div class="product__meta">
     <h2 class="product__brand">[[ vendor ]]</h2>

@@ -348,8 +348,7 @@
     configure({
       hitsPerPage: instant.hitsPerPage,
       clickAnalytics: true,
-      facetingAfterDistinct: false,
-      analyticsTags: collectionRulesContextValue ? [collectionRulesContextValue] : [],
+      facetingAfterDistinct: Boolean(algolia.config.show_products),
     }),
   ]);
 
@@ -757,7 +756,8 @@
              * Uncomment the following function call to start storing data in
              * local storage for conversion tracking
              */
-            clickData.productId = hit.dataset.productId;
+            clickData.productID = hit.dataset.productId;
+            clickData.variantID = hit.dataset.variantId;
             algolia.saveForConversionTracking(clickData);
           }
           window.location.href = link;
@@ -802,7 +802,7 @@
                 const viewData = {
                   index: algolia.config.index_prefix + 'products',
                   eventName: 'Landing Page Viewed',
-                  filters: ['category:' + encodeURIComponent(document.querySelector(".ais-page-title h1").innerText)],
+                  filters: ['category:' + document.querySelector(".ais-page-title h1").innerText],
                   userToken: ShopifyAnalytics.lib.user().traits().uniqToken,
                 };
       
@@ -961,26 +961,30 @@ function closeFilters() {
     var btn = form.find('.btn');
     var product = $(e.target).closest('.product');
     btn.text('Adding...');
-    
-    // save the click info for later use    
-    algolia.saveForConversionTracking({
-      index: algolia.config.index_prefix + 'products',
-      eventName: 'Product Add to Cart Clicked',
-      objectIDs: [String(product.data('algolia-objectid'))],
-      queryID: product.data('algolia-queryid'),
-      productId: product.data('product-id'),
-    });
-    
   	$.ajax({
       type: 'POST',
       url: '/cart/add.js',
-      data: JSON.stringify({ id: form.find('input:checked').val(), quantity: 1 }),
+      data: JSON.stringify({ 
+        items: [{ id: form.find('input:checked').val(), quantity: 1 }]
+      }),
       contentType: 'application/json',
       dataType: 'json',
       success: function(line_item) {
         ajaxCart.load();
+        var clickData = {
+          index: algolia.config.index_prefix + 'products',
+          eventName: 'Product Added to Cart',
+          objectIDs: [String(product.data('algolia-objectid'))],
+          positions: [product.data('algolia-position')],
+          queryID: product.data('algolia-queryid'),
+        };
+      
+        if (typeof ShopifyAnalytics.lib.user().id === 'function') {
+          clickData.userToken = ShopifyAnalytics.lib.user().id();
+        }
         
-        $('body').trigger('addToCart.livestock', [line_item, 1]);
+        aa.clickedObjectIDsAfterSearch(clickData);
+        algolia.saveForConversionTracking(clickData);
         
         btn.text('Added');
         
@@ -1006,7 +1010,7 @@ function closeFilters() {
       
       var data = {
         index: algolia.config.index_prefix + 'products',
-        eventName: 'Product Filter Clicked',
+        eventName: 'Product Added to Cart',
         filters: filters,
       };
       
