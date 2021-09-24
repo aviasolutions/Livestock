@@ -46,14 +46,11 @@
 {% endfor %}
 
 <div class="desktop_checkout-text">
-  {% if settings.text != blank %}
-  <div class="title title-cus">{{settings.text}}</div>
-  {% endif %}
+ 
+ 
+   {% if settings.customer_service_hours_title != blank %} <div class="customer_service_hours_title">{{settings.customer_service_hours_title}}</div>    {% endif %}
+  {% if settings.customer_service_hours != blank %}  <div class="customer_service_hours">{{settings.customer_service_hours}}</div>   {% endif %}
 
-  {% if settings.text != blank %}
-  <div class="customer_service_hours_title">{{settings.customer_service_hours_title}}</div>
-  <div class="customer_service_hours">{{settings.customer_service_hours}}</div>
-  {% endif %}
 </div>
 
 {% schema %}

@@ -1,0 +1,578 @@
+<style>
+  .site-header__logo img {
+    max-width: {{ section.settings.logo_max_width | escape | default: '180' | remove: 'px' | append: 'px' }};
+  }
+
+  @media screen and (max-width: 1349px) and (min-width:1280px) { 
+    .site-header__logo img {
+      max-width: 170px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .site-header__logo img {
+      max-width: 100%;
+    }
+  } 
+</style>
+
+{% assign hero_full_height = true %}
+<div data-section-id="{{ section.id }}" data-section-type="header-section" data-template="{{ template.name }}">
+  <div class="header-wrapper{% unless hero_full_height %} header-wrapper--over-hero{% endunless %}
+              {% if section.settings.show_announcement %} promotext {% endif %}">
+    {% if section.settings.show_announcement %}
+    {% if section.settings.home_page_only == false or template.name == 'index' %}
+    <style>
+      .announcement-bar {
+        background-color: {{ section.settings.color_bg }};
+      }
+
+      .announcement-bar--link:hover {
+        {% assign brightness = section.settings.color_bg | color_brightness %}
+
+        {% if brightness <= 192 %}
+        {% assign lightenAmount = 255 | minus: brightness | divided_by: 255 | times: 16 %}
+        background-color: {{ section.settings.color_bg | color_lighten: lightenAmount }};
+        {% else %}
+        {% assign darkenAmount = 255 | divided_by: brightness | times: 8 %}
+        background-color: {{ section.settings.color_bg | color_darken: darkenAmount }};
+        {% endif %}
+      }
+
+      .announcement-bar__message {
+        color: {{ section.settings.color_text }};
+      }
+    </style>
+
+    {% if section.settings.link == blank %}
+    <div class="announcement-bar">
+      {% else %}
+      <a href="{{ section.settings.link }}" class="announcement-bar announcement-bar--link">
+        {% endif %}
+
+        <p class="announcement-bar__message">{{ section.settings.text | escape }}</p>
+
+        {% if section.settings.link == blank %}
+        </div>
+      {% else %}
+      </a>
+    {% endif %}
+
+    {% endif %}
+    {% endif %}
+
+    
+
+    <div class="top-nav">
+      <ul>
+        {% for link in linklists[section.settings.main_menu_link_list].links %}
+        {% assign child_list_handle = link.title | handleize %}
+        {% if linklists[child_list_handle].links == blank %}
+
+
+        {% if link.title == 'New Arrivals' %}{% else %}
+        <li class="nav--{{ link.title }} site-nav__item site-nav__expanded-item{% unless template.name == 'index' %}{% if link.active %} site-nav--active{% endif %}{% endunless%} single-linklst">
+          <a href="{{ link.url }}" class="site-nav__link">{{ link.title }}</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+      </ul>
+    </div>
+  
+    
+    
+    <header class="site-header" role="banner">
+      <div class="wrapper">
+        <div class="grid--full grid--table">
+          <div class="grid__item large--hide-disable one-quarter">
+            <div class="site-nav--mobile">
+              <button type="button" class="icon-fallback-text site-nav__link js-drawer-open-left" aria-controls="NavDrawer">
+                <span class="icon icon-hamburgerr" aria-hidden="true">
+                
+<svg width="25" height="20" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M32 0H0.0360107V4H32V0Z" fill="black"/>
+<path d="M32 10H0.0360107V14H32V10Z" fill="black"/>
+<path d="M32 20H0.0360107V24H32V20Z" fill="black"/>
+</svg>
+
+                  
+                </span>
+                <span class="fallback-text">{{ 'general.drawers.navigation' | t }}</span>
+              </button>
+            </div>
+          </div>
+          <div class="grid__item large--one-sixth  medium-down--one-half change-mobile ">
+            {% comment %}
+            Use the uploaded logo from theme settings if enabled.
+            Site name gets precedence with H1 tag on homepage, div on other pages.
+            {% endcomment %}
+            {% if template.name == 'index' %}
+            <h1 class="site-header__logo large--left" itemscope itemtype="http://schema.org/Organization">
+              {% else %}
+              <div class="h1 site-header__logo large--left" itemscope itemtype="http://schema.org/Organization">
+                {% endif %}
+                {% if section.settings.logo %}
+                {% comment %}
+                .logo--has-inverted is only applied to the default logo if the inverted logo exists. That way it'll only be hidden on the slider when it has a backup.
+                {% endcomment %}
+                <a href="/" itemprop="url" class="site-header__logo-link{% if section.settings.logo-inverted %} logo--has-inverted{% endif %}">
+                  {% if section.settings.logo_max_width != empty %}
+                  {% capture image_size %}{{ section.settings.logo_max_width | escape }}x{% endcapture %}
+                  {% else %}
+                  {% assign image_size = "180x" %}
+                  {% endif %}
+                  <img src="{{ section.settings.logo | img_url: image_size }}"
+                       srcset="{{ section.settings.logo | img_url: image_size }} 1x, {{ section.settings.logo | img_url: image_size, scale: 1 }} 1x"
+                       alt="{{ section.settings.logo.alt | default: shop.name }}"
+                       itemprop="logo">
+                </a>
+                {% if section.settings.logo-inverted %}
+                <a href="/" itemprop="url" class="logo--inverted">
+                  <img src="{{ section.settings.logo-inverted | img_url: image_size }}"
+                       srcset="{{ section.settings.logo-inverted | img_url: image_size }} 1x, {{ section.settings.logo-inverted | img_url: image_size, scale: 1 }} 1x"
+                       alt="{{ section.settings.logo-inverted.alt | default: shop.name }}"
+                       itemprop="logo">
+                </a>
+                {% endif %}
+                {% else %}
+                <a href="/" itemprop="url">{{ shop.name }}</a>
+                {% endif %}
+                {% if template.name == 'index' %}
+                </h1>
+              {% else %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="grid__item large--five-sixths large--text-center medium-down--hide-disable">
+            {% comment %}
+            List out your main-menu linklist (default)
+
+            More info on linklists:
+            - http://docs.shopify.com/themes/liquid-variables/linklists
+            {% endcomment %}
+            <!-- begin site-nav -->
+            
+          	{% include 'site-nav' %}
+            
+            <!-- //site-nav -->
+            
+            <ul class="right">
+
+              {% if section.settings.search == "box" %}
+              <li class="site-nav__item site-nav--search__bar search-link">
+                <span class="site-nav__link search-wrap"> 
+                  <span class="btn-fix ">                   
+                
+<svg class="search-img" width="20" height="20" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 28C17.144 28 20.036 26.951 22.373 25.201L36 38.829L38.828 36L25.201 22.373C26.951 20.036 28 17.144 28 14C28 6.268 21.732 0 14 0C6.268 0 0 6.268 0 14C0 21.732 6.268 28 14 28ZM14 4C19.514 4 24 8.486 24 14C24 19.514 19.514 24 14 24C8.486 24 4 19.514 4 14C4 8.486 8.486 4 14 4Z" fill="black"/>
+</svg>
+                    
+                                    
+<svg class="search-img-hover" width="20" height="20" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 28C17.144 28 20.036 26.951 22.373 25.201L36 38.829L38.828 36L25.201 22.373C26.951 20.036 28 17.144 28 14C28 6.268 21.732 0 14 0C6.268 0 0 6.268 0 14C0 21.732 6.268 28 14 28ZM14 4C19.514 4 24 8.486 24 14C24 19.514 19.514 24 14 24C8.486 24 4 19.514 4 14C4 8.486 8.486 4 14 4Z" fill="white"/>
+</svg>
+                
+                  </span></span>
+                
+                {% include 'search-bar', search_btn_style: 'btn', search_bar_location: 'search-bar--header' %}
+              </li>
+              {% endif %}
+              {% if shop.customer_accounts_enabled %}
+              <li class="login-text site-nav__item site-nav__expanded-item">
+                <a class="site-nav__link site-nav__link--icon" href="/account">
+                  <span class="btn-fix"> 
+                  
+                  
+<svg width="19" height="21" viewBox="0 0 38 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M26.278 21.525C29.144 19.332 31 15.887 31 12C31 5.373 25.627 0 19 0C12.373 0 7 5.373 7 12C7 15.887 8.856 19.332 11.722 21.525C4.84 24.531 0 31.665 0 40H38C38 31.665 33.16 24.531 26.278 21.525ZM11 12C11 7.589 14.589 4 19 4C23.411 4 27 7.589 27 12C27 16.411 23.411 20 19 20C14.589 20 11 16.411 11 12ZM19 24C25.977 24 31.856 29.107 33.525 36H4.475C6.144 29.107 12.023 24 19 24Z" fill="black"/>
+</svg>
+
+                  </span>
+                </a>
+              </li>
+              {% endif %}
+
+             {%if settings.show_currency%} {% include 'currency-picker' %}{% endif %}
+              {% if section.settings.search == 'page' or section.settings.search == 'modal' %}
+              {% assign search_modal = true %}
+              {% if section.settings.search == 'page' %}
+              {% assign search_modal = false %}
+              {% endif %}
+              <li class="site-nav__item">
+                <a href="/search" class="site-nav__link site-nav__link--icon{% if search_modal %} js-toggle-search-modal{% endif %}" data-mfp-src="#SearchModal">
+                  <span class="icon-fallback-text">
+                    <span class="icon icon-search" aria-hidden="true"></span>
+                    <span class="fallback-text">{{ 'general.search.title' | t }}</span>
+                  </span>
+                </a>
+              </li>
+              {% endif %}
+
+              <li class="site-nav__item">
+                <a href="/cart" class="site-nav__link site-nav__link--icon cart-link js-drawer-open-right cart-page-open" aria-controls="CartDrawer">
+                  
+<svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 14C24 16.206 22.206 18 20 18C17.794 18 16 16.206 16 14V8H12V14C12 18.411 15.589 22 20 22C24.411 22 28 18.411 28 14V8H24V14Z" fill="black"/>
+<path d="M0 36C0 38.2 1.8 40 4 40H36C38.2 40 40 38.2 40 36V0H0V36ZM4 4H36V36H4V4Z" fill="black"/>
+</svg>
+
+                  <span  id="CartCount" class="cart-link__bubble cart-link__bubble--visible">{{ cart.item_count }}</span>
+                </a>
+              </li>
+
+            </ul>
+           
+          </div>
+          <div class="grid__item large--hide-disable one-quarter">
+            <div class="site-nav--mobile text-right">
+             
+              <a href="/cart" class="site-nav__link mobile1 cart-link js-drawer-open-right" aria-controls="CartDrawer">
+                <span class="icon-fallback-text">
+                  <span class="icon icon-cart" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 14C24 16.206 22.206 18 20 18C17.794 18 16 16.206 16 14V8H12V14C12 18.411 15.589 22 20 22C24.411 22 28 18.411 28 14V8H24V14Z" fill="black"></path>
+<path d="M0 36C0 38.2 1.8 40 4 40H36C38.2 40 40 38.2 40 36V0H0V36ZM4 4H36V36H4V4Z" fill="black"></path>
+</svg>
+                  </span>
+                  <span class="fallback-text">{{ 'layout.cart.title' | t }}</span>
+                </span>
+                <span id="CartCount" class="cart-link__bubble{% if cart.item_count > -1 %} cart-link__bubble--visible{% endif %}"></span>
+              </a>
+              <a href="/cart" class="site-nav__link mobile2 cart-link " aria-controls="CartDrawer">
+                <span class="icon-fallback-text">
+                  <span class="icon icon-cart" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 14C24 16.206 22.206 18 20 18C17.794 18 16 16.206 16 14V8H12V14C12 18.411 15.589 22 20 22C24.411 22 28 18.411 28 14V8H24V14Z" fill="black"></path>
+<path d="M0 36C0 38.2 1.8 40 4 40H36C38.2 40 40 38.2 40 36V0H0V36ZM4 4H36V36H4V4Z" fill="black"></path>
+</svg>
+                  </span>
+                  <span class="fallback-text">{{ 'layout.cart.title' | t }}</span>
+                </span>
+                <span class="cart-link__bubble{% if cart.item_count > -1 %} cart-link__bubble--visible{% endif %}">{{cart.item_count}}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% if template.name == 'collection'%}
+        <div class="st-sm-header-sticky hidden-desktop">
+
+                            <div id="STheader" class="" style="bottom: 60px;">
+
+                            <div class="st-row">
+
+                                <div class="st-col-sm-6">
+
+                                    <div class="st-pro-result-count">
+                                        <span></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="st-col-sm-6">
+
+                                    <div class="sm-filter-btn hidden-desktop">
+
+                                        <div class="st-sm-filterbtn" onclick="navOpen()">
+                                            <div class="sm-filter-txt"> SORT &amp; FILTER</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        </div>
+        {%endif%}
+      </div>
+    </header>
+  </div>
+</div>
+
+{% schema %}
+{
+"name": "Header",
+"settings": [
+{
+"type": "link_list",
+"id": "main_menu_link_list",
+"label": "Menu",
+"default": "main-menu"
+},
+
+{
+"type": "header",
+"content": "Apparel menu"
+},
+{
+"type": "image_picker",
+"id": "apparel_image_1",
+"label": "Image 1"
+},
+{
+"type": "url",
+"id": "apparel_link_1",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "apparel_image_2",
+"label": "Image 2"
+},
+{
+"type": "url",
+"id": "apparel_link_2",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "apparel_image_3",
+"label": "Image 3"
+},
+{
+"type": "url",
+"id": "apparel_link_3",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "apparel_image_4",
+"label": "Image 4"
+},
+{
+"type": "url",
+"id": "apparel_link_4",
+"label": "Link"
+},
+{
+"type": "header",
+"content": "Category menu"
+},
+{
+"type": "image_picker",
+"id": "category_image_1",
+"label": "Image 1"
+},
+{
+"type": "url",
+"id": "category_link_1",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "category_image_2",
+"label": "Image 2"
+},
+{
+"type": "url",
+"id": "category_link_2",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "category_image_3",
+"label": "Image 3"
+},
+{
+"type": "url",
+"id": "category_link_3",
+"label": "Link"
+},
+{
+"type": "image_picker",
+"id": "category_image_4",
+"label": "Image 4"
+},
+{
+"type": "url",
+"id": "category_link_4",
+"label": "Link"
+},
+{
+"type": "header",
+"content": "Brand menu"
+},
+{
+"type": "image_picker",
+"id": "brand_image",
+"label": "Brand featured image"
+},
+{
+"type": "color",
+"id": "brands_color",
+"label": "Brand Background Color"
+},
+{
+"type": "url",
+"id": "brand_link",
+"label": "Brand featured Link"
+},
+
+
+
+{
+"type": "image_picker",
+"id": "footwear_image",
+"label": "Footwear featured image"
+},
+{
+"type": "color",
+"id": "footwear_color",
+"label": "Footwear Background Color"
+},
+{
+"type": "color",
+"id": "footwear_line_color",
+"label": "Footwear Horizontal line Color"
+},
+{
+"type": "url",
+"id": "footwear_link",
+"label": "Footwear featured Link"
+},
+{
+"type": "image_picker",
+"id": "accessories_image",
+"label": "Accessories featured image"
+},
+{
+"type": "color",
+"id": "accessories_color",
+"label": "Accessories Background Color"
+},
+{
+"type": "color",
+"id": "accessories_line_color",
+"label": "Accessories Horizontal line Color"
+},
+{
+"type": "url",
+"id": "accessories_link",
+"label": "accessories featured Link"
+},
+{
+"type": "image_picker",
+"id": "apparel_image",
+"label": "Apparel featured image"
+},
+{
+"type": "color",
+"id": "apparel_color",
+"label": "Apparel Background Color"
+},
+{
+"type": "color",
+"id": "apparel_line_color",
+"label": "Apparel Horizontal line Color"
+},
+{
+"type": "url",
+"id": "apparel_link",
+"label": "apparel featured Link"
+},
+{
+"type": "image_picker",
+"id": "sale_image",
+"label": "Sale featured image"
+},
+{
+"type": "color",
+"id": "sale_color",
+"label": "Sale Background Color"
+},
+{
+"type": "color",
+"id": "sale_line_color",
+"label": "Sale Horizontal line Color"
+},
+{
+"type": "url",
+"id": "sale_link",
+"label": "Sale featured Link"
+},
+{
+"type": "image_picker",
+"id": "logo",
+"label": "Logo image"
+},
+{
+"type": "image_picker",
+"id": "logo-inverted",
+"label": "Inverted logo",
+"info": "Use a lighter-colored logo when a dark slideshow image is displayed."
+},
+{
+"type": "text",
+"id": "logo_max_width",
+"label": "Custom logo width (in pixels)",
+"default": "180"
+},
+{
+"type": "select",
+"id": "search",
+"options": [
+{ "value": "modal",
+"label": "Modal"
+},
+{ "value": "page",
+"label": "Page"
+},
+{ "value": "box",
+"label": "Box"
+},
+{ "value": "none",
+"label": "None"
+}
+],
+"label": "Search type"
+},
+{
+"type": "header",
+"content": "Announcement bar"
+},
+{
+"type": "checkbox",
+"id": "show_announcement",
+"label": "Show announcement",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "home_page_only",
+"label": "Home page only",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_currency",
+"label": "Show currency picker",
+"default": true
+},
+{
+"type": "text",
+"id": "text",
+"label": "Text",
+"default": "Announce something here"
+},
+{
+"type": "url",
+"id": "link",
+"label": "Link"
+},
+{
+"type": "color",
+"id": "color_bg",
+"label": "Bar",
+"default": "#1c1d1d"
+},
+{
+"type": "color",
+"id": "color_text",
+"label": "Text",
+"default": "#fff"
+}
+]
+}
+{% endschema %}
+
+

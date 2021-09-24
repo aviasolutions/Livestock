@@ -141,9 +141,8 @@
     "enable_pro_gifbox_collection": true,
     "pro_gifbox_collection": "gwp",
     "auto_slide": true,
-    "text": "When your purchase is complete, you’ll receive a confirmation email. Hit us back at <a href=\"mailto:shop@deadstock.ca\">shop@deadstock.ca<\/a> or 1.855.360.5483 with any inquiries, changes or if you just want someone to chat with.",
-    "customer_service_hours_title": "Customer Service Hours:",
-    "customer_service_hours": "9:00AM - 5:00PM PST Daily.<br>\nClosed on statutory holidays.",
+    "customer_service_hours_title": "need help?",
+    "customer_service_hours": "<a href=\"\/pages\/faq\">Check out our FAQ section<\/a> or reach out to us at \n<a href=\"mailto:shop@deadstock.ca\">shop@deadstock.ca<\/a> for any enquiries.",
     "checkout_header_image": "",
     "checkout_logo_image": "shopify:\/\/shop_images\/logo_190x_190x_1_190x_30b89727-b541-4c02-9c39-70a8537ea391_1.png",
     "checkout_logo_position": "left",
@@ -158,6 +157,7 @@
     "checkout_accent_color": "#1e998a",
     "checkout_button_color": "#000000",
     "checkout_error_color": "#ff6d6d",
+    "text": "",
     "enable_btn_link": true,
     "notify_me_form": true,
     "block_31_enable": false,
@@ -184,6 +184,36 @@
         "settings": {
           "subtitle": "<a href=\"https:\/\/www.deadstock.ca\/collections\/new-arrivals\">Click here<\/a> or search below to continue shopping.",
           "collection": "new-arrivals"
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "main_menu_link_list": "desktop-menu",
+          "brands_color": "#f8f8f8",
+          "brand_link": "#",
+          "footwear_color": "#f8f8f8",
+          "footwear_line_color": "#d1d1d1",
+          "footwear_link": "https:\/\/www.deadstock.ca\/collections\/footwear-new-balance\/products\/new-balance-mr993gl-grey",
+          "accessories_color": "#f8f8f8",
+          "accessories_line_color": "#d1d1d1",
+          "accessories_link": "https:\/\/www.deadstock.ca\/collections\/brand-porter",
+          "apparel_color": "#f8f8f8",
+          "apparel_line_color": "#d1d1d1",
+          "apparel_link": "https:\/\/www.deadstock.ca\/collections\/apparel-the-north-face",
+          "sale_color": "#f8f8f8",
+          "sale_line_color": "#d1d1d1",
+          "sale_link": "https:\/\/www.deadstock.ca\/collections\/sale-footwear?page=1",
+          "logo": "shopify:\/\/shop_images\/logo_190x_190x_5cd6c911-29fa-4603-88c7-e0715be20047_1.png",
+          "logo_max_width": "190",
+          "search": "box",
+          "show_announcement": true,
+          "home_page_only": false,
+          "show_currency": false,
+          "text": "Our online shop is open. Click for updates on COVID-19.",
+          "link": "https:\/\/www.deadstock.ca\/pages\/covid-19-notice",
+          "color_bg": "#1c1d1d",
+          "color_text": "#ffffff"
         }
       },
       "slideshow": {
@@ -250,7 +280,17 @@
       },
       "collection-template": {
         "type": "collection-template",
-        "settings": {}
+        "settings": {
+          "collection_banner_image_desc": "shopify:\/\/shop_images\/eoy-livesale-banner_4c10adec-5bb2-48f5-b509-124424e6af97.jpg",
+          "collection_banner_image_mobile": "shopify:\/\/shop_images\/eoy-livesale-mailer-9x2.jpg",
+          "link_to_image": "https:\/\/www.deadstock.ca\/collections\/sale",
+          "handles_of_collection": "",
+          "mobile_view_grid": "half",
+          "collection_products_grid": "grid",
+          "enable_sorting": true,
+          "collection_tags_enable": false,
+          "product_vendor_enable": false
+        }
       },
       "product-template": {
         "type": "product-template",
@@ -1495,9 +1535,9 @@
               "column4_menu1": "",
               "menu-title-7": "",
               "column5_enable": true,
-              "column5_image": "shopify:\/\/shop_images\/9_MENU_FOOTWEAR_fed7874a-a56c-4c7a-9d96-88798ec3c7f7.jpg",
-              "image-title": "Clarks Originals",
-              "column5_image_link": "shopify:\/\/collections\/footwear-clarks"
+              "column5_image": "shopify:\/\/shop_images\/9_MENU_FOOTWEAR_3a2104bb-3b25-4798-936f-99ae109cd23e.jpg",
+              "image-title": "Nike",
+              "column5_image_link": "shopify:\/\/collections\/footwear-nike"
             }
           },
           "3627a953-bb26-4411-9352-8ce8e1391734": {
@@ -1517,9 +1557,9 @@
               "column4_menu1": "",
               "menu-title-7": "",
               "column5_enable": true,
-              "column5_image": "shopify:\/\/shop_images\/10_MENU_APPAREL_be1aeeb3-facc-4395-a7d5-a4df42fb2852.jpg",
-              "image-title": "Nike Apparel",
-              "column5_image_link": "shopify:\/\/collections\/apparel-nike"
+              "column5_image": "shopify:\/\/shop_images\/10_MENU_APPAREL_1.jpg",
+              "image-title": "Manastash",
+              "column5_image_link": "shopify:\/\/collections\/apparel-manastash"
             }
           },
           "07d7355b-9f49-4f23-9507-b3b058578ced": {
@@ -1539,9 +1579,9 @@
               "column4_menu1": "accessories_brands-2",
               "menu-title-7": "",
               "column5_enable": true,
-              "column5_image": "shopify:\/\/shop_images\/11_MENU_ACCESSORIES_631bc97e-e0c9-4aee-be8f-008d05fd61a0.jpg",
-              "image-title": "hibi",
-              "column5_image_link": "shopify:\/\/collections\/accessories-hibi"
+              "column5_image": "shopify:\/\/shop_images\/10_MENU_APPAREL_7ae05e04-f2eb-48da-b2ca-ddb0220c5089.jpg",
+              "image-title": "Cool Calm Studios",
+              "column5_image_link": "shopify:\/\/collections\/accessories-cool-calm-studios"
             }
           },
           "4666f213-4582-4ef8-93f8-540fa3b2ae29": {
@@ -1561,9 +1601,9 @@
               "column4_menu1": "",
               "menu-title-7": "",
               "column5_enable": true,
-              "column5_image": "shopify:\/\/shop_images\/12_MENU_BRANDS_86112e56-31aa-4d90-8fa2-d75c8f687dbd.jpg",
-              "image-title": "Watches",
-              "column5_image_link": "shopify:\/\/collections\/watches"
+              "column5_image": "shopify:\/\/shop_images\/11_MENU_ACCESSORIES_08caf31f-f334-4b4b-84d6-d5e40d688627.jpg",
+              "image-title": "Medicom Toy",
+              "column5_image_link": "shopify:\/\/collections\/brand-medicom"
             }
           },
           "3b3a2152-6484-449e-b6c3-b86d4f9a86e0": {
@@ -2120,13 +2160,6 @@
               "title": "BEAMS PLUS",
               "brand_url": "shopify:\/\/collections\/beams-plus"
             }
-          },
-          "313a97b0-5085-4331-bd54-2c879a195329": {
-            "type": "brand",
-            "settings": {
-              "title": "CurrentSee",
-              "brand_url": "shopify:\/\/collections\/currentsee"
-            }
           }
         },
         "block_order": [
@@ -2202,8 +2235,7 @@
           "889b8c0f-0472-4193-8c51-a59b1c898654",
           "d70229f0-9f80-4d90-8623-4c546d4e8d0e",
           "2ba66ed6-b97f-41a9-8030-e598c2221061",
-          "ad2a2fd5-3115-47ec-a409-9df7bb366c28",
-          "313a97b0-5085-4331-bd54-2c879a195329"
+          "ad2a2fd5-3115-47ec-a409-9df7bb366c28"
         ],
         "settings": {}
       },
@@ -2242,7 +2274,7 @@
         "type": "product-home-featured",
         "settings": {
           "heading_color": "#000000",
-          "title": "New Apparel",
+          "title": "New Arrivals",
           "collection": "featured-apparel",
           "btn-text": "shop new apparel",
           "btn_link": "",
@@ -2262,13 +2294,13 @@
           "theme-mobile": "light_m",
           "caption_background": "#000000",
           "caption_background_opacity": 15,
-          "image": "shopify:\/\/shop_images\/00_HEADER.jpg",
-          "image_mobile": "shopify:\/\/shop_images\/HEADER_MOBILE.jpg",
+          "image": "shopify:\/\/shop_images\/00_HEADER_BANNER_e2ae04c3-ba7d-4054-92db-6e5d868a3f43.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/00_HEADER_BANNER_MOBILE_478aa56e-2681-42c8-9d71-1e9cfc1d7644.jpg",
           "subheading-hide": true,
-          "subheading": "AVAILABLE NOW",
-          "heading": "Nike NOCTA Golf Collection",
-          "btn-text": "SHOP NOW",
-          "btn_link": "https:\/\/www.deadstock.ca\/collections\/nocta",
+          "subheading": "",
+          "heading": "Late Summer",
+          "btn-text": "Shop Now",
+          "btn_link": "shopify:\/\/collections\/hiddentest-collection",
           "video": ""
         }
       },
@@ -2295,22 +2327,22 @@
             "type": "logo_image",
             "settings": {
               "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/01_FEATURED_LEFT_8315434c-87ef-4040-a5a7-cc4b99c5bdff.jpg",
-              "heading": "New Balance",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/01_FEATURED_LEFT_b09ca953-1fad-4bfa-8d06-f1f5f45c66f5.jpg",
+              "heading": "Sneakers",
               "btn-text": "Shop Now",
-              "btn_link": "shopify:\/\/collections\/footwear-new-balance"
+              "btn_link": "shopify:\/\/collections\/sneakers"
             }
           },
           "995cd6e2-e135-4357-96e5-b6669a011ce9": {
             "type": "logo_image",
             "settings": {
-              "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/02_FEATURED_RIGHT_1edc7754-d5ce-445f-bbb1-b7cf05b0024d.jpg",
-              "heading": "BEAMS PLUS",
+              "theme": "light",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/02_FEATURED_RIGHT.png",
+              "heading": "Sale",
               "btn-text": "Shop Now",
-              "btn_link": "shopify:\/\/collections\/beams-plus"
+              "btn_link": "shopify:\/\/collections\/sale"
             }
           }
         },
@@ -2332,22 +2364,22 @@
             "type": "logo_image",
             "settings": {
               "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/05_FEATURE_APPAREL_LEFT_24202ed9-8465-4b04-931e-7fffb7c65e14.jpg",
-              "heading": "Pop Trading Company",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/05_FEATURE_APPAREL_LEFT_195abda4-10d2-4f30-adf8-870ad701e9f2.jpg",
+              "heading": "Book Works x Gramicci",
               "btn-text": "Shop Now",
-              "btn_link": "shopify:\/\/collections\/apparel-pop-trading-company"
+              "btn_link": "shopify:\/\/collections\/brand-book-works"
             }
           },
           "c71ac944-cd23-45a6-9f7e-9e7503be7b83": {
             "type": "logo_image",
             "settings": {
-              "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/07_FEATURE_APPAREL_RIGHT_f8c3c865-9b9e-4edd-a41a-f76dfe59ca2a.jpg",
-              "heading": "Real Bad Man",
+              "theme": "light",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/07_FEATURE_APPAREL_RIGHT_5bd40f4c-d058-479f-8d5e-6cbdcf9f9874.jpg",
+              "heading": "Carhartt WIP",
               "btn-text": "Shop Now",
-              "btn_link": "shopify:\/\/collections\/apparel-real-bad-man"
+              "btn_link": "shopify:\/\/collections\/apparel-carhartt-wip"
             }
           }
         },
@@ -2415,10 +2447,18 @@
       "1617970755958c3f5d": {
         "type": "product-home-featured-custom",
         "blocks": {
+          "32f80421-1ef2-44e7-b8bb-2494433cf79f": {
+            "type": "image_text_block",
+            "settings": {
+              "image_big": "shopify:\/\/shop_images\/4530956593920_medicom_toy_be_rbrick_1st_model_white_chrome_400__1_740x_ff902be5-aa22-4dde-b5cb-719b56020ef5.jpg",
+              "img-text": "Toys",
+              "hov_btn_link": "shopify:\/\/collections\/toys"
+            }
+          },
           "26632851-5de7-4a69-a4f3-966e226bc82e": {
             "type": "image_text_block",
             "settings": {
-              "image_big": "shopify:\/\/shop_images\/h01434_adidas_equipment_support_93_ls_gretwo_gretwo_grethr_1_1.jpg",
+              "image_big": "shopify:\/\/shop_images\/l4125290034_salomon_xt6_white_white_lunar_rock_01_740x_3e2a31db-244a-4923-977b-8c2ccf419c05.jpg",
               "img-text": "sneakers",
               "hov_btn_link": "https:\/\/www.deadstock.ca\/collections\/sneakers"
             }
@@ -2426,49 +2466,33 @@
           "ca251a54-88dc-4b7f-993e-802056fe11b9": {
             "type": "image_text_block",
             "settings": {
-              "image_big": "shopify:\/\/shop_images\/38110273791_Beams_Plus_Adventure_Shirt_Print_Nel_Combi_1.jpg",
-              "img-text": "Shirts",
-              "hov_btn_link": "shopify:\/\/collections\/shirts"
+              "image_big": "shopify:\/\/shop_images\/cwd8t04_blk_paid_in_full_tee_black_1_740x_f0b53bf0-1d48-4784-9d4a-9ef55cc08027.jpg",
+              "img-text": "t-shirts",
+              "hov_btn_link": "https:\/\/www.deadstock.ca\/collections\/t-shirts"
             }
           },
           "78f92b56-7503-48c2-b64a-50a2233eaec7": {
             "type": "image_text_block",
             "settings": {
-              "image_big": "shopify:\/\/shop_images\/popaw2104005_pop_trading_company_cargo_denim_pants_rinsed_denim_1_740x_505a2394-176e-4ff9-a493-5e1ccd907bdb.jpg",
-              "img-text": "Pants",
-              "hov_btn_link": "shopify:\/\/collections\/pants"
-            }
-          },
-          "32f80421-1ef2-44e7-b8bb-2494433cf79f": {
-            "type": "image_text_block",
-            "settings": {
-              "image_big": "shopify:\/\/shop_images\/4530956240565_medicom_toy_BE_RBRICK_series_42_blind_box_2_740x_41b4d3b2-ae92-483f-9b1e-91f9f6ef6de8.jpg",
-              "img-text": "Toys",
-              "hov_btn_link": "shopify:\/\/collections\/toys"
-            }
-          },
-          "d05d6be5-1abf-444e-bd82-e35cdddc1291": {
-            "type": "image_text_block",
-            "settings": {
-              "image_big": "shopify:\/\/shop_images\/i006396_carhartt_wip_essentials_bag_multi_color_1_740x_794459d2-a5b6-4446-a589-0bf74ef7f771.jpg",
-              "img-text": "Bags",
-              "hov_btn_link": "shopify:\/\/collections\/bags"
-            }
-          },
-          "69735005-8617-455c-b1b6-ba49b7ef33c5": {
-            "type": "image_text_block",
-            "settings": {
-              "image_big": "shopify:\/\/shop_images\/53243606_puma_butter_goods_track_top_black_peacoat_1_740x_a7a642e4-4215-4ded-b3ab-713406f4a027.jpg",
-              "img-text": "Jackets",
-              "hov_btn_link": "shopify:\/\/collections\/jackets"
+              "image_big": "shopify:\/\/shop_images\/IMG_3378_740x_f9244fc4-5024-4f26-83e2-909b12ee77e8.jpg",
+              "img-text": "Shorts",
+              "hov_btn_link": "shopify:\/\/collections\/shorts"
             }
           },
           "33b3dec4-72d4-4d1f-ba9e-b12a3346bc1e": {
             "type": "image_text_block",
             "settings": {
-              "image_big": "shopify:\/\/shop_images\/MG_8545_740x_22845175-d7e2-48a7-bb04-e58c92bfc158.jpg",
+              "image_big": "shopify:\/\/shop_images\/g-shock_ga700ske_7a_clear_1_740x_2457770e-bfa3-4a6a-9db9-c4057bd8a5e8.jpg",
               "img-text": "Watches",
               "hov_btn_link": "shopify:\/\/collections\/watches"
+            }
+          },
+          "69735005-8617-455c-b1b6-ba49b7ef33c5": {
+            "type": "image_text_block",
+            "settings": {
+              "image_big": "shopify:\/\/shop_images\/46135_by_parra_sc_pnc_s_jacket_blue_1_740x_c21df2ba-cd31-4bc2-8e12-9d88fcf7eeaa.jpg",
+              "img-text": "Jackets",
+              "hov_btn_link": "shopify:\/\/collections\/jackets"
             }
           },
           "213d9927-7db2-4d63-be43-f96189e1e3e6": {
@@ -2478,17 +2502,25 @@
               "img-text": "Publications",
               "hov_btn_link": "shopify:\/\/collections\/publications"
             }
+          },
+          "d05d6be5-1abf-444e-bd82-e35cdddc1291": {
+            "type": "image_text_block",
+            "settings": {
+              "image_big": "shopify:\/\/shop_images\/sa8100sforn_comme_des_garcons_wallet_fluo_leather_line_wallet_orange_pink_1_900x_cdef57ee-3d58-4610-8b8d-5778ee7205a5.jpg",
+              "img-text": "Wallets",
+              "hov_btn_link": "shopify:\/\/collections\/wallets-and-key-chains"
+            }
           }
         },
         "block_order": [
+          "32f80421-1ef2-44e7-b8bb-2494433cf79f",
           "26632851-5de7-4a69-a4f3-966e226bc82e",
           "ca251a54-88dc-4b7f-993e-802056fe11b9",
           "78f92b56-7503-48c2-b64a-50a2233eaec7",
-          "32f80421-1ef2-44e7-b8bb-2494433cf79f",
-          "d05d6be5-1abf-444e-bd82-e35cdddc1291",
-          "69735005-8617-455c-b1b6-ba49b7ef33c5",
           "33b3dec4-72d4-4d1f-ba9e-b12a3346bc1e",
-          "213d9927-7db2-4d63-be43-f96189e1e3e6"
+          "69735005-8617-455c-b1b6-ba49b7ef33c5",
+          "213d9927-7db2-4d63-be43-f96189e1e3e6",
+          "d05d6be5-1abf-444e-bd82-e35cdddc1291"
         ],
         "settings": {
           "heading_color": "#000000",
@@ -2537,17 +2569,17 @@
         "type": "home-hero-3",
         "settings": {
           "content-hide": true,
-          "theme": "dark",
-          "theme-mobile": "dark_m",
+          "theme": "light",
+          "theme-mobile": "light_m",
           "caption_background": "rgba(0,0,0,0)",
           "caption_background_opacity": 20,
-          "image": "shopify:\/\/shop_images\/08_RELEASE_1_c5e59730-515e-4ec2-a836-ef49cdaebbbf.jpg",
-          "image_mobile": "shopify:\/\/shop_images\/08_RELEASE_MOBILE_1_989b6bf8-b1e5-4772-ae9f-e44bf72b4886.jpg",
+          "image": "shopify:\/\/shop_images\/08_RELEASE_72a47f29-fec5-47d4-9289-248810317fa3.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/08_RELEASE_MOBILE_fcae78e2-3811-48c5-ad13-3d86bef7a840.jpg",
           "subheading-hide": true,
-          "subheading": "COMING SOON",
-          "heading": "Jordan 1 Retro High \"Prototype\"",
-          "btn-text": "LEARN MORE",
-          "btn_link": "shopify:\/\/blogs\/coming-soon",
+          "subheading": "AVAILABLE NOW",
+          "heading": "Nike Air Max Pre-Day LX Phantom \/ Black-Rattan-Light Bone",
+          "btn-text": "SHOP NOW",
+          "btn_link": "https:\/\/www.deadstock.ca\/products\/nike-air-max-pre-day-lx-phantom-black-rattan",
           "video": "",
           "m_video": ""
         }
@@ -2558,20 +2590,20 @@
           "79746cfd-f05e-4039-905f-c5ef70079ac8": {
             "type": "logo_image",
             "settings": {
-              "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/03_FEATURE_FOOTWEAR_LEFT_d89ad307-8010-43e6-b9bc-daff0a4e6b74.jpg",
-              "heading": "Nike",
+              "theme": "light",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/03_FEATURE_FOOTWEAR_LEFT_c78528fd-b953-419c-8ff6-144e8246c3e3.jpg",
+              "heading": "ASICS",
               "btn-text": "Shop Now",
-              "btn_link": "shopify:\/\/collections\/footwear-nike"
+              "btn_link": "shopify:\/\/collections\/footwear-asics"
             }
           },
           "8e260f34-97f9-4353-9741-8e4b3cac3b26": {
             "type": "logo_image",
             "settings": {
-              "theme": "dark",
-              "text-postion": "bottom",
-              "image": "shopify:\/\/shop_images\/04_FEATURE_FOOTWEAR_RIGHT_afd1401c-0530-4e3d-8968-8f291cabe87f.jpg",
+              "theme": "light",
+              "text-postion": "top",
+              "image": "shopify:\/\/shop_images\/04_FEATURE_FOOTWEAR_RIGHT_8fc5bd2b-6cee-4a05-ad67-93693bdf584b.jpg",
               "heading": "adidas",
               "btn-text": "Shop Now",
               "btn_link": "shopify:\/\/collections\/footwear-adidas"
@@ -2625,7 +2657,7 @@
             "settings": {
               "imageurl": "https:\/\/cdn.shopify.com\/s\/files\/1\/0616\/3517\/files\/live-chat.svg?v=1629275053",
               "heading": "Live Chat",
-              "text": "<p>Our customer service agents are available from 9am - 8pm EST daily and are here to support you with any question you might have. <\/p>",
+              "text": "<p>Our customer service agents are available from 9am - 8pm EST Daily and here to support you with any question you might have. <\/p>",
               "btn": "",
               "btn-link": "#",
               "btn1": "start a live chat",
@@ -2699,7 +2731,7 @@
               "image1": "shopify:\/\/shop_images\/livestock-winnipeg-new-store-1_1_1024x1024_1_0467e3ab-a989-4e65-8f53-cd0f812a9c7b.jpg",
               "image2": "shopify:\/\/shop_images\/livestock-winnipeg-new-store-2_1_1024x1024_1_1d0cd449-14d5-43a8-9390-40e36b10198b.jpg",
               "heading": "Livestock Winnipeg",
-              "text": "<p><strong>Address:<\/strong> 224 Main St, Winnipeg MB - R3C 1A8<\/p><p><strong>Hours:<\/strong> Open 11am - 7pm, Monday to Sunday. Closed during stat holidays.<\/p><p><strong>Phone:<\/strong> <a href=\"tel:204.306.8881\" title=\"tel:204.306.8881\">204.306.8881<\/a><\/p>",
+              "text": "<p><strong>Address:<\/strong> 224 Main St, Winnipeg MB - R3C 1A8<\/p><p><strong>Hours:<\/strong> Open 11am - 7pm, Monday to Sunday. Closed during stat holidays.<\/p><p><strong>Phone:<\/strong> <a href=\"tel:647.347.8046\" title=\"tel:647.347.8046\">647.347.8046<\/a><\/p>",
               "btn": "Button",
               "btn-link": ""
             }
@@ -2782,6 +2814,60 @@
           "overlay_color": "#000000",
           "overlay_text_color": "#ffffff",
           "overlay_opacity": 65
+        }
+      },
+      "page-comman": {
+        "type": "page-comman",
+        "settings": {
+          "sidebar": "sidebar-pages"
+        }
+      },
+      "footer-new": {
+        "type": "footer-new",
+        "blocks": {
+          "363eb5a7-909d-4c21-980b-f9e3cc1cf3f6": {
+            "type": "menu",
+            "settings": {
+              "show_footer_title": true,
+              "menu": "brands",
+              "container_width": 20
+            }
+          },
+          "eb4455b2-31be-4546-9a21-f348a6b34fa4": {
+            "type": "menu",
+            "settings": {
+              "show_footer_title": true,
+              "menu": "about",
+              "container_width": 20
+            }
+          },
+          "baf1cbd5-891b-4cfd-a370-fb2368a659f2": {
+            "type": "menu",
+            "settings": {
+              "show_footer_title": true,
+              "menu": "support",
+              "container_width": 20
+            }
+          },
+          "5bdae028-534b-49c8-8038-f1d805730321": {
+            "type": "newsletter",
+            "settings": {
+              "show_footer_title": true,
+              "title": "Be the first to know about products coming soon and new brands",
+              "text": "<p>By entering your email, you agree to our <a href=\"\/pages\/terms-and-conditions\" title=\"Terms and Conditions\">Terms & Conditions<\/a> + <a href=\"\/policies\/privacy-policy\" title=\"Privacy Policy\">Privacy Policy<\/a>, including receipt of emails and promotions. You can unsubcribe at any time. <\/p>",
+              "container_width": 40
+            }
+          }
+        },
+        "block_order": [
+          "363eb5a7-909d-4c21-980b-f9e3cc1cf3f6",
+          "eb4455b2-31be-4546-9a21-f348a6b34fa4",
+          "baf1cbd5-891b-4cfd-a370-fb2368a659f2",
+          "5bdae028-534b-49c8-8038-f1d805730321"
+        ],
+        "settings": {
+          "footer-bg": "#000000",
+          "copyright_text": "@2021 deadstock.ca, all rights reserved."
         }
       }
     },

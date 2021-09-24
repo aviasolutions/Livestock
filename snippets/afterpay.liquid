@@ -1,0 +1,35 @@
+<script>
+    let amount = 0.0, priceSelector = ""
+    let currency = "CAD", locale = "en_CA" 
+    
+   {%case template.name%} 
+      {%when "product"%}
+    	console.log("in product")
+          amount = {{product.selected_or_first_available_variant.price | money_without_currency }}
+          priceSelector= ".currency-price-list-wrapper"
+    
+      {%when "cart"%}     
+          amount = {{cart.total_price | money_without_currency }}
+          priceSelector = ".cart > div:last-child > div > div:last-child > div"
+    
+      {%when "product" or "cart"%} 
+            Afterpay.createPlacements({
+              targetSelector: priceSelector, 
+                attributes: {
+                	currency: currency,
+                	locale: locale,
+                	amount: amount,
+                  	size: "sm",
+                	logoType: "lockup",
+                  	modalTheme: "white"
+              } 
+          })
+            
+    {%endcase%}
+</script>
+  
+<style>
+    .product-single__meta afterpay-placement {text-align: left;}
+  .afterpay-modal-wrapper{background: #b2fce4 !important;}
+</style>
+  

@@ -12,6 +12,7 @@ $(document).ready(function(){
 $(window).on('load', function(){
   $('.custom-add').on('click', function(e){
     e.preventDefault();
+    console.log('Hehehhehehe');
     var variantId = $(this).attr('data-id');
 
     $.ajax({
@@ -20,8 +21,7 @@ $(window).on('load', function(){
       data: 'quantity='+1+'&id='+variantId,
       dataType: 'json',
       async:false,
-      success: function(line_item) {
-        $('body').trigger('addToCart.livestock', [line_item]);
+      success: function() {
         location.reload(true);
       },
       error: function(er) {
@@ -30,4 +30,78 @@ $(window).on('load', function(){
       }
     })
   });
+  
+  if(document.querySelector(".page--thank-you")) {
+    var ALGOLIA_INSIGHTS_SRC = "https://cdn.jsdelivr.net/npm/search-insights@1.8.0";
+
+    !function(e,a,t,n,s,i,c){e.AlgoliaAnalyticsObject=s,e[s]=e[s]||function(){
+      (e[s].queue=e[s].queue||[]).push(arguments)},i=a.createElement(t),c=a.getElementsByTagName(t)[0],
+      i.async=1,i.src=n,c.parentNode.insertBefore(i,c)
+                            }(window,document,"script",ALGOLIA_INSIGHTS_SRC,"aa");
+    
+  	aa('init', {
+        appId: 'XAALWQZ7Q2',
+        apiKey: 'f5cef61b6e76b474f75dc46e295f52d3',
+    });
+
+
+      var products = document.querySelectorAll(".product-table .product");
+      var items = [];
+      [].forEach.call(products, function(product) {
+        items.push({
+          product_id: product.dataset.productId,
+          variant_id: product.dataset.variantId
+        });
+      });
+
+      var localStorageKey = 'algolia_analytics_clicked_objects';
+      try {
+        // Get any previously stored data.
+        var previousClickItemsString = localStorage.getItem(localStorageKey);
+        // If data was found, send a conversion event for those products.
+        if (!!previousClickItemsString) {
+          var previousClickItems = JSON.parse(previousClickItemsString);
+          previousClickItems.forEach(function(item) {
+            var hasItem = items.find(function(i) {
+              return i.variant_id == item.variantID
+            });
+            if(hasItem) {
+              hasItem.converted = true;
+              delete item.positions;
+              item.eventName = 'Product Purchased';
+              aa('convertedObjectIDsAfterSearch', item);
+            }
+          });
+        }
+
+        var data = {
+          index: 'Livestock_shopify_products',
+          eventName: 'Product Purchased',
+          objectIDs: [],
+        };
+
+        if (typeof ShopifyAnalytics.lib.user().id === 'function') {
+          data.userToken = ShopifyAnalytics.lib.user().id();
+        }
+
+        items.forEach(function(item) {
+          if(!item.converted) {
+            data.objectIDs.push(item.variant_id);
+          }
+        });
+
+        if(data.objectIDs.length) {
+          aa('convertedObjectIDs', data);
+        }
+      } catch (error) {
+        // No need to do anything in this scenario.
+      }
+
+      // Try to remove the items from local storage.
+      try {
+        localStorage.removeItem(localStorageKey);
+      } catch (error) {
+        // No need to do anything in this scenario.
+      }
+  }
 });

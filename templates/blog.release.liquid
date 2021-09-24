@@ -1,5 +1,6 @@
 <!-- /templates/blog.liquid -->
 {% paginate blog.articles by 40 %}
+
 <div>
 <br>
   <div class="blog_release_grid_wrap">
@@ -309,67 +310,6 @@ Fancy
     {% if tag contains 'Time' %}
     {% assign tagFilter = tag | split: '-' %}
     <script>
-      function CountDownTimer(dt, id) {
-        var end = new Date(dt);
-
-        var _second = 1000;
-        var _minute = _second * 60;
-        var _hour = _minute * 60;
-        var _day = _hour * 24;
-        var timer;
-
-        function showRemaining() {
-          var now = new Date();
-          var distance = end - now;
-          if (distance < 0) {
-
-            clearInterval(timer);
-            document.getElementById(id).innerHTML = 'EXPIRED!';
-
-            return;
-          }
-          var days = Math.floor(distance / _day);
-          var hours = Math.floor((distance % _day) / _hour);
-          var minutes = Math.floor((distance % _hour) / _minute);
-          var seconds = Math.floor((distance % _minute) / _second);
-
-
-          if (String(hours).length < 2){
-            hours = 0 + String(hours);
-          }
-          if (String(minutes).length < 2){
-            minutes = 0 + String(minutes);
-          }
-          if (String(seconds).length < 2){
-            seconds = 0 + String(seconds);
-          }
-
-
-
-          if(days.toString().length == 1)
-          {
-            days ='0'+days;
-          } 
-          if(minutes.toString().length == 1)
-          {
-            minutes ='0'+minutes;
-          } 
-          if(hours.toString().length == 1)
-          {
-            hours ='0'+hours;
-          }
-
-          var datestr ='<div class="day-time"><span class="day-val">'+days+ '</span><span class="days">Days</span></div><div class="hour-time"><span class="hour-val">'+hours+'</span><span class="time">Hrs</span></div><div class="minute-time"><span class="minute-val">'+minutes+'</span><span class="minute">Min</span></div>';
-
-          //: ' + 
-          //minutes + ' : ' + 
-          // seconds + ' ';
-
-          document.getElementById(id).innerHTML = datestr;
-        }
-
-        timer = setInterval(showRemaining, 1000);
-      }
       CountDownTimer('{{tagFilter[1]}}', 'countdown{{countloop}}');
     </script>   
     {% endif %}
@@ -403,11 +343,4 @@ Fancy
 </div>
 {% endpaginate %}
 
-<div id="blog_release_popup" class="blog_popup_close">
-  <div id="blog_release_popup_iner">
-    <span class="blog_release_popup_close fa fa-times"></span>
-    <div class="">
-      {% include 'klaviyo' %}
-    </div>
-  </div>
-</div>
+
